@@ -18,6 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form action="create_account.php" method="post">
     <label for="accountName">Account Name:</label><br>
-    <input type="text" id="accountName" name="accountName" required><br>
+    <input type="text" id="accountName" name="accountName" required autocomplete="off"><br>
     <input type="submit" value="Create Account">
 </form>

@@ -1,16 +1,30 @@
 <?php
 require_once 'db_connection.php';
 require_once 'queries.php';
+require_once 'classes.php';
 
-function saveTransaction($isExpense, $amount, $accountId, $categoryId, $positionId, $transactionDate)
+function saveTransaction($isExpense, $amount, $account, $category, $positionCity, $transactionDate)
 {
     global $conn, $insertTransactionQuery;
 
     $stmt = $conn->prepare($insertTransactionQuery);
-    $stmt->bind_param("sdiiss", $isExpense, $amount, $accountId, $categoryId, $positionId, $transactionDate);
-    $stmt->execute();
+
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+
+    // Ottenere gli ID dell'account e della categoria
+    $accountID = $account->id;
+    $categoryID = $category->id;
+
+    $stmt->bind_param("idiiis", $isExpense, $amount, $accountID, $categoryID, $positionCity, $transactionDate);
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+    }
     $stmt->close();
 }
+
 
 function createAccount($accountName)
 {

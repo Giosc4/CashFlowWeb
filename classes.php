@@ -3,7 +3,6 @@ class Account
 {
     public $id;
     public $name;
-    public $transactions = []; // Array di oggetti Transaction associati a questo account
 
     // Costruttore
     public function __construct($id, $name)
@@ -46,9 +45,9 @@ class Transaction
     public $id;
     public $isExpense;
     public $amount;
-    public $account; // Oggetto Account associato a questa transazione
-    public $category; // Oggetto Categories associato a questa transazione
-    public $position; // Oggetto Position associato a questa transazione
+    public $account; 
+    public $category; 
+    public $position; 
     public $transactionDate;
 
     public function __construct($id, $isExpense, $amount, $account, $category, $position, $transactionDate)

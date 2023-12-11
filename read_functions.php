@@ -26,15 +26,15 @@ function getAllPositions()
 
     $result = $conn->query($selectAllPositionsQuery);
 
-    $Positions = [];
+    $positions = [];
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $Positions[] = $row;
+            $positions[] = $row;
         }
     }
 
-    return $Positions;
+    return $positions;
 }
 function getAllAccounts()
 {
@@ -46,12 +46,16 @@ function getAllAccounts()
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $accounts[] = $row;
+            if (isset($row['id'])) {
+                $accounts[] = new Account($row['id'], $row['name']);
+            } else {
+                echo "Errore: Chiave 'id' non presente nell'array.";
+            }
         }
     }
-
     return $accounts;
 }
+
 
 function getAllCategories()
 {
@@ -63,38 +67,12 @@ function getAllCategories()
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $categories[] = $row;
+            if (isset($row['id'])) {
+                $categories[] = new Categories($row['id'], $row['name']);
+            } else {
+                echo "Errore: Chiave 'id' non presente nell'array.";
+            }
         }
     }
-
     return $categories;
-}
-// read_functions.php
-
-function getAccountById($accountId) {
-    $accounts = getAllAccounts(); 
-
-    foreach ($accounts as $account) {
-        if (isset($account['id']) && $account['id'] == $accountId) {
-            return $account;
-        }
-    }
-
-    // Debug: stampa l'ID cercato
-    echo "Debug getAccountById: Account con ID $accountId non trovato.";
-    return null; // Restituisci null se l'account non è stato trovato
-}
-
-function getCategoryById($categoryId) {
-    $categories = getAllCategories(); 
-
-    foreach ($categories as $category) {
-        if (isset($category['id']) && $category['id'] == $categoryId) {
-            return $category;
-        }
-    }
-
-    // Debug: stampa l'ID cercato
-    echo "Debug getCategoryById: Categoria con ID $categoryId non trovata.";
-    return null; // Restituisci null se la categoria non è stata trovata
 }

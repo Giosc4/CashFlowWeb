@@ -20,6 +20,7 @@
     <?php
     require_once 'queries.php';
     require_once 'read_functions.php';
+    require_once 'classes.php';
 
     // Esempio di visualizzazione di tutte le tabelle
     $accounts = getAllAccounts();

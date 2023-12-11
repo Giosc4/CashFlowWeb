@@ -18,6 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <form action="create_category.php" method="post">
     <label for="categoryName">Category Name:</label><br>
-    <input type="text" id="categoryName" name="categoryName" required><br>
+    <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
     <input type="submit" value="Create Category">
 </form>
