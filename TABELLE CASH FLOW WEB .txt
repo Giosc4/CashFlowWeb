@@ -1,0 +1,176 @@
+TABELLE CASH FLOW WEB 
+
+1. Transazioni
+2. Account
+3. Categoria
+4. Posizione
+5. Budget massimo o minimo
+6. Risparmi
+7. Valute
+8. Prestiti 
+9. Spese Ricorrenti
+10. Giroconto
+11. Pianificazioni di Pagamento
+12. Bilancio Mensile
+
+
+Transazioni:
+
+IDTransazione (chiave primaria, auto-increment)
+TipoTransazione (booleano per indicare se è un'entrata o un'uscita)
+Importo (valore double del prezzo)
+IDAccount (chiave esterna per collegare a una tabella Account)
+Longitudine, Latitudine, Citta (posizione della transazione)
+DataTransazione
+IDCategoria (chiave esterna per collegare a una tabella Categoria)
+Descrizione (testo descrittivo della transazione)
+MetodoPagamento (ad esempio, carta di credito, contanti, bonifico)
+IDUtente (chiave esterna per collegare a una tabella Utente)
+----
+
+Account:
+
+IDAccount (chiave primaria, auto-increment)
+NomeAccount (nome dell'account)
+Saldo (valore double rappresentante il saldo dell'account)
+----
+
+Categoria:
+
+IDCategoria (chiave primaria, auto-increment)
+NomeCategoria (nome della categoria)
+DescrizioneCategoria (descrizione dettagliata della categoria)
+---
+
+Posizione:
+
+IDPosizione (chiave primaria, auto-increment)
+Longitudine, Latitudine (coordinate della posizione)
+NomeCitta (nome della città)
+Nazione (nazione della posizione)
+
+---
+Utente:
+
+IDUtente (chiave primaria, auto-increment)
+NomeUtente (nome dell'utente)
+Email (indirizzo email dell'utente)
+Password (hash della password dell'utente)
+
+---
+Budget massimo o minimo:
+
+IDBudget (chiave primaria, auto-increment)
+IDCategoria (chiave esterna per collegare a una tabella Categoria)
+ImportoMassimo (valore double rappresentante il limite di spesa per la categoria)
+DataInizio, DataFine (periodo di validità del budget)
+
+---
+Risparmi:
+
+IDRisparmio (chiave primaria, auto-increment)
+IDAccount (chiave esterna per collegare a una tabella Account)
+ImportoRisparmio (valore double rappresentante l'importo risparmiato)
+DataInizioRisparmio, DataFineRisparmio (periodo di risparmio)
+
+---
+Valute:
+IDValuta (chiave primaria, auto-increment)
+NomeValuta (nome della valuta, es. Euro, Dollaro)
+Simbolo (simbolo della valuta, es. €, $)
+
+---
+Prestiti:
+
+IDPrestito (chiave primaria, auto-increment)
+IDAccount (chiave esterna per collegare a una tabella Account)
+ImportoPrestito (valore double rappresentante l'importo del prestito)
+DataConcessione (data in cui è stato concesso il prestito)
+TassoInteresse (tasso di interesse del prestito)
+Durata (durata del prestito)
+
+---
+Spese Ricorrenti:
+
+IDSpesaRicorrente (chiave primaria, auto-increment)
+IDAccount (chiave esterna per collegare a una tabella Account)
+ImportoSpesa (valore double rappresentante l'importo della spesa)
+DataScadenza (data in cui è prevista la prossima spesa)
+IDCategoria (chiave esterna per collegare a una tabella Categoria)
+
+---
+Giroconto:
+IDGiroconto (chiave primaria, auto-increment)
+IDAccountA (chiave esterna per collegare a una tabella Account)
+IDAccountB (chiave esterna per collegare a una tabella Account)
+Importo (valore double rappresentante l'importo della transazione reciproca)
+DataTransazioneReciproca (data della transazione reciproca)
+
+---
+Pianificazioni di Pagamento:
+
+IDPianificazionePagamento (chiave primaria, auto-increment)
+IDAccount (chiave esterna per collegare a una tabella Account)
+ImportoPagamento (valore double rappresentante l'importo da pagare)
+DataScadenzaPagamento (data di scadenza del pagamento)
+IDCategoria (chiave esterna per collegare a una tabella Categoria)
+
+---
+Bilancio Mensile:
+
+IDBilancioMensile (chiave primaria, auto-increment)
+IDAccount (chiave esterna per collegare a una tabella Account)
+Mese, Anno (periodo del bilancio)
+Entrate (valore double rappresentante le entrate del mese)
+Uscite (valore double rappresentante le uscite del mese)
+SaldoMese (valore double rappresentante il saldo alla fine del mese)
+
+-----------------------------------
+
+
+Stored Procedure per l'aggiornamento del saldo dell'account
+1. 
+DELIMITER //
+
+CREATE PROCEDURE AggiornaSaldoAccount (
+    IN p_IDAccount INT
+)
+BEGIN
+    UPDATE Account
+    SET Saldo = (SELECT COALESCE(SUM(Importo), 0) FROM Transazioni WHERE IDAccount = p_IDAccount)
+    WHERE IDAccount = p_IDAccount;
+END //
+
+DELIMITER ;
+
+
+2. 
+DELIMITER //
+
+CREATE PROCEDURE CancellaTransazione (
+    IN p_IDTransazione INT
+)
+BEGIN
+    DELETE FROM Transazioni WHERE IDTransazione = p_IDTransazione;
+    -- Aggiorna il saldo dell'account dopo la cancellazione
+    CALL AggiornaSaldoAccount((SELECT IDAccount FROM Transazioni WHERE IDTransazione = p_IDTransazione));
+END //
+
+DELIMITER ;
+
+
+-------------
+TRIGGER:
+
+1.
+DELIMITER //
+
+CREATE TRIGGER AfterInsertTransazione
+AFTER INSERT ON Transazioni
+FOR EACH ROW
+BEGIN
+    -- Aggiorna il saldo dell'account dopo l'inserimento di una nuova transazione
+    CALL AggiornaSaldoAccount(NEW.IDAccount);
+END //
+
+DELIMITER ;
