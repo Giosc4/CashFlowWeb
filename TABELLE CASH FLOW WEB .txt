@@ -2,15 +2,15 @@ TABELLE CASH FLOW WEB
 
 1. Transazioni
 2. Account
-3. Categoria
-4. Posizione
-5. Budget massimo o minimo
-6. Risparmi
-7. Valute
-8. Prestiti 
-9. Spese Ricorrenti
-10. Giroconto
-11. Pianificazioni di Pagamento
+3. Categoria primaria
+4. Categoria secondaria
+5. Posizione
+6. Budget massimo o minimo
+7. Risparmi
+8. Valute
+9. Prestiti 
+10. Spese Ricorrenti o Pianificazioni di Pagamento
+11. Obiettivi Finanziari
 12. Bilancio Mensile
 
 
@@ -20,12 +20,11 @@ IDTransazione (chiave primaria, auto-increment)
 TipoTransazione (booleano per indicare se è un'entrata o un'uscita)
 Importo (valore double del prezzo)
 IDAccount (chiave esterna per collegare a una tabella Account)
-Longitudine, Latitudine, Citta (posizione della transazione)
+Posizione (posizione della transazione)
 DataTransazione
 IDCategoria (chiave esterna per collegare a una tabella Categoria)
 Descrizione (testo descrittivo della transazione)
 MetodoPagamento (ad esempio, carta di credito, contanti, bonifico)
-IDUtente (chiave esterna per collegare a una tabella Utente)
 ----
 
 Account:
@@ -35,27 +34,28 @@ NomeAccount (nome dell'account)
 Saldo (valore double rappresentante il saldo dell'account)
 ----
 
-Categoria:
+Categoria principale:
 
-IDCategoria (chiave primaria, auto-increment)
+IDCategoriaPrimaria (chiave primaria, auto-increment)
 NomeCategoria (nome della categoria)
 DescrizioneCategoria (descrizione dettagliata della categoria)
----
 
+----
+
+Categoria secondaria:
+
+IDCategoriaSecondaria (chiave primaria, auto-increment)
+IDCategoriaPrimaria (chiave della categoria principale)
+NomeCategoria (nome della categoria)
+DescrizioneCategoria (descrizione dettagliata della categoria)
+
+---
 Posizione:
 
 IDPosizione (chiave primaria, auto-increment)
 Longitudine, Latitudine (coordinate della posizione)
 NomeCitta (nome della città)
 Nazione (nazione della posizione)
-
----
-Utente:
-
-IDUtente (chiave primaria, auto-increment)
-NomeUtente (nome dell'utente)
-Email (indirizzo email dell'utente)
-Password (hash della password dell'utente)
 
 ---
 Budget massimo o minimo:
@@ -90,7 +90,7 @@ TassoInteresse (tasso di interesse del prestito)
 Durata (durata del prestito)
 
 ---
-Spese Ricorrenti:
+Spese Ricorrenti o Pianificazioni di Pagamento:
 
 IDSpesaRicorrente (chiave primaria, auto-increment)
 IDAccount (chiave esterna per collegare a una tabella Account)
@@ -99,21 +99,13 @@ DataScadenza (data in cui è prevista la prossima spesa)
 IDCategoria (chiave esterna per collegare a una tabella Categoria)
 
 ---
-Giroconto:
-IDGiroconto (chiave primaria, auto-increment)
-IDAccountA (chiave esterna per collegare a una tabella Account)
-IDAccountB (chiave esterna per collegare a una tabella Account)
-Importo (valore double rappresentante l'importo della transazione reciproca)
-DataTransazioneReciproca (data della transazione reciproca)
+Obiettivi Finanziari:
 
----
-Pianificazioni di Pagamento:
-
-IDPianificazionePagamento (chiave primaria, auto-increment)
+IDObiettivo (chiave primaria, auto-increment)
 IDAccount (chiave esterna per collegare a una tabella Account)
-ImportoPagamento (valore double rappresentante l'importo da pagare)
-DataScadenzaPagamento (data di scadenza del pagamento)
-IDCategoria (chiave esterna per collegare a una tabella Categoria)
+DescrizioneObiettivo (descrizione dettagliata dell'obiettivo finanziario)
+ImportoObiettivo (valore double rappresentante l'importo da raggiungere)
+DataScadenza
 
 ---
 Bilancio Mensile:
