@@ -1,6 +1,6 @@
 <?php
-require_once 'db_connection.php';
-require_once 'queries.php';
+require_once '../db/db_connection.php';
+require_once '../db/queries.php';
 
 
 function getAllTransactions()
