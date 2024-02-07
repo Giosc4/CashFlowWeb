@@ -8,7 +8,7 @@ function createAccount($nomeAccount, $saldo)
     global $conn, $insertAccountQuery;
 
     $stmt = $conn->prepare($insertAccountQuery);
-    $stmt->bind_param("ss", $nomeAccount, $saldo);
+    $stmt->bind_param("sd", $nomeAccount, $saldo);
     $stmt->execute();
     $stmt->close();
 }
@@ -43,5 +43,22 @@ function createCategoriaSecondaria($idCategoriaPrimaria, $nomeCategoria, $descri
     $stmt = $conn->prepare($insertCategoriaSecondariaQuery);
     $stmt->bind_param("iss", $idCategoriaPrimaria, $nomeCategoria, $descrizioneCategoria); // i = integer, s = string
     $stmt->execute();
+    $stmt->close();
+}
+function createTransaction($importo, $idAccount, $dataTransazione, $idCategoriaPrimaria, $idCategoriaSecondaria, $descrizione, $isEntrata)
+{
+    global $conn, $insertTransactionQuery;
+
+
+    $stmt = $conn->prepare($insertTransactionQuery);
+    $isEntrata = $isEntrata ? 1 : 0;
+    $idCategoriaSecondaria = !empty($idCategoriaSecondaria) ? $idCategoriaSecondaria : NULL;
+
+    // Nota: 'i' per gli interi, 's' per le stringhe, 'd' per i decimali, e 'b' per i blob
+    $stmt->bind_param("disiisb", $importo, $idAccount, $dataTransazione, $idCategoriaPrimaria, $idCategoriaSecondaria, $descrizione, $isEntrata);
+
+    if (!$stmt->execute()) {
+        echo "Errore durante l'inserimento della transazione: " . $stmt->error;
+    }
     $stmt->close();
 }

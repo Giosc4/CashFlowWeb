@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Crea Account</title>
 </head>
+
 <body>
     <h2>Crea un nuovo account</h2>
     <form action="../server/create_account_s.php" method="post">
@@ -17,5 +19,9 @@
 
         <input type="submit" value="Crea Account">
     </form>
+
+    <br>
+    <a href="../client/index.php"><button>Ritorna ad Index</button></a>
 </body>
+
 </html>

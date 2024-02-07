@@ -3,8 +3,8 @@ require_once '../db/db.php';
 require_once '../db/queries.php';
 require_once '../server/classes.php';
 
-
-function getAllTransactions() {
+function getAllTransactions()
+{
     global $conn, $selectAllTransactionsQuery;
 
     if ($conn->connect_error) {
@@ -24,27 +24,8 @@ function getAllTransactions() {
     return $transactions;
 }
 
-function getAllPositions() {
-    global $conn, $selectAllPositionsQuery;
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $result = $conn->query($selectAllPositionsQuery);
-
-    $positions = [];
-
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $positions[] = $row;
-        }
-    }
-
-    return $positions;
-}
-
-function getAllAccounts() {
+function getAllAccounts()
+{
     global $conn, $selectAllAccountsQuery;
 
     if ($conn->connect_error) {
@@ -57,17 +38,15 @@ function getAllAccounts() {
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            // Assuming Account class constructor correctly takes parameters as (id, name)
-            // Adjust parameter names as per your Account class constructor
-            $accounts[] = new Account($row['IDAccount'], $row['NomeAccount'], $row['Saldo'], $row['IDRisparmio'], $row['IDSpesaRicorrente'], $row['IDPrestito'], $row['IDObiettivo'], $row['IDCredito']);
+            $accounts[] = $row;
         }
     }
-
     return $accounts;
 }
 
 
-function getAllCategoriePrimarie() {
+function getAllCategoriePrimarie()
+{
     global $conn, $selectAllCategoriePrimarieQuery;
 
     if ($conn->connect_error) {
@@ -87,7 +66,29 @@ function getAllCategoriePrimarie() {
     return $categoriePrimarie;
 }
 
-function getAllCategorieSecondarie() {
+function getCategorieSecondarieFromPrimarie($primaryCategory)
+{
+    global $conn;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query("SELECT * FROM categoriasecondaria WHERE IDPCategoriaPrimaria = '$primaryCategory'");
+
+    $categorieSecondarie = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $categorieSecondarie[] = $row;
+        }
+    }
+
+    return $categorieSecondarie;
+}
+
+function getAllCategorieSecondarie()
+{
     global $conn, $selectAllCategorieSecondarieQuery;
 
     if ($conn->connect_error) {

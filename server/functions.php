@@ -6,14 +6,12 @@ require_once '../server/classes.php';
 
 function displayAllTables() {
     $accounts = getAllAccounts();
-    $positions = getAllPositions();
     $transactions = getAllTransactions();
     $categoriePrimarie = getAllCategoriePrimarie();
     $categorieSecondarie = getAllCategorieSecondarie();
     // Aggiungi qui altre chiamate di funzione
 
     displayTableData($accounts, 'account');
-    displayTableData($positions, 'position');
     displayTableData($transactions, 'transaction');
     displayTableData($categoriePrimarie, 'categoria primaria');
     displayTableData($categorieSecondarie, 'categoria secondaria');
