@@ -1,0 +1,59 @@
+body {
+    padding-top: 20px;
+    padding-right: 250px;
+    padding-left: 250px;
+    background-color: #6cd45d;
+
+}
+
+#innnerContent {
+    background-color: #ffffe6;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+#tot {
+    font-size: 23px;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.navWord {
+    margin-left: 50px;
+    font-weight: bold;
+    font-size: 25px;
+
+}
+
+#accounts {
+    margin-top: 20px;
+    border-radius: 15px;
+}
+
+#bottoneAccount {
+    background-color: #ffffe6;
+    padding: 10px;
+    border-color: #36ad47;
+    border-width: 5px;
+    color: #36ad47;
+    border-radius: 15px;
+}
+
+.navbar {
+    background-color: #ffffe6;
+    border-radius: 150px;
+
+}
+
+.centered-cell {
+    text-align: center;
+    padding: 8px;
+    border: 1px #dddddd;
+}

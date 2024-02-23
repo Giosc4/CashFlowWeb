@@ -79,20 +79,32 @@ function displayAccounts()
         }
     }
 }
-
 function displayTransactionsList()
 {
     $transactions = getAllTransactions();
+    echo "<thead>
+                <tr>
+                    <th class='centered-cell'>Data Transazione</th>
+                    <th class='centered-cell'>Descrizione</th>
+                    <th class='centered-cell'>Importo</th>
+                    <th class='centered-cell'>Utente ID</th>
+                </tr>
+            </thead>
+            <tbody>";
 
-    echo "<ul class='list-group'>";
     foreach ($transactions as $transaction) {
-        echo "
-        <li class='list-group-item'>
-   {$transaction['DataTransazione']} - {$transaction['Descrizione']} - {$transaction['Importo']} - {$transaction['IDAccount']};
-        </li>
-        ";
+        echo "<tr>
+                <td class='centered-cell'>{$transaction['DataTransazione']}</td>
+                <td class='centered-cell'>{$transaction['Descrizione']}</td>
+                <td class='centered-cell'>{$transaction['Importo']}</td>
+                <td class='centered-cell'>{$transaction['IDAccount']}</td>
+              </tr>";
     }
+
+    echo "</tbody>";
 }
+
+
 function displayLineChart()
 {
     echo "<canvas id='lineChart' width='400' height='400'></canvas>";
@@ -155,7 +167,8 @@ var myPieChart = new Chart(ctx, {
 ";
 }
 
-function displayBarChart() {
+function displayBarChart()
+{
     echo "<canvas id='barChart' width='400' height='400'></canvas>";
     $labels = ["Gennaio", "Febbraio", "Marzo", "Aprile"];
     $data = [20, 30, 40, 50];
