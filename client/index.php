@@ -5,22 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="../client/css/index.css">
-    <title>Home</title>
+    <link rel="stylesheet" href="../client/css/body-nav-foot.css">
 
+    <title>Home</title>
 </head>
 
 <body>
     <div id="innnerContent">
-    <?php include 'nav&foot.php';
-    printNav();
-    ?>
+        <?php include '../server/functions.php';
+        printNav(); ?>
 
-        <div class="container text-center" id="accounts">
+        <div class="container text-center">
             <?php
-            include '../server/functions.php';
             displayAccounts();
             ?>
         </div>
@@ -28,7 +28,7 @@
         <div>
             <h1 class="text-C" id="tot">TOTALE: </h1>
         </div>
-
+<hr>
         <div class="container mt-4">
             <form action="" method="post">
                 <div class="form-row">
@@ -44,6 +44,7 @@
                 <button type="submit" class="btn" style="background-color: #36ad47; border-color: #36ad47; color: white;">Visualizza</button>
             </form>
         </div>
+        <hr>
         <div class="container" style="margin-top: 30px;">
             <div class="row">
                 <div class="col-md-6 d-flex align-items-stretch">
@@ -87,13 +88,18 @@
                 </div>
             </div>
         </div>
+        <hr>
 
-    <?php 
-    printFoot();
-    ?>
-
-
+        <?php
+        printFoot();
+        ?>
     </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

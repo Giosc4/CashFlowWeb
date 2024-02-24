@@ -1,0 +1,25 @@
+
+.titolo {
+    font-size: 30px;
+    font-weight: bold;
+
+}
+
+.accountsDetails-btn {
+    padding: 10px;
+    margin-top: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.box-accounts {
+    border-radius: 25px;
+    margin: 50px;
+}
+
+#bottone-crea {
+    background-color: #36ad47;
+    border-color: #36ad47;
+    color: white;
+    margin-bottom: 20px;
+}

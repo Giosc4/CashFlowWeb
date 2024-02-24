@@ -1,0 +1,31 @@
+body {
+    width: 70%;
+    background-color: #6cd45d;
+    margin: auto;
+    font-family: "Comfortaa", sans-serif;
+
+}
+
+#innnerContent {
+    background-color: #cceeff;
+    border-radius: 15px;
+}
+
+.footer {
+    background-color: #cceeff;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.navWord {
+    margin-left: 50px;  
+    font-weight: bold;
+    font-size: 25px;
+
+}
+.navbar {
+    background-color: #ffffe6;
+    border-radius: 150px;
+    margin-bottom: 20px;
+}
