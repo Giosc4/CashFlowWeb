@@ -95,9 +95,9 @@ function displayAccountsDetails()
     $html .= "<h5 class='card-title titolo'>{$account['Nome_Account']}</h5>";
     $html .= "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
     $html .= "<p class='card-text'>IdAccount: {$account['IdAccount']}</p>";
-    $html .= "<br><a href='../client/transactions.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Transazioni</a>";
-    $html .= "<br><a href='../client/budget_obiettivi_risparmi.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Budget e Obiettivi</a>";
-    $html .= "<br><a href='../client/debito_credito.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Credito / Debito</a>";
+    $html .= "<br><a href='../client/transactions.php' class='btn btn-primary accountsDetails-btn' >Transazioni</a>";
+    $html .= "<br><a href='../client/budget_obiettivi_risparmi.php' class='btn btn-primary accountsDetails-btn' >Budget e Obiettivi</a>";
+    $html .= "<br><a href='../client/debito_credito.php' class='btn btn-primary accountsDetails-btn'>Credito / Debito</a>";
     $html .= "</div></div></div>";
 
     $count++;
@@ -147,17 +147,6 @@ function generaGrid()
 
   echo $html;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 function displayTransactionsList()
 {
@@ -316,13 +305,13 @@ function printNav()
                 <a class='nav-link active navWord' href='transaction.php'>Transazioni</a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link active navWord' href='budget_obiettivi.php'>Budget/Obiettivi</a>
+                <a class='nav-link active navWord' href='budget_obiettivi_risparmi.php'>Budget/ Obiettivi /Risparmi</a>
             </li>
             <li class='nav-item'>
                 <a class='nav-link active navWord' href='debito_credito.php'>Debito/Credito</a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link active navWord' href='categories.php'>Categorie</a>
+                <a class='nav-link active navWord' href='categorie.php'>Categorie</a>
             </li>
         </ul>
     </div>

@@ -1,0 +1,32 @@
+.marrone {
+    background-color: brown;
+}
+
+.griglia {
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+    border: 1px solid #6cd45d;
+    border-radius: 30px;
+
+}
+
+.creaButton {
+    background-color: #6cd45d;
+    color: white;
+    padding: 20px;
+    border: 1px solid #6cd45d;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    height: 60%;
+}
+
+.testo{
+    text-align: center;
+}
+
+.tabella{
+    width: 100%;
+}

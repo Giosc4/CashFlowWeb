@@ -1,4 +1,3 @@
-
 .titolo {
     font-size: 30px;
     font-weight: bold;
@@ -10,6 +9,8 @@
     margin-top: 5px;
     color: white;
     font-weight: bold;
+    background-color: #6cd45d;
+    border-color: #6cd45d;
 }
 
 .box-accounts {
@@ -18,8 +19,8 @@
 }
 
 #bottone-crea {
-    background-color: #36ad47;
-    border-color: #36ad47;
+    background-color: #6cd45d;
+    border-color: #6cd45d;
     color: white;
     margin-bottom: 20px;
 }
