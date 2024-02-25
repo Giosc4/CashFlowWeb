@@ -51,7 +51,6 @@ function createTransaction($importo, $idAccount, $dataTransazione, $idCategoriaP
 
 
     $stmt = $conn->prepare($insertTransactionQuery);
-    $isEntrata = $isEntrata ? 1 : 0;
     $idCategoriaSecondaria = !empty($idCategoriaSecondaria) ? $idCategoriaSecondaria : NULL;
 
     // Nota: 'i' per gli interi, 's' per le stringhe, 'd' per i decimali, e 'b' per i blob

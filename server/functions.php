@@ -22,98 +22,133 @@ function displayAllTables()
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)
 {
-  echo "<h3>$tableName</h3>";
+  $html = "<h3>$tableName</h3>";
 
   if (!empty($data)) {
-    echo "<table border='1'>";
-    echo "<tr>";
-
+    $html .= "<table border='1'><tr>";
     // Stampa gli header della tabella
     foreach ($data[0] as $key => $value) {
-      echo "<th>$key</th>";
+      $html .= "<th>$key</th>";
     }
-
-    echo "</tr>";
+    $html .= "</tr>";
 
     // Stampa i dati della tabella
     foreach ($data as $row) {
-      echo "<tr>";
+      $html .= "<tr>";
       foreach ($row as $value) {
-        echo "<td>$value</td>";
+        $html .= "<td>$value</td>";
       }
-      echo "</tr>";
+      $html .= "</tr>";
     }
-
-    echo "</table>";
+    $html .= "</table>";
   } else {
-    echo "Nessun dato presente nella tabella $tableName.";
+    $html .= "Nessun dato presente nella tabella $tableName.";
   }
+
+  echo $html;
 }
+
 
 function displayAccounts()
 {
   $accounts = getAllAccounts();
   $count = 0;
+  $html = '';
 
   foreach ($accounts as $account) {
     if ($count % 4 == 0) {
-      echo "<div class='row justify-content-center'>";
+      $html .= "<div class='row justify-content-center'>";
     }
 
-    echo "<div class='col-md-3'>"; // Dividi la larghezza della colonna in 4 parti (12 / 4 = 3)
-    echo "<div class='card mb-3'>";
-    echo "<div class='card-body btn'>";
-    echo "<h5 class='card-title'>{$account['Nome_Account']}</h5>";
-    echo "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
-    echo "</div>";
-    echo "</div>";
-    echo "</div>";
+    $html .= "<div class='col-md-3'>"; // Dividi la larghezza della colonna in 4 parti (12 / 4 = 3)
+    $html .= "<div class='card mb-3'>";
+    $html .= "<div class='card-body btn'>";
+    $html .= "<h5 class='card-title'>{$account['Nome_Account']}</h5>";
+    $html .= "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
+    $html .= "</div></div></div>";
 
-    // Incrementa il contatore
     $count++;
 
-    // Se il contatore è divisibile per 4 o siamo all'ultimo account, chiudi la riga
     if ($count % 4 == 0 || $count == count($accounts)) {
-      echo "</div>"; // Chiudi la riga
+      $html .= "</div>"; // Chiudi la riga
     }
   }
+
+  echo $html;
 }
 
 
 function displayAccountsDetails()
 {
-
   $accounts = getAllAccounts();
   $count = 0;
+  $html = '';
 
   foreach ($accounts as $account) {
     if ($count % 3 == 0) {
-      echo "<div class='row justify-content-center'>";
+      $html .= "<div class='row justify-content-center'>";
     }
 
-    echo "<div class='col-md-4' >";
-    echo "<div class='card mb-3 box-accounts'>";
-    echo "<div class='card-body btn details-accounts'>";
-    echo "<h5 class='card-title titolo'>{$account['Nome_Account']}</h5>";
-    echo "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
-    echo "<p class='card-text'>IdAccount: {$account['IdAccount']}</p>";
-    echo "<a href='../client/risparmi.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Risparmi</a>";
-    echo "<br><a href='../client/transactions.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Transazioni</a>";
-    echo "<br><a href='../client/budget_obiettivi.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Budget e Obiettivi</a>";
-    echo "<br><a href='../client/debito_credito.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Credito / Debito</a>";
-    echo "</div>";
-    echo "</div>";
-    echo "</div>";
+    $html .= "<div class='col-md-4'>";
+    $html .= "<div class='card mb-3 box-accounts'>";
+    $html .= "<div class='card-body btn details-accounts'>";
+    $html .= "<h5 class='card-title titolo'>{$account['Nome_Account']}</h5>";
+    $html .= "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
+    $html .= "<p class='card-text'>IdAccount: {$account['IdAccount']}</p>";
+    $html .= "<br><a href='../client/transactions.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Transazioni</a>";
+    $html .= "<br><a href='../client/budget_obiettivi_risparmi.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Budget e Obiettivi</a>";
+    $html .= "<br><a href='../client/debito_credito.php' class='btn btn-primary accountsDetails-btn' style='background-color: #36ad47;'>Credito / Debito</a>";
+    $html .= "</div></div></div>";
 
-    // Incrementa il contatore
     $count++;
 
-    // Se il contatore è divisibile per 4 o siamo all'ultimo account, chiudi la riga
     if ($count % 3 == 0 || $count == count($accounts)) {
-      echo "</div>"; // Chiudi la riga
+      $html .= "</div>"; // Chiudi la riga
     }
   }
+
+  echo $html;
 }
+
+
+function generaGrid()
+{
+  $elementi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+
+  $html = '<div class="container">'; // Apri il container
+
+  // Iniziamo la prima riga
+  $html .= '<div class="row">';
+
+  foreach ($elementi as $indice => $elemento) {
+    // Costruisci l'URL usando il nome dell'elemento con aggiunta l'estensione .php
+    $url = strtolower($elemento) . '.php';
+
+    // Aggiungi il box
+    $html .= '<div class="col-lg-3 col-md-6 col-sm-6 mb-4" >'; // la classe mb-4 aggiunge un margine al fondo di ciascun box
+    $html .= '<a href="' . htmlspecialchars($url) . '" class="d-block h-100">';
+    $html .= '<div class="card"  id="template-box">';
+    $html .= '<div class="card-body text-center ">';
+    $html .= '<h5 class="card-title" style="font-size: 30px">' . htmlspecialchars($elemento) . '</h5>';
+    $html .= '</div>';
+    $html .= '</div>';
+    $html .= '</a>';
+    $html .= '</div>';
+
+    // Chiudi e apri una nuova riga ogni 4 elementi
+    if (($indice + 1) % 4 == 0 && ($indice + 1) < count($elementi)) {
+      $html .= '</div><div class="row">';
+    }
+  }
+
+  // Chiudi l'ultima riga e il container
+  $html .= '</div>';
+  $html .= '</div>';
+
+  echo $html;
+}
+
+
 
 
 

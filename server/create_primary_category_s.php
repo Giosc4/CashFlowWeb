@@ -1,5 +1,5 @@
 <?php
-require_once '../db/db.php'; 
+require_once '../db/db.php';
 require_once '../db/write_db.php';
 
 // Controlla se il form è stato inviato
@@ -24,4 +24,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
-?>

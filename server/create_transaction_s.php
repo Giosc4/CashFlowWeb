@@ -12,11 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idCategoriaPrimaria = $_POST['idCategoriaPrimaria'] ?? null;
     $idCategoriaSecondaria = $_POST['idCategoriaSecondaria'] ?? null;
     $descrizione = $_POST['descrizione'] ?? '';
-    $isEntrata = isset($_POST['isEntrata']) ? 1 : 0;
-
-    echo $dataTransazione; // Debugging per verificare il valore di $_POST["dataTransazione"]
-    
-    echo "- " . $isEntrata;
+    $isEntrata = !empty($_POST['isEntrata']) ? 1 : 0;
 
     if (empty($importo) || empty($idAccount) ||  !strtotime($dataTransazione)) {
         die('I campi Tipo, Importo, ID Account e Data Transazione sono obbligatori.');

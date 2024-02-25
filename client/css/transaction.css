@@ -1,5 +1,36 @@
-#newTransaction{
-    width: 60%;
-    margin: 0 auto;
-    
+#newTransaction {
+    margin-left: 100px;
+    padding: 40px;
+    border: 4px solid #6cd45d;
+    margin-bottom: 20px;
+
+}
+
+#template-box {
+    background-color: #6cd45d;
+    color: white;
+}
+
+.brown {
+    background-color: brown;
+}
+
+#ripTempl {
+    border: 4px solid #6cd45d;
+    padding: 40px;
+    margin-bottom: 20px;
+
+}
+
+
+#button-newTransaction {
+    background-color: #36ad47;
+    border-color: #36ad47;
+    color: white;
+    margin-top: 50px;
+    width: auto;
+    padding: 20px;
+    font: bolder;
+    font-size: x-large;
+    display: block;
 }
