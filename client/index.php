@@ -20,37 +20,37 @@
         <?php include '../server/functions.php';
         printNav(); ?>
 
-        <div class="container text-center">
+        <div class="container text-center box-accounts">
             <?php
             displayAccounts();
             ?>
         </div>
 
         <div>
-            <h1 class="text-C" id="tot">TOTALE: </h1>
+            <h1 class="text-C" id="tot">TOTALE: € 123,69</h1>
         </div>
         <hr>
+
+
+        <!--  -->
         <div class="container mt-4">
-            <form action="" method="post">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="start_date">Data di inizio</label>
-                        <input type="date" class="form-control" id="start_date" name="start_date">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="end_date">Data di fine</label>
-                        <input type="date" class="form-control" id="end_date" name="end_date">
-                    </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="start_date">Data di inizio</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date">
+                    <br>
+                    <label for="end_date">Data di fine</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
                 </div>
-                <button type="submit" class="btn" style="background-color: #36ad47; border-color: #36ad47; color: white;">Visualizza</button>
-            </form>
+            </div>
+            <button type="submit" class="btn" id="btn-visualizza">Visualizza</button>
         </div>
         <hr>
         <div class="container" style="margin-top: 30px;">
             <div class="row">
                 <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body d-flex flex-column">
+                    <div class="card w-100 box-statistics">
+                        <div class="card-body d-flex flex-column box-statistics" style="border: 4px solid #6cd45d;">
                             <h5 class="card-title">Lista Transazioni</h5>
                             <table class="table table-striped">
                                 <?php displayTransactionsList(); ?>

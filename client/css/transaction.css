@@ -1,14 +1,22 @@
 #newTransaction {
     margin-left: 100px;
-    padding: 40px;
+    padding: 20px;
     border: 4px solid #6cd45d;
-    margin-bottom: 20px;
+    background-color: white;
 
+    /* margin-bottom: 20px; */
+    border-radius: 20px;
 }
 
 #template-box {
-    background-color: #6cd45d;
-    color: white;
+    background-color: white;
+    border: 4px solid #6cd45d;
+    color: black ;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50px;
 }
 
 .brown {
@@ -17,9 +25,10 @@
 
 #ripTempl {
     border: 4px solid #6cd45d;
-    padding: 40px;
+    background-color: white;
+    padding: 20px;
     margin-bottom: 20px;
-
+    border-radius: 20px;
 }
 
 
@@ -33,4 +42,13 @@
     font: bolder;
     font-size: x-large;
     display: block;
+}
+
+.box-template{
+    font-size: 30px;
+}
+
+#template-box:hover {
+    background-color: #6cd45d;
+    border-color: black 20px;
 }

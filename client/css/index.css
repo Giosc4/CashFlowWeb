@@ -1,15 +1,53 @@
-
-
 #tot {
     font-size: 23px;
-    font-weight: bold;
+    font: bold;
     padding: 20px;
+    text-align: center;
+    margin: 50px;
 }
-
-
 
 .centered-cell {
     text-align: center;
     padding: 8px;
-    border: 1px #dddddd;
+    border: 1px #ffffe6;
+}
+
+.account-bordo {
+    border-radius: 100px;
+    border: 2px solid #6cd45d;
+    border: #ffffe6;
+}
+
+.account-bordo:hover {
+    background-color: #6cd45d;
+    border-color: black 20px;
+}
+
+.box-accounts {
+    border-radius: 60px;
+    /* background-color: #ffffe6; */
+}
+
+.box-statistics {
+    border-radius: 20px;
+    border: 2px solid #6cd45d;
+
+}
+
+#start_date{
+    width: 60%;
+    
+}
+#end_date{
+    width: 60%;
+}
+
+#start_date:hover{
+    border: 2px solid #6cd45d;
+
+    
+}
+#end_date:hover{
+    border: 2px solid #6cd45d;
+
 }

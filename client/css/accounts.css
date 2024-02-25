@@ -11,11 +11,14 @@
     font-weight: bold;
     background-color: #6cd45d;
     border-color: #6cd45d;
+    
 }
 
 .box-accounts {
     border-radius: 25px;
-    margin: 50px;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid #6cd45d;
 }
 
 #bottone-crea {

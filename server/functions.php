@@ -56,12 +56,12 @@ function displayAccounts()
   $html = '';
 
   foreach ($accounts as $account) {
-    if ($count % 4 == 0) {
+    if ($count % 3 == 0) {
       $html .= "<div class='row justify-content-center'>";
     }
 
-    $html .= "<div class='col-md-3'>"; // Dividi la larghezza della colonna in 4 parti (12 / 4 = 3)
-    $html .= "<div class='card mb-3'>";
+    $html .= "<div class='col-md-3' style='margin:10px'>"; // Dividi la larghezza della colonna in 4 parti (12 / 4 = 3)
+    $html .= "<div class='card mb-3 account-bordo'>";
     $html .= "<div class='card-body btn'>";
     $html .= "<h5 class='card-title'>{$account['Nome_Account']}</h5>";
     $html .= "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
@@ -69,7 +69,7 @@ function displayAccounts()
 
     $count++;
 
-    if ($count % 4 == 0 || $count == count($accounts)) {
+    if ($count % 3 == 0 || $count == count($accounts)) {
       $html .= "</div>"; // Chiudi la riga
     }
   }
@@ -89,7 +89,7 @@ function displayAccountsDetails()
       $html .= "<div class='row justify-content-center'>";
     }
 
-    $html .= "<div class='col-md-4'>";
+    $html .= "<div class='col-md-3'>";
     $html .= "<div class='card mb-3 box-accounts'>";
     $html .= "<div class='card-body btn details-accounts'>";
     $html .= "<h5 class='card-title titolo'>{$account['Nome_Account']}</h5>";
@@ -129,7 +129,9 @@ function generaGrid()
     $html .= '<a href="' . htmlspecialchars($url) . '" class="d-block h-100">';
     $html .= '<div class="card"  id="template-box">';
     $html .= '<div class="card-body text-center ">';
-    $html .= '<h5 class="card-title" style="font-size: 30px">' . htmlspecialchars($elemento) . '</h5>';
+    $html .= "<div class='card-body btn'>";
+    $html .= "<label class='card-title box-template'>" . htmlspecialchars($elemento) . "</label>";
+    $html .= "</div>";
     $html .= '</div>';
     $html .= '</div>';
     $html .= '</a>';
@@ -291,7 +293,7 @@ var myBarChart = new Chart(ctx, {
 
 function printNav()
 {
-  echo "<nav class='navbar navbar-expand-lg navbar-light bg-light'>
+  echo " <nav class='navbar navbar-expand-lg navbar-light bg-light'>
   <a class='navbar-brand' href='../client/'> <img src='../INFO/CashFlowApp_LOGO-bordo.png' alt='LOGO' width='100px' id='logo'> </a>
   <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
     <span class='navbar-toggler-icon'></span>
@@ -305,7 +307,7 @@ function printNav()
                 <a class='nav-link active navWord' href='transaction.php'>Transazioni</a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link active navWord' href='budget_obiettivi_risparmi.php'>Budget/ Obiettivi /Risparmi</a>
+                <a class='nav-link active navWord' href='budget_obiettivi_risparmi.php'>B.O.R.</a>
             </li>
             <li class='nav-item'>
                 <a class='nav-link active navWord' href='debito_credito.php'>Debito/Credito</a>
