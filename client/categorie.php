@@ -20,9 +20,8 @@
         <div class="container" style="margin-top: 30px;">
 
             <div class="row justify-content-center">
-
-                <a href="#" class="btn btn-primary creaCategoria-btn">Crea Categoria Principale</a>
-                <a href="#" class="btn btn-primary creaCategoria-btn">Crea Categoria Secondaria</a>
+                <button type="submit" class="btn creaCategoria-btn">Crea Categoria Principale</button>
+                <button type="submit" class="btn creaCategoria-btn">Crea Categoria Secondaria</button>
             </div>
             <hr>
             <div class="row" style="margin-top: 30px;">

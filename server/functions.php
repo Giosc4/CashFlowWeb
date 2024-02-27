@@ -104,9 +104,8 @@ function displayAccountsDetails()
     $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/transactions.php'\">Transazioni</button>";
     $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/budget_obiettivi_risparmi.php'\">Budget e Obiettivi</button>";
     $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/debito_credito.php'\">Credito / Debito</button>";
-    $html .= "<form action='../server/account_s.php' method='post'>";
-    $html .= "<input type='hidden' name='idAccount' value='{$account['IdAccount']}'>";
-    $html .= "<hr><button type='submit' name='submit' value='deleteAccount' class='btn btn-danger' style='border-radius: 20px; padding: 10px;'>Elimina Account</button>";
+    $html .= "<input type='hidden' name='idAccountToDelete' value='{$account['IdAccount']}'>";
+    $html .= "<hr><button type='submit' name='submit[deleteAccount][{$account['IdAccount']}]' class='btn btn-danger' style='border-radius: 20px; padding: 10px;'>Elimina Account</button>";
     $html .= "</form>";
     $html .= "</div> </div> </div>";
 
@@ -118,6 +117,125 @@ function displayAccountsDetails()
   }
 
   echo $html;
+}
+
+function displayBudgetsList()
+{
+  $budgets = getAllBudgets();
+  if (empty($budgets)) {
+    echo "<h3 class=' row justify-content-center'>Nessun budget presente.</h3>";
+  }
+
+  foreach ($budgets as $budget) {
+    $dataFine = date('d/m/Y', strtotime($budget['DataFine']));
+    $dataInizio = date('d/m/Y', strtotime($budget['DataInizio']));
+
+    // Converti l'importo massimo in un formato leggibile (es. con due decimali)
+    $importoMassimo = number_format($budget['ImportoMassimo'], 2, ',', '.');
+
+    echo "<tr>
+        <form action='../server/budget_s.php' method='post'>
+        <td class='text-center align-middle'>{$budget['NomeBudget']}</td>
+            <td class='text-center align-middle'>{$budget['IDCategoria']}</td>
+            <td class='text-center align-middle'>{$importoMassimo}€</td>
+            <td class='text-center align-middle'>{$dataInizio}</td>
+            <td class='text-center align-middle'>{$dataFine}</td>
+            <td class='text-center align-middle'><input type='hidden' name='budget_id' value='{$budget['IDBudget']}'>
+            <button type='submit' name='submit' value='deleteBudget' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+        </form>
+        </tr>";
+  }
+}
+
+function displayObiettiviList()
+{
+  $goals = getAllObiettivi();
+  foreach ($goals as $goal) {
+    $dataScadenza = date('d/m/Y', strtotime($goal['DataScadenza']));
+
+    // Converti l'importo obiettivo in un formato leggibile (es. con due decimali)
+    $importoObiettivo = number_format($goal['ImportoObiettivo'], 2, ',', '.');
+
+    echo "<tr>
+          <form action='../server/goals_s.php' method='post'>
+              <td class='text-center align-middle'>{$goal['NomeObiettivo']}</td>
+              <td class='text-center align-middle'>{$importoObiettivo}€</td>
+              <td class='text-center align-middle'>{$dataScadenza}</td>
+              <td class='text-center align-middle'><input type='hidden' name='goal_id' value='{$goal['IDObiettivo']}'>
+              <button type='submit' name='submit' value='deleteGoal' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+          </form>
+          </tr>";
+  }
+}
+
+
+function displayRisparmiList()
+{
+  $savings = getAllRisparmi();
+  foreach ($savings as $saving) {
+    $dataInizio = date('d/m/Y', strtotime($saving['DataInizioRisparmio']));
+    $dataFine = date('d/m/Y', strtotime($saving['DataFineRisparmio']));
+
+    // Converti l'importo in un formato leggibile (es. con due decimali)
+    $importo = number_format($saving['Importo'], 2, ',', '.');
+
+    echo "<tr>
+            <form action='../server/savings_s.php' method='post'>
+            <td class='text-center align-middle'>{$saving['IDAccount']}</td>
+            <td class='text-center align-middle'>{$importo}€</td>
+            <td class='text-center align-middle'>{$dataInizio}</td>
+            <td class='text-center align-middle'>{$dataFine}</td>
+            <td class='text-center align-middle'><input type='hidden' name='saving_id' value='{$saving['Id']}'>
+            <button type='submit' name='submit' value='deleteSaving' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+            </form>
+            </tr>";
+  }
+}
+function displayDebitiList()
+{
+  $debts = getAllDebiti();
+  foreach ($debts as $debt) {
+    $dataEstrinzione = date('d/m/Y', strtotime($debt['DataEstrinzione']));
+    $dataConcessione = date('d/m/Y', strtotime($debt['DataConcessione']));
+
+    // Converti l'importo in un formato leggibile (es. con due decimali)
+    $importo = number_format($debt['Importo'], 2, ',', '.');
+
+    echo "<tr>
+              <form action='../server/debit_s.php' method='post'>
+                  <td class='text-center align-middle'>{$debt['NomeDebito']}</td>
+                  <td class='text-center align-middle'>{$importo}€</td>
+                  <td class='text-center align-middle'>{$dataEstrinzione}</td>
+                  <td class='text-center align-middle'>{$debt['Note']}</td>
+                  <td class='text-center align-middle'>{$dataConcessione}</td>
+                  <td class='text-center align-middle'><input type='hidden' name='debt_id' value='{$debt['IDDebito']}'>
+                  <button type='submit' name='submit' value='deleteDebt' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+              </form>
+              </tr>";
+  }
+}
+function displayCreditiList()
+{
+    $credits = getAllCrediti();
+    
+    foreach ($credits as $credito) {
+        $dataEstinzione = date('d/m/Y', strtotime($credito['DataEstrinzione']));
+        $dataConcessione = date('d/m/Y', strtotime($credito['DataConcessione']));
+        $importo = number_format($credito['Importo'], 2, ',', '.');
+
+        echo "<tr>
+            <form action='../server/credit_s.php' method='post'>
+            <td class='text-center align-middle'>{$credito['ID']}</td>
+                <td class='text-center align-middle'>{$importo}€</td>
+                <td class='text-center align-middle'>{$dataEstinzione}</td>
+                <td class='text-center align-middle'>{$credito['Note']}</td>
+                <td class='text-center align-middle'>{$dataConcessione}</td>
+                <td class='text-center align-middle'>{$credito['NomeCredito']}</td>
+                <td class='text-center align-middle'><input type='hidden' name='credito_id' value='{$credito['ID']}'>
+                <button type='submit' name='submit' value='deleteCredit' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+            </form>
+            </tr>";
+    }
 }
 
 

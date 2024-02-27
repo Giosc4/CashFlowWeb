@@ -160,7 +160,7 @@
                 </div>
                 <div class="row justify-content-center">
                     <div class="custom-control custom-switch mb-3">
-                        <button type="submit" name="submit" class="btn" id="button-newTransaction" value="createTransaction" style="border-radius: 100px;">Crea Transazione</button>
+                        <button type="submit" name="submit" class="btn" id="button-newTransaction" value="createTransaction" >Crea Transazione</button>
 
                     </div>
                 </div>

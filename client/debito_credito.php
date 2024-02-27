@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../client/css/body-nav-foot.css">
-    <link rel="stylesheet" href="../client/css/BOR.css">
+    <link rel="stylesheet" href="../client/css/debito_credito.css">
     <title>Debito Credito</title>
 </head>
 
@@ -20,86 +20,73 @@
 
         <div class="container my-5">
             <!-- Primo Contenitore -->
-            <div class="row mb-4">
+            <div class="row mb-4 contenitore-debito">
                 <div class="col-12">
-                    <h2>Lista Debiti</h2>
+                    <h2>Debiti</h2>
                 </div>
                 <div class="col-md-7 griglia">
-                    <table class="tabella">
-                        <tr class="testo">
-                            <th>Id Categoria</th>
-                            <th>Importo Massimo</th>
-                            <th>Importo Speso</th>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 1</td>
-                            <td>Importo Massimo 1</td>
-                            <td>Importo Speso 1</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 2</td>
-                            <td>Importo Massimo 2</td>
-                            <td>Importo Speso 2</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 3</td>
-                            <td>Importo Massimo 3</td>
-                            <td>Importo Speso 3</td>
-                        </tr>
-                    </table>
+                    <div class="row justify-content-center">
+                        <div class='scrollable-table'>
+                            <table class="table table-striped" style="font-size: 18px;">
+                                <thead>
+                                    <tr>
+                                        <th class='text-center align-middle'>NomeDebito</th>
+                                        <th class='text-center align-middle'>Importo</th>
+                                        <th class='text-center align-middle'>Data Estrinzione</th>
+                                        <th class='text-center align-middle'>Note</th>
+                                        <th class='text-center align-middle'>Data Concessione</th>
+                                        <th class='text-center align-middle'>Elimina Debito</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php displayDebitiList(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-center ">
-                    <button class="btn btn-primary btn-block creaButton ">Crea Debito</button>
+                <div class="col-md-3 d-flex align-text-center justify-content-center">
+                    <button class="btn btn-block creaButton ">Crea Debito</button>
                 </div>
             </div>
+
             <hr>
             <!-- Secondo Contenitore -->
-            <div class="row mb-4">
+            <div class="row mb-4 contenitore-credito">
                 <div class="col-12">
-                    <h2>Lista Crediti</h2>
+                    <h2>Crediti</h2>
                 </div>
                 <div class="col-md-7 griglia">
-                    <table class="tabella">
-                        <tr class="testo">
-                            <th>Id Account</th>
-                            <th>Importo Massimo</th>
-                            <th>Importo Attuale</th>
-                            <th>Data</th>
-                            <th>Descrizione</th>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 1</td>
-                            <td>Importo Massimo 1</td>
-                            <td>Importo Attuale 1</td>
-                            <td>Data 1</td>
-                            <td>Descrizione 1</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 2</td>
-                            <td>Importo Massimo 2</td>
-                            <td>Importo Attuale 2</td>
-                            <td>Data 2</td>
-                            <td>Descrizione 2</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 3</td>
-                            <td>Importo Massimo 3</td>
-                            <td>Importo Attuale 3</td>
-                            <td>Data 3</td>
-                            <td>Descrizione 3</td>
-                        </tr>
-                    </table>
+                    <div class="row justify-content-center">
+                        <div class='scrollable-table'>
+                            <table class="table table-striped" style="font-size: 18px;">
+                                <thead>
+                                    <tr>
+                                        <th class='text-center align-middle'>ID</th>
+                                        <th class='text-center align-middle'>Importo</th>
+                                        <th class='text-center align-middle'>Data Estinzione</th>
+                                        <th class='text-center align-middle'>Note</th>
+                                        <th class='text-center align-middle'>Data Concessione</th>
+                                        <th class='text-center align-middle'>Nome Credito</th>
+                                        <th class='text-center align-middle'>Elimina Credito</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php displayCreditiList(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-center">
-                    <button class="btn btn-primary btn-block creaButton">Crea Credito</button>
+                <div class="col-md-3 d-flex align-text-center justify-content-center">
+                    <button class="btn btn-block creaButton ">Crea Credito</button>
                 </div>
             </div>
+
+
+            <?php printFoot();
+            ?>
         </div>
-
-
-        <?php printFoot();
-        ?>
-    </div>
 </body>
 
 </html>

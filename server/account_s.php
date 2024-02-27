@@ -7,9 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($action == 'deleteAccount') {
         $nomeAccount = $_POST['idAccount'];
+        echo $nomeAccount;  
         deleteAccount($nomeAccount);
-        header('Location: ../client/index.php');
-        exit();
+        // header('Location: ../client/index.php');
+        // exit();
     } elseif ($action == 'createAccount') {
 
         $nomeAccount = $_POST['nomeAccount'];

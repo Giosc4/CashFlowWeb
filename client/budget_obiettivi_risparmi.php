@@ -18,126 +18,102 @@
 
         <?php include '../server/functions.php';
         printNav(); ?>
-
-        <div class="container my-5">
+        <div class="container">
             <!-- Primo Contenitore -->
-            <div class="row mb-4">
+            <div class="row mb-4 contenitore-budget" >
                 <div class="col-12">
                     <h2>Budget</h2>
                 </div>
                 <div class="col-md-7 griglia">
-                    <table class="tabella">
-                        <tr class="testo">
-                            <th>Id Categoria</th>
-                            <th>Importo Massimo</th>
-                            <th>Importo Speso</th>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 1</td>
-                            <td>Importo Massimo 1</td>
-                            <td>Importo Speso 1</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 2</td>
-                            <td>Importo Massimo 2</td>
-                            <td>Importo Speso 2</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Categoria 3</td>
-                            <td>Importo Massimo 3</td>
-                            <td>Importo Speso 3</td>
-                        </tr>
-                    </table>
+                    <div class="row justify-content-center">
+                        <div class='scrollable-table'>
+                            <table class="table table-striped" style="font-size: 18px;">
+                                <thead>
+                                    <tr>
+                                        <th class='text-center align-middle'>NomeBudget</th>
+                                        <th class='text-center align-middle'>IDCategoria</th>
+                                        <th class='text-center align-middle'>ImportoMassimo</th>
+                                        <th class='text-center align-middle'>Data Fine</th>
+                                        <th class='text-center align-middle'>Data Inizio</th>
+                                        <th class='text-center align-middle'>Elimina Budget</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php displayBudgetsList(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-center ">
-                    <button class="btn btn-primary btn-block creaButton ">Crea Budget</button>
+                <div class="col-md-3 d-flex  ">
+                    <button class="btn btn-block creaButton ">Crea Budget</button>
                 </div>
             </div>
             <hr>
             <!-- Secondo Contenitore -->
-            <div class="row mb-4">
+            <div class="row mb-4 contenitore-obiettivi">
                 <div class="col-12">
                     <h2>Obiettivi</h2>
                 </div>
-                <div class="col-md-8 griglia">
-                    <table class="tabella">
-                        <tr class="testo">
-                            <th>Id Account</th>
-                            <th>Importo Massimo</th>
-                            <th>Importo Attuale</th>
-                            <th>Data</th>
-                            <th>Descrizione</th>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 1</td>
-                            <td>Importo Massimo 1</td>
-                            <td>Importo Attuale 1</td>
-                            <td>Data 1</td>
-                            <td>Descrizione 1</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 2</td>
-                            <td>Importo Massimo 2</td>
-                            <td>Importo Attuale 2</td>
-                            <td>Data 2</td>
-                            <td>Descrizione 2</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Account 3</td>
-                            <td>Importo Massimo 3</td>
-                            <td>Importo Attuale 3</td>
-                            <td>Data 3</td>
-                            <td>Descrizione 3</td>
-                        </tr>
-                    </table>
+                <div class="col-md-7 griglia">
+                    <div class="row justify-content-center">
+                        <div class='scrollable-table'>
+                            <table class="table table-striped" style="font-size: 18px;">
+                                <thead>
+                                    <tr>
+                                        <th class='text-center align-middle'>NomeObiettivo</th>
+                                        <th class='text-center align-middle'>ImportoObiettivo</th>
+                                        <th class='text-center align-middle'>DataScadenza</th>
+                                        <th class='text-center align-middle'>Elimina Obiettivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php displayObiettiviList(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-center">
-                    <button class="btn btn-primary btn-block creaButton">Crea Obiettivi</button>
+                <div class="col-md-3 d-flex align-text-center justify-content-center">
+                    <button class="btn btn-block creaButton ">Crea Obiettivo</button>
                 </div>
             </div>
+
             <hr>
             <!-- Terzo Contenitore -->
-            <div class="row">
+            <div class="row mb-4 contenitore-risparmi">
                 <div class="col-12">
                     <h2>Risparmi</h2>
                 </div>
                 <div class="col-md-7 griglia">
-                    <table class="tabella">
-                        <tr class="testo">
-                            <th>Id Account</th>
-                            <th>Importo Risparmiato</th>
-                            <th>Data Inizio</th>
-                            <th>Data Fine</th>
-                        </tr>
-                        <tr class="testo">
-                            <td>Id Account 1</td>
-                            <td>Importo Risparmiato 1</td>
-                            <td>Data Inizio 1</td>
-                            <td>Data Fine 1</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Id Account 2</td>
-                            <td>Importo Risparmiato 2</td>
-                            <td>Data Inizio 2</td>
-                            <td>Data Fine 2</td>
-                        </tr>
-                        <tr class="testo">
-                            <td>Id Account 3</td>
-                            <td>Importo Risparmiato 3</td>
-                            <td>Data Inizio 3</td>
-                            <td>Data Fine 3</td>
-                        </tr>
-                    </table>
+                    <div class="row justify-content-center">
+                        <div class='scrollable-table'>
+                            <table class="table table-striped" style="font-size: 18px;">
+                                <thead>
+                                    <tr>
+                                        <th class='text-center align-middle'>IDAccount</th>
+                                        <th class='text-center align-middle'>Importo</th>
+                                        <th class='text-center align-middle'>Data Inizio Risparmio</th>
+                                        <th class='text-center align-middle'>Data Fine Risparmio</th>
+                                        <th class='text-center align-middle'>Elimina Risparmio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php displayRisparmiList(); ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-center">
-                    <button class="btn btn-primary btn-block creaButton">Crea Risparmi</button>
+                <div class="col-md-3 d-flex align-text-center justify-content-center ">
+                    <button class="btn creaButton">Crea Risparmio</button>
                 </div>
             </div>
-        </div>
 
-        <?php printFoot();
-        ?>
-    </div>
+
+            <?php printFoot();
+            ?>
+        </div>
 </body>
 
 </html>

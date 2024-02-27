@@ -107,3 +107,112 @@ function getAllCategorieSecondarie()
 
     return $categorieSecondarie;
 }
+
+
+function getAllBudgets()
+{
+
+    global $conn, $selectAllBudgetsQuery;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query($selectAllBudgetsQuery);
+
+    $budgets = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $budgets[] = $row;
+        }
+    }
+
+    return $budgets;
+}
+function getAllObiettivi()
+{
+
+    global $conn, $queryObiettiviFinanziari;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query($queryObiettiviFinanziari);
+
+    $budgets = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $budgets[] = $row;
+        }
+    }
+
+    return $budgets;
+}
+
+function getAllRisparmi()
+{
+
+    global $conn, $queryRisparmi;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query($queryRisparmi);
+
+    $budgets = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $budgets[] = $row;
+        }
+    }
+
+    return $budgets;
+}
+
+function getAllDebiti()
+{
+    global $conn, $queryDebito;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query($queryDebito);
+
+    $debiti = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $debiti[] = $row;
+        }
+    }
+
+    return $debiti;
+}
+
+
+function getAllCrediti()
+{
+    global $conn, $queryCredito;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $result = $conn->query($queryCredito);
+
+    $debiti = [];
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $debiti[] = $row;
+        }
+    }
+
+    return $debiti;
+}

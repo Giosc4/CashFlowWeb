@@ -18,9 +18,10 @@
     <div id="innnerContent">
         <?php include '../server/functions.php';
         printNav(); ?>
-
-        <?php
-        displayAccountsDetails() ?>
+        <form action="../server/account_s.php" method="post">
+            <?php
+            displayAccountsDetails() ?>
+        </form>
         <hr>
         <div class="container mt-5 text-center">
             <div class="col-md-6 mx-auto">
