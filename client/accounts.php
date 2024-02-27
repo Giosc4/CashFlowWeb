@@ -24,7 +24,7 @@
         <hr>
         <div class="container mt-5 text-center">
             <div class="col-md-6 mx-auto">
-                <div class="card">
+                <div class="card box-statistics">
                     <div class="card-body">
                         <h5 class="card-title" style="font-weight: bold">Barre sulle Categorie</h5>
                         <!-- Inserisci qui il tuo grafico -->
@@ -38,7 +38,7 @@
         <!-- CREATE ACCOUNT -->
         <h2 class="text-center" style="margin: 20px;">Crea un nuovo account</h2>
         <div class="container mt-4">
-            <form action="../server/create_account_s.php" method="post">
+            <form action="../server/account_s.php" method="post">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="nomeAccount">Nome Account:</label>
@@ -49,7 +49,7 @@
                         <input type="text" class="form-control" id="saldo" name="saldo" required>
                     </div>
                 </div>
-                <button type="submit" class="btn" id='bottone-crea'>Crea Account</button>
+                <button type="submit" name="submit" value="createAccount" class="btn" id='bottone-crea'>Crea Account</button>
             </form>
         </div>
 

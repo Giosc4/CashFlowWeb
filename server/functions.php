@@ -52,6 +52,9 @@ function displayTableData($data, $tableName)
 function displayAccounts()
 {
   $accounts = getAllAccounts();
+  if (empty($accounts)) {
+    echo "<h3 class=' row justify-content-center'>Nessun account presente.</h3>";
+  }
   $count = 0;
   $html = '';
 
@@ -81,6 +84,9 @@ function displayAccounts()
 function displayAccountsDetails()
 {
   $accounts = getAllAccounts();
+  if (empty($accounts)) {
+    echo "<h3 class=' row justify-content-center'>Nessun account presente.</h3>";
+  }
   $count = 0;
   $html = '';
 
@@ -91,14 +97,18 @@ function displayAccountsDetails()
 
     $html .= "<div class='col-md-3'>";
     $html .= "<div class='card mb-3 box-accounts'>";
-    $html .= "<div class='card-body btn details-accounts'>";
+    $html .= "<div class='card-body btn '>";
     $html .= "<h5 class='card-title titolo'>{$account['Nome_Account']}</h5>";
     $html .= "<p class='card-text'>Saldo: {$account['Saldo']}</p>";
     $html .= "<p class='card-text'>IdAccount: {$account['IdAccount']}</p>";
-    $html .= "<br><a href='../client/transactions.php' class='btn btn-primary accountsDetails-btn' >Transazioni</a>";
-    $html .= "<br><a href='../client/budget_obiettivi_risparmi.php' class='btn btn-primary accountsDetails-btn' >Budget e Obiettivi</a>";
-    $html .= "<br><a href='../client/debito_credito.php' class='btn btn-primary accountsDetails-btn'>Credito / Debito</a>";
-    $html .= "</div></div></div>";
+    $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/transactions.php'\">Transazioni</button>";
+    $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/budget_obiettivi_risparmi.php'\">Budget e Obiettivi</button>";
+    $html .= "<br><button type='submit' class='btn btn-primary accountsDetails-btn' onclick=\"window.location='../client/debito_credito.php'\">Credito / Debito</button>";
+    $html .= "<form action='../server/account_s.php' method='post'>";
+    $html .= "<input type='hidden' name='idAccount' value='{$account['IdAccount']}'>";
+    $html .= "<hr><button type='submit' name='submit' value='deleteAccount' class='btn btn-danger' style='border-radius: 20px; padding: 10px;'>Elimina Account</button>";
+    $html .= "</form>";
+    $html .= "</div> </div> </div>";
 
     $count++;
 
@@ -115,7 +125,7 @@ function generaGrid()
 {
   $elementi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 
-  $html = '<div class="container">'; // Apri il container
+  $html = '<div class="container col-lg-9">'; // Apri il container
 
   // Iniziamo la prima riga
   $html .= '<div class="row">';
@@ -125,12 +135,12 @@ function generaGrid()
     $url = strtolower($elemento) . '.php';
 
     // Aggiungi il box
-    $html .= '<div class="col-lg-3 col-md-6 col-sm-6 mb-4" >'; // la classe mb-4 aggiunge un margine al fondo di ciascun box
-    $html .= '<a href="' . htmlspecialchars($url) . '" class="d-block h-100">';
-    $html .= '<div class="card"  id="template-box">';
+    $html .= '<div class="col-lg-3 col-md-7 col-sm-7 mb-4" >';
+    $html .= '<a  class="text-template" href="' . htmlspecialchars($url) . '" class="d-block h-100">';
+    $html .= '<div class="card template-box">';
     $html .= '<div class="card-body text-center ">';
     $html .= "<div class='card-body btn'>";
-    $html .= "<label class='card-title box-template'>" . htmlspecialchars($elemento) . "</label>";
+    $html .= "<label class='card-title text-template'>" . htmlspecialchars($elemento) . "</label>";
     $html .= "</div>";
     $html .= '</div>';
     $html .= '</div>';
@@ -153,16 +163,6 @@ function generaGrid()
 function displayTransactionsList()
 {
   $transactions = getAllTransactions();
-  echo "<thead>
-                <tr>
-                    <th class='centered-cell'>Data Transazione</th>
-                    <th class='centered-cell'>Descrizione</th>
-                    <th class='centered-cell'>Entrata</th>
-                    <th class='centered-cell'>Importo</th>
-                    <th class='centered-cell'>Utente ID</th>
-                </tr>
-            </thead>
-            <tbody>";
 
   foreach ($transactions as $transaction) {
     if ($transaction['IsEntrata'] == 1) {
@@ -170,18 +170,19 @@ function displayTransactionsList()
     } else {
       $IsEntry = "No";
     }
-    echo "<tr>
-                <td class='centered-cell'>{$transaction['DataTransazione']}</td>
-                <td class='centered-cell'>{$transaction['Descrizione']}</td>
-                <td class='centered-cell'>{$IsEntry}</td>
-                <td class='centered-cell'>{$transaction['Importo']}</td>
-                <td class='centered-cell'>{$transaction['IDAccount']}</td>
-              </tr>";
+    echo "<tr'> 
+    <form action='../server/transaction_s.php' method='post'>
+
+                <td class='text-center align-middle'>{$transaction['DataTransazione']}</td>
+                <td class='text-center align-middle'>{$transaction['Descrizione']}</td>
+                <td class='text-center align-middle'>{$IsEntry}</td>
+                <td class='text-center align-middle'>{$transaction['Importo']}</td>
+                <td class='text-center align-middle'>{$transaction['IDAccount']}</td>
+                <td class='text-center align-middle'><input type='hidden' name='transaction_id' value='{$transaction['ID']}'>
+                <button type='submit' name='submit' value='deleteTransaction' class='btn btn-danger' style='border-radius: 80px; font-size: 12px;'>Elimina</button></td>
+                </tr> </form>";
   }
-
-  echo "</tbody>";
 }
-
 
 function displayLineChart()
 {
@@ -279,17 +280,16 @@ var myBarChart = new Chart(ctx, {
   data: barData,
   options: {
     scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
+      y: {
+        beginAtZero: true
+      }
     }
   }
 });
 </script>
 ";
 }
+
 
 function printNav()
 {

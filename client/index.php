@@ -50,17 +50,31 @@
             <div class="row">
                 <div class="col-md-6 d-flex align-items-stretch">
                     <div class="card w-100 box-statistics">
-                        <div class="card-body d-flex flex-column box-statistics" style="border: 4px solid #6cd45d;">
+                        <div class="card-body d-flex flex-column box-statistics">
                             <h5 class="card-title">Lista Transazioni</h5>
-                            <table class="table table-striped">
-                                <?php displayTransactionsList(); ?>
-                            </table>
+                            <div class='scrollable-table'>
+                                <table class="table table-striped tabellaTransa">
+                                    <thead>
+                                        <tr>
+                                            <th class='centered-cell '>Data Transazione</th>
+                                            <th class='centered-cell'>Descrizione</th>
+                                            <th class='centered-cell'>Entrata</th>
+                                            <th class='centered-cell'>Importo</th>
+                                            <th class='centered-cell'>Utente ID</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php displayTransactionsList(); ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body d-flex flex-column">
+                    <div class="card w-100 box-statistics">
+                        <div class="card-body d-flex flex-column box-statistics">
                             <h5 class="card-title">Flusso di Cassa</h5>
                             <!-- Inserisci qui il tuo grafico -->
                             <?php displayLineChart(); ?>
@@ -70,8 +84,8 @@
             </div>
             <div class="row" style="margin-top: 30px;">
                 <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body d-flex flex-column">
+                    <div class="card w-100 box-statistics">
+                        <div class="card-body d-flex flex-column box-statistics">
                             <h5 class="card-title">Torta Categorie</h5>
                             <!-- Inserisci qui il tuo grafico -->
                             <?php displayPieChart(); ?>
@@ -79,8 +93,8 @@
                     </div>
                 </div>
                 <div class="col-md-6 d-flex align-items-stretch">
-                    <div class="card w-100">
-                        <div class="card-body d-flex flex-column">
+                    <div class="card w-100 box-statistics">
+                        <div class="card-body d-flex flex-column box-statistics">
                             <h5 class="card-title">Barre sulle Categorie</h5>
                             <!-- Inserisci qui il tuo grafico -->
                             <?php displayBarChart(); ?>

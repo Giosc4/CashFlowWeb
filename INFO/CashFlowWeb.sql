@@ -7,9 +7,9 @@ CREATE TABLE `account` (
   Saldo decimal(10,2) DEFAULT NULL,
   IDRisparmio int(11) DEFAULT NULL,
   IDSpesaRicorrente int(11) DEFAULT NULL,
-  IDPrestito int(11) DEFAULT NULL,
   IDObiettivo int(11) DEFAULT NULL,
-  IDCredito int(11) DEFAULT NULL
+  IDCredito int(11) DEFAULT NULL,
+  IDDebito int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE budgetmassimominimo (
@@ -101,8 +101,8 @@ ALTER TABLE account
   ADD PRIMARY KEY (IdAccount),
   ADD KEY FK_Account_Risparmi (IDRisparmio),
   ADD KEY FK_Account_SpesaRicorrente (IDSpesaRicorrente),
-  ADD KEY FK_Account_Prestito (IDPrestito),
-  ADD KEY FK_Account_Credito (IDCredito);
+  ADD KEY FK_Account_Credito (IDCredito),
+  ADD KEY IDDebito (IDDebito);
 
 ALTER TABLE budgetmassimominimo
   ADD PRIMARY KEY (IDBudget);
@@ -136,9 +136,9 @@ ALTER TABLE template_transazioni
 
 ALTER TABLE transazioni
   ADD PRIMARY KEY (ID),
-  ADD KEY IDAccount (IDAccount),
   ADD KEY IDCategoriaPrimaria (IDCategoriaPrimaria),
-  ADD KEY IDCategoriaSecondaria (IDCategoriaSecondaria);
+  ADD KEY IDCategoriaSecondaria (IDCategoriaSecondaria),
+  ADD KEY transazioni_ibfk_1 (IDAccount);
 
 
 ALTER TABLE account
@@ -178,14 +178,15 @@ ALTER TABLE transazioni
 ALTER TABLE account
   ADD CONSTRAINT FK_Account_Credito FOREIGN KEY (IDCredito) REFERENCES credito (ID),
   ADD CONSTRAINT FK_Account_Risparmi FOREIGN KEY (IDRisparmio) REFERENCES risparmi (Id),
-  ADD CONSTRAINT FK_Account_SpesaRicorrente FOREIGN KEY (IDSpesaRicorrente) REFERENCES pianificazionepagamento (ID);
+  ADD CONSTRAINT FK_Account_SpesaRicorrente FOREIGN KEY (IDSpesaRicorrente) REFERENCES pianificazionepagamento (ID),
+  ADD CONSTRAINT account_ibfk_1 FOREIGN KEY (IDDebito) REFERENCES debito (IDDebito);
 
 ALTER TABLE template_transazioni
   ADD CONSTRAINT FK_Template_CategoriaPrimaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID),
   ADD CONSTRAINT FK_Template_CategoriaSecondaria FOREIGN KEY (IDCategoriaSecondaria) REFERENCES categoriasecondaria (ID),
-  ADD CONSTRAINT fk_template_transazioni_IDAccount FOREIGN KEY (IDAccount) REFERENCES account (IDAccount);
+  ADD CONSTRAINT fk_template_transazioni_IDAccount FOREIGN KEY (IDAccount) REFERENCES account (IdAccount);
 
 ALTER TABLE transazioni
-  ADD CONSTRAINT transazioni_ibfk_1 FOREIGN KEY (IDAccount) REFERENCES account (IDAccount),
+  ADD CONSTRAINT transazioni_ibfk_1 FOREIGN KEY (IDAccount) REFERENCES account (IdAccount) ON DELETE CASCADE,
   ADD CONSTRAINT transazioni_ibfk_3 FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID),
   ADD CONSTRAINT transazioni_ibfk_4 FOREIGN KEY (IDCategoriaSecondaria) REFERENCES categoriasecondaria (ID);

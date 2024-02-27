@@ -9,13 +9,12 @@
 .centered-cell {
     text-align: center;
     padding: 8px;
-    border: 1px #ffffe6;
+    border: 1px #E9F2EF;
 }
 
 .account-bordo {
     border-radius: 100px;
-    border: 2px solid #6cd45d;
-    border: #ffffe6;
+    border: 2px solid #E9F2EF;
 }
 
 .account-bordo:hover {
@@ -34,20 +33,62 @@
 
 }
 
-#start_date{
+
+#start_date {
     width: 60%;
-    
+
 }
-#end_date{
+
+#end_date {
     width: 60%;
 }
 
-#start_date:hover{
+#start_date:hover {
     border: 2px solid #6cd45d;
 
-    
+
 }
-#end_date:hover{
+
+#end_date:hover {
     border: 2px solid #6cd45d;
+
+}
+
+#btn-visualizza {
+    border: 2px solid #6cd45d;
+    background-color: #E9F2EF;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-size: 20px;
+
+}
+
+#btn-visualizza:hover {
+    background-color: #6cd45d;
+    border-color: black 20px;
+}
+
+.scrollable-table {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    margin-top: 0;
+    font-size: 12px;
+
+}
+
+.tabellaTransa {
+    width: auto;
+    border-collapse: collapse;
+}
+
+
+.centered-cell {
+    text-align: center;
+    white-space: nowrap;
+    font-size: 14px;
+
 
 }

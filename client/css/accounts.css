@@ -6,12 +6,18 @@
 
 .accountsDetails-btn {
     padding: 10px;
-    margin-top: 5px;
-    color: white;
+    margin-top: 10px;
+    margin-bottom: 20px;
     font-weight: bold;
+    color: black;
+    background-color: #E9F2EF;
+    border: 2px solid #6cd45d;
+    border-radius: 20px;
+}
+
+.accountsDetails-btn:hover {
     background-color: #6cd45d;
-    border-color: #6cd45d;
-    
+    border-color: black 20px;
 }
 
 .box-accounts {
@@ -22,8 +28,22 @@
 }
 
 #bottone-crea {
-    background-color: #6cd45d;
-    border-color: #6cd45d;
-    color: white;
+    padding: 10px;
+    margin-top: 10px;
     margin-bottom: 20px;
+    font-weight: bold;
+    color: black;
+    background-color: #E9F2EF;
+    border: 2px solid #6cd45d;
+    border-radius: 20px;
+}
+#bottone-crea:hover {
+    background-color: #6cd45d;
+    border-color: black 20px;
+}
+
+
+.box-statistics {
+    border-radius: 20px;
+    border: 2px solid #6cd45d;
 }

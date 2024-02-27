@@ -2,13 +2,24 @@
 require_once '../db/queries.php';
 require_once '../db/db.php';
 
-function createAccount($nomeAccount, $saldo)
+function createAccount($Nome_Account, $saldo)
 {
     // Prepara la query SQL per inserire i dati
-    global $conn, $insertAccountQuery;
+    global $conn, $inserisciAccount;
 
-    $stmt = $conn->prepare($insertAccountQuery);
-    $stmt->bind_param("sd", $nomeAccount, $saldo);
+    $stmt = $conn->prepare($inserisciAccount);
+    $stmt->bind_param("sd", $Nome_Account, $saldo);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Funzione per eliminare un account
+function deleteAccount($idAccount)
+{
+    global $conn, $eliminaAccount;
+
+    $stmt = $conn->prepare($eliminaAccount);
+    $stmt->bind_param("i", $idAccount);
     $stmt->execute();
     $stmt->close();
 }
@@ -47,17 +58,27 @@ function createCategoriaSecondaria($idCategoriaPrimaria, $nomeCategoria, $descri
 }
 function createTransaction($importo, $idAccount, $dataTransazione, $idCategoriaPrimaria, $idCategoriaSecondaria, $descrizione, $isEntrata)
 {
-    global $conn, $insertTransactionQuery;
+    global $conn, $inserisciTransazione;
 
 
-    $stmt = $conn->prepare($insertTransactionQuery);
+    $stmt = $conn->prepare($inserisciTransazione);
+
     $idCategoriaSecondaria = !empty($idCategoriaSecondaria) ? $idCategoriaSecondaria : NULL;
 
     // Nota: 'i' per gli interi, 's' per le stringhe, 'd' per i decimali, e 'b' per i blob
-    $stmt->bind_param("disiisb", $importo, $idAccount, $dataTransazione, $idCategoriaPrimaria, $idCategoriaSecondaria, $descrizione, $isEntrata);
+    $stmt->bind_param("idsiisi", $idAccount, $importo, $dataTransazione, $idCategoriaPrimaria, $idCategoriaSecondaria, $descrizione, $isEntrata);
 
     if (!$stmt->execute()) {
         echo "Errore durante l'inserimento della transazione: " . $stmt->error;
     }
+    $stmt->close();
+}
+function deleteTransaction($idTrans)
+{
+    global $conn, $eliminaTransazione;
+
+    $stmt = $conn->prepare($eliminaTransazione);
+    $stmt->bind_param("i", $idTrans);
+    $stmt->execute();
     $stmt->close();
 }
