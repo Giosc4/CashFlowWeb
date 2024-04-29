@@ -20,22 +20,7 @@ function getAllTransactions()
     return $transactions;
 }
 
-function getAllPositions()
-{
-    global $conn, $selectAllPositionsQuery;
 
-    $result = $conn->query($selectAllPositionsQuery);
-
-    $positions = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $positions[] = $row;
-        }
-    }
-
-    return $positions;
-}
 function getAllAccounts()
 {
     global $conn, $selectAllAccountsQuery;

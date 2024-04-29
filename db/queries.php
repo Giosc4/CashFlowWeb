@@ -4,10 +4,9 @@ $insertAccountQuery = "INSERT INTO `account` (`name`) VALUES (?)";
 $insertCategoryQuery = "INSERT INTO `categories` (`name`) VALUES (?)";
 $insertPositionQuery = "INSERT INTO `position` (`longitude`, `latitude`, `city_name`) VALUES (?, ?, ?)";
 
-$selectAllTransactionsQuery = "SELECT * FROM `transaction`";
-$selectAllAccountsQuery = "SELECT * FROM `account`";
-$selectAllCategoriesQuery = "SELECT * FROM `categories`";
-$selectAllPositionsQuery = "SELECT * FROM `position`";
+$selectAllTransactionsQuery = "SELECT * FROM `transazione`";
+$selectAllAccountsQuery = "SELECT * FROM `conto`";
+$selectAllCategoriesQuery = "SELECT * FROM `categoriaprimaria`";
 $selectAccountByNameQuery = "SELECT * FROM `account` WHERE `name` = ?";
 $selectCategoryByNameQuery = "SELECT * FROM `categories` WHERE `name` = ?";
 

@@ -42,12 +42,10 @@ function displayAllTables()
 {
     $accounts = getAllAccounts();
     $categories = getAllCategories();
-    $positions = getAllPositions();
     $transactions = getAllTransactions();
 
     displayTableData($accounts, 'account');
     displayTableData($categories, 'categories');
-    displayTableData($positions, 'position');
     displayTableData($transactions, 'transaction');
 }
 
