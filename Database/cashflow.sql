@@ -1,21 +1,10 @@
 
-
--- Creation of PianificazionePagamento table
-CREATE TABLE PianificazionePagamento (
-    ID INT PRIMARY KEY,
-    IDTransazione INT,
-    Ripetizione VARCHAR(255),
-    DataScadenza DATE,
-    FOREIGN KEY (IDTransazione) REFERENCES Transazione(ID)
-);
-
-
 -- Creation of Risparmi table
 CREATE TABLE Risparmi (
     ID INT PRIMARY KEY,
     ImportoRisparmiato DECIMAL(10, 2),
     DataInizio DATE,
-    DataFine DATE,
+    DataFine DATE
 );
 
 -- Creation of Debit table
@@ -25,7 +14,7 @@ CREATE TABLE Debit (
     NomeImporto VARCHAR(255),
     DataConcessione DATE,
     DataEstinsione DATE,
-    Note VARCHAR(255),
+    Note VARCHAR(255)
 );
 
 -- Creation of Credit table
@@ -35,7 +24,7 @@ CREATE TABLE Credit (
     NomeImporto VARCHAR(255),
     DataConcessione DATE,
     DataEstinsione DATE,
-    Note VARCHAR(255),
+    Note VARCHAR(255)
 );
 
 -- Creation of ObiettiviFinanziari table
@@ -43,7 +32,7 @@ CREATE TABLE ObiettiviFinanziari (
     ID INT PRIMARY KEY,
     NomeObiettivo VARCHAR(255),
     ImportoObiettivo DECIMAL(10, 2),
-    DataScadenza DATE,
+    DataScadenza DATE
 );
 
 -- Creation of BudgetMax table 
@@ -52,14 +41,14 @@ CREATE TABLE BudgetMax (
     NomeBudget VARCHAR(255),
     ImportoMax DECIMAL(10, 2),
     DataInizio DATE,
-    DataFine DATE,
+    DataFine DATE
 );
 
 -- Creation of Conto table
 CREATE TABLE Conto (
     IDConto INT PRIMARY KEY,
     NomeConto VARCHAR(255),
-    Saldo DECIMAL(10, 2)
+    Saldo DECIMAL(10, 2),
     IdRisparmio INT,
     IDDebit INT,
     IDCredit INT,
@@ -67,14 +56,14 @@ CREATE TABLE Conto (
     FOREIGN KEY (IdRisparmio) REFERENCES Risparmi(ID),
     FOREIGN KEY (IDDebit) REFERENCES Debit(ID),
     FOREIGN KEY (IDCredit) REFERENCES Credit(ID),
-    FOREIGN KEY (IDObiettivo) REFERENCES ObiettiviFinanziari(ID),
+    FOREIGN KEY (IDObiettivo) REFERENCES ObiettiviFinanziari(ID)
 );
 
 -- Creation of CategoriaPrimaria table
 CREATE TABLE CategoriaPrimaria (
     ID INT PRIMARY KEY,
     NomeCategoria VARCHAR(255),
-    DescrizioneCategoria VARCHAR(255)
+    DescrizioneCategoria VARCHAR(255),
     IDBudget INT,
     FOREIGN KEY (IDBudget) REFERENCES BudgetMax(IDBudget)
 );
@@ -88,6 +77,15 @@ CREATE TABLE CategoriaSecondaria (
     FOREIGN KEY (IDCategoriaPrimaria) REFERENCES CategoriaPrimaria(ID)
 );
 
+-- Creation of Profili table
+CREATE TABLE Profili (
+    IDProfilo INT PRIMARY KEY,
+    NomeProfilo VARCHAR(255),
+    Saldo_totale DECIMAL(10, 2),
+    Email VARCHAR(255),
+    Password VARCHAR(255)
+);
+
 -- Creation of AssConti table
 CREATE TABLE AssConti (
     IDAssegnazione INT PRIMARY KEY,
@@ -97,14 +95,6 @@ CREATE TABLE AssConti (
     FOREIGN KEY (IDConto) REFERENCES Conto(IDConto)
 );
 
--- Creation of Profili table
-CREATE TABLE Profili (
-    IDProfilo INT PRIMARY KEY,
-    NomeProfilo VARCHAR(255),
-    Saldo_totale DECIMAL(10, 2),
-    Email VARCHAR(255),
-    Password VARCHAR(255)
-);
 
 -- Creation of Template_Transazioni table
 CREATE TABLE Template_Transazioni (
@@ -138,182 +128,239 @@ CREATE TABLE Transazione (
     FOREIGN KEY (IDCategoriaSecondaria) REFERENCES CategoriaSecondaria(ID)
 );
 
+---------- TRIGGERS
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Stored Procedures for Profilo table
-
--- Create Profilo
-CREATE PROCEDURE CreateProfilo(IN p_NomeProfilo VARCHAR(255), IN p_Saldo_totale DECIMAL(10, 2), IN p_Email VARCHAR(255), IN p_Password VARCHAR(255))
+--- Trigger per aggiornare il saldo di un conto dopo l'INSERIMENTO di una transazione
+DELIMITER $$
+CREATE TRIGGER aggiornaSaldoDopoInserimento
+AFTER INSERT ON Transazione
+FOR EACH ROW
 BEGIN
-    INSERT INTO Profili (NomeProfilo, Saldo_totale, Email, Password) VALUES (p_NomeProfilo, p_Saldo_totale, p_Email, p_Password);
-END;
+    UPDATE Conto
+    SET Saldo = CASE 
+                    WHEN NEW.Entrata_Uscita = 1 THEN Saldo + NEW.Importo
+                    ELSE Saldo - NEW.Importo
+                END
+    WHERE IDConto = NEW.IDConto;
+END$$
+DELIMITER ;
+
+
+--- Trigger per aggiornare il saldo di un conto dopo l'AGGIORNAMENTO di una transazione
+DELIMITER $$
+CREATE TRIGGER aggiornaSaldoDopoAggiornamento
+AFTER UPDATE ON Transazione
+FOR EACH ROW
+BEGIN
+    UPDATE Conto
+    SET Saldo = Saldo
+              - CASE WHEN OLD.Entrata_Uscita = 1 THEN OLD.Importo ELSE -OLD.Importo END
+              + CASE WHEN NEW.Entrata_Uscita = 1 THEN NEW.Importo ELSE -NEW.Importo END
+    WHERE IDConto = NEW.IDConto;
+END$$
+DELIMITER ;
+
+--- Trigger per aggiornare il saldo di un conto dopo l'ELIMINAZIONE di una transazione
+DELIMITER $$
+CREATE TRIGGER aggiornaSaldoDopoEliminazione
+AFTER DELETE ON Transazione
+FOR EACH ROW
+BEGIN
+    UPDATE Conto
+    SET Saldo = CASE 
+                    WHEN OLD.Entrata_Uscita = 1 THEN Saldo - OLD.Importo
+                    ELSE Saldo + OLD.Importo
+                END
+    WHERE IDConto = OLD.IDConto;
+END$$
+DELIMITER ;
+
+--- Stored Procedures per Profili
+-- Create Profilo
+DELIMITER $$
+CREATE PROCEDURE sp_CreateProfilo(
+    IN NomeProfilo VARCHAR(255),
+    IN Saldo_totale DECIMAL(10, 2),
+    IN Email VARCHAR(255),
+    IN Password VARCHAR(255)
+)
+BEGIN
+    INSERT INTO Profili (NomeProfilo, Saldo_totale, Email, Password)
+    VALUES (NomeProfilo, Saldo_totale, Email, Password);
+END$$
+DELIMITER ;
 
 -- Update Profilo
-CREATE PROCEDURE UpdateProfilo(IN p_IDProfilo INT, IN p_NomeProfilo VARCHAR(255), IN p_Saldo_totale DECIMAL(10, 2), IN p_Email VARCHAR(255), IN p_Password VARCHAR(255))
+DELIMITER $$
+CREATE PROCEDURE sp_UpdateProfilo(
+    IN IDProfilo INT,
+    IN NomeProfilo VARCHAR(255),
+    IN Saldo_totale DECIMAL(10, 2),
+    IN Email VARCHAR(255),
+    IN Password VARCHAR(255)
+)
 BEGIN
-    UPDATE Profili SET NomeProfilo = p_NomeProfilo, Saldo_totale = p_Saldo_totale, Email = p_Email, Password = p_Password WHERE IDProfilo = p_IDProfilo;
-END;
+    UPDATE Profili
+    SET NomeProfilo = NomeProfilo,
+        Saldo_totale = Saldo_totale,
+        Email = Email,
+        Password = Password
+    WHERE IDProfilo = IDProfilo;
+END$$
+DELIMITER ;
+
+
 
 -- Delete Profilo
-CREATE PROCEDURE DeleteProfilo(IN p_IDProfilo INT)
+DELIMITER $$
+CREATE PROCEDURE sp_DeleteProfilo(
+    IN IDProfilo INT
+)
 BEGIN
-    DELETE FROM Profili WHERE IDProfilo = p_IDProfilo;
-END;
+    DELETE FROM Profili WHERE IDProfilo = IDProfilo;
+END$$
+DELIMITER ;
 
 
 
-
-
--- Stored Procedures for Transazione table
-
--- Create Transazione
-CREATE PROCEDURE CreateTransazione(...)
-BEGIN
-    -- INSERT statement for Transazione with parameters for each column
-END;
-
--- Update Transazione
-CREATE PROCEDURE UpdateTransazione(...)
-BEGIN
-    -- UPDATE statement for Transazione with parameters for each column
-END;
-
--- Delete Transazione
-CREATE PROCEDURE DeleteTransazione(IN p_ID INT)
-BEGIN
-    DELETE FROM Transazioni WHERE ID = p_ID;
-END;
-
-
-
-
--- Stored Procedures for Conto table
-
+--- Stored Procedures per Conto
 -- Create Conto
-CREATE PROCEDURE CreateConto(...)
+DELIMITER $$
+CREATE PROCEDURE sp_CreateConto(
+    IN NomeConto VARCHAR(255),
+    IN Saldo DECIMAL(10, 2),
+    IN IdRisparmio INT,
+    IN IDDebit INT,
+    IN IDCredit INT,
+    IN IDObiettivo INT
+)
 BEGIN
-    -- INSERT statement for Conto with parameters for each column
-END;
+    INSERT INTO Conto (NomeConto, Saldo, IdRisparmio, IDDebit, IDCredit, IDObiettivo)
+    VALUES (NomeConto, Saldo, IdRisparmio, IDDebit, IDCredit, IDObiettivo);
+END$$
+DELIMITER ;
+
 
 -- Update Conto
-CREATE PROCEDURE UpdateConto(...)
+DELIMITER $$
+CREATE PROCEDURE sp_UpdateConto(
+    IN IDConto INT,
+    IN NomeConto VARCHAR(255),
+    IN Saldo DECIMAL(10, 2),
+    IN IdRisparmio INT,
+    IN IDDebit INT,
+    IN IDCredit INT,
+    IN IDObiettivo INT
+)
 BEGIN
-    -- UPDATE statement for Conto with parameters for each column
-END;
+    UPDATE Conto
+    SET NomeConto = NomeConto,
+        Saldo = Saldo,
+        IdRisparmio = IdRisparmio,
+        IDDebit = IDDebit,
+        IDCredit = IDCredit,
+        IDObiettivo = IDObiettivo
+    WHERE IDConto = IDConto;
+END$$
+DELIMITER ;
+
 
 -- Delete Conto
-CREATE PROCEDURE DeleteConto(IN p_IDConto INT)
+DELIMITER $$
+CREATE PROCEDURE sp_DeleteConto(
+    IN IDConto INT
+)
 BEGIN
-    DELETE FROM Conto WHERE IDConto = p_IDConto;
-END;
+    DELETE FROM Conto WHERE IDConto = IDConto;
+END$$
+DELIMITER ;
 
 
 
-
--- Stored Procedures for Risparmi table
-
--- Create Risparmi
-CREATE PROCEDURE CreateRisparmi(...)
+--- Stored Procedures per Transazioni
+-- Create Transazione
+DELIMITER $$
+CREATE PROCEDURE sp_CreateTransazione(
+    IN Entrata_Uscita BOOLEAN,
+    IN Importo DECIMAL(10, 2),
+    IN IDTemplate INT,
+    IN IDConto INT,
+    IN DataTransazione DATE,
+    IN IDCategoriaPrimaria INT,
+    IN IDCategoriaSecondaria INT,
+    IN Descrizione VARCHAR(255)
+)
 BEGIN
-    -- INSERT statement for Risparmi with parameters for each column
-END;
+    INSERT INTO Transazione (Entrata_Uscita, Importo, IDTemplate, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria, Descrizione)
+    VALUES (Entrata_Uscita, Importo, IDTemplate, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria, Descrizione);
+END$$
+DELIMITER ;
 
--- Update Risparmi
-CREATE PROCEDURE UpdateRisparmi(...)
+
+-- Update Transazione
+DELIMITER $$
+CREATE PROCEDURE sp_UpdateTransazione(
+    IN ID INT,
+    IN Entrata_Uscita BOOLEAN,
+    IN Importo DECIMAL(10, 2),
+    IN IDTemplate INT,
+    IN IDConto INT,
+    IN DataTransazione DATE,
+    IN IDCategoriaPrimaria INT,
+    IN IDCategoriaSecondaria INT,
+    IN Descrizione VARCHAR(255)
+)
 BEGIN
-    -- UPDATE statement for Risparmi with parameters for each column
-END;
+    UPDATE Transazione
+    SET Entrata_Uscita = Entrata_Uscita,
+        Importo = Importo,
+        IDTemplate = IDTemplate,
+        IDConto = IDConto,
+        DataTransazione = DataTransazione,
+        IDCategoriaPrimaria = IDCategoriaPrimaria,
+        IDCategoriaSecondaria = IDCategoriaSecondaria,
+        Descrizione = Descrizione
+    WHERE ID = ID;
+END$$
+DELIMITER ;
 
--- Delete Risparmi
-CREATE PROCEDURE DeleteRisparmi(IN p_ID INT)
+
+-- Delete Transazione
+DELIMITER $$
+CREATE PROCEDURE sp_DeleteTransazione(
+    IN ID INT
+)
 BEGIN
-    DELETE FROM Risparmi WHERE ID = p_ID;
-END;
+    DELETE FROM Transazione WHERE ID = ID;
+END$$
+DELIMITER ;
 
 
 
 
--- Stored Procedures for PianificazionePagamento table
-
--- Create PianificazionePagamento
-CREATE PROCEDURE CreatePianificazionePagamento(...)
-BEGIN
-    -- INSERT statement for PianificazionePagamento with parameters for each column
-END;
-
--- Update PianificazionePagamento
-CREATE PROCEDURE UpdatePianificazionePagamento(...)
-BEGIN
-    -- UPDATE statement for PianificazionePagamento with parameters for each column
-END;
-
--- Delete PianificazionePagamento
-CREATE PROCEDURE DeletePianificazionePagamento(IN p_ID INT)
-BEGIN
-    DELETE FROM PianificazionePagamento WHERE ID = p_ID;
-END;
 
 
 
 
--- Stored Procedures for Budget table
 
--- Create Budget
-CREATE PROCEDURE CreateBudget(...)
-BEGIN
-    -- INSERT statement for Budget with parameters for each column
-END;
 
--- Update Budget
-CREATE PROCEDURE UpdateBudget(...)
-BEGIN
-    -- UPDATE statement for Budget with parameters for each column
-END;
 
--- Delete Budget
-CREATE PROCEDURE DeleteBudget(IN p_IDBudget INT)
-BEGIN
-    DELETE FROM BudgetMassimo WHERE IDBudget = p_IDBudget;
-END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
