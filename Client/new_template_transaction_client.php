@@ -19,16 +19,15 @@
 
         <?php
         require_once '../server/other_functions.php';
-        $data = setAccountsAndCategories();
-        $accounts = $data['accounts'];
-        $categories = $data['categories'];
+        $accounts  = getAllConti();
+        $categories = getAllPrimaryCategories();
         ?>
 
         <label for="accountId">Seleziona un conto:</label>
         <select name="accountId" required>
             <option value="" disabled selected>Please seleziona un conto</option>
-            <?php foreach ($accounts as $account) : ?>
-                <option value="<?php echo $account->id; ?>"><?php echo $account->name; ?></option>
+            <?php foreach ($accounts as $conto) : ?>
+                <option value="<?php echo $conto['id']; ?>"><?php echo $conto['name']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
@@ -36,7 +35,7 @@
         <select name="categoryId" required>
             <option value="" disabled selected>Please seleziona un a Categoria Primaria</option>
             <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>
+                <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

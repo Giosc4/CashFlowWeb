@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form action="new_conto_server.php" method="post">
+    <form action="../Server/new_conto_server.php" method="post">
         <label for="nome">Nome:</label>
         <input type="text" name="nome" id="nome" required><br>
 

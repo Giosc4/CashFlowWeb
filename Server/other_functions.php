@@ -4,8 +4,6 @@ require_once '../db/queries.php';
 require_once '../db/read_functions.php';
 require_once '../server/classes.php';
 
-
-
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)
 {
@@ -27,8 +25,10 @@ function displayTableData($data, $tableName)
             echo "<tr>";
             foreach ($row as $value) {
                 echo "<td>$value</td>";
+
             }
             echo "</tr>";
+
         }
 
         echo "</table>";
@@ -40,19 +40,15 @@ function displayTableData($data, $tableName)
 // Visualizza i dati delle tabelle
 function displayAllTables()
 {
-    $accounts = getAllAccounts();
-    $categories = getAllCategories();
+    $conti = getAllConti(); 
+    $categories = getAllPrimaryCategories();
     $transactions = getAllTransactions();
+    $risparmi = getAllRisparmi();
+    $obiettivi = getAllObiettivi();
 
-    displayTableData($accounts, 'account');
+    displayTableData($conti, 'Conti');
     displayTableData($categories, 'categories');
     displayTableData($transactions, 'transaction');
-}
-
-// Recupera la lista degli account e delle categorie dal database
-function setAccountsAndCategories()
-{
-    $accounts = getAllAccounts();
-    $categories = getAllCategories();
-    return ['accounts' => $accounts, 'categories' => $categories];
+    displayTableData($risparmi, 'risparmi');
+    displayTableData($obiettivi, 'obiettivi');
 }

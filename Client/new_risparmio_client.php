@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form action="new_risparmio_server.php" method="post">
+    <form action="../server/new_risparmio_server.php" method="post">
 
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" required><br>
@@ -19,11 +19,15 @@
         <label for="risparmioDateFine">Data Fine Risparmio:</label>
         <input type="date" id="risparmioDateFine" name="risparmioDateFine" value="<?php echo date("Y-m-d"); ?>" required><br>
 
+        <?php
+        include '../db/read_functions.php';
+        $conti = getAllConti();
+        ?>
         <label for="contoId">Seleziona un Conto:</label>
         <select name="contoId" required>
             <option value="" disabled selected>Please seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
-                <option value="<?php echo $conto->id; ?>"><?php echo $conto->name; ?></option>
+                <option value="<?php echo $conto['NomeConto']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

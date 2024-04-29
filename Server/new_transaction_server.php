@@ -32,10 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 function getAccountById($accountId)
 {
-    $accounts = getAllAccounts();
+    $accounts = getAllConti();
 
     foreach ($accounts as $account) {
-        if ($account->id == $accountId) {
+        if (property_exists($account, 'id') && $account['id'] == $accountId) {
             return $account;
         }
     }
@@ -45,10 +45,10 @@ function getAccountById($accountId)
 
 function getCategoryById($categoryId)
 {
-    $categories = getAllCategories();
+    $categories = getAllPrimaryCategories();
 
     foreach ($categories as $category) {
-        if ($category->id == $categoryId) {
+        if ($category['id'] == $categoryId) {
             return $category;
         }
     }

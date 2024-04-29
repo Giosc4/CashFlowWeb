@@ -19,24 +19,23 @@
 
         <?php
         require_once '../server/other_functions.php';
-        $data = setAccountsAndCategories();
-        $accounts = $data['accounts'];
-        $categories = $data['categories'];
+        $accounts = getAllConti();
+        $primaryCategories = getAllPrimaryCategories();
         ?>
 
         <label for="accountId">Select an Account:</label>
         <select name="accountId" required>
             <option value="" disabled selected>Please select the Account</option>
             <?php foreach ($accounts as $account) : ?>
-                <option value="<?php echo $account->id; ?>"><?php echo $account->name; ?></option>
+                <option value="<?php echo $account['id']; ?>"><?php echo $account['name']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
         <label for="categoryId">Select a Category:</label>
         <select name="categoryId" required>
             <option value="" disabled selected>Please select a Category</option>
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>
+            <?php foreach ($primaryCategories as $category) : ?>
+                <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
