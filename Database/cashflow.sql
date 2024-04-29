@@ -1,183 +1,319 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Dec 11, 2023 at 04:23 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- Creation of PianificazionePagamento table
+CREATE TABLE PianificazionePagamento (
+    ID INT PRIMARY KEY,
+    IDTransazione INT,
+    Ripetizione VARCHAR(255),
+    DataScadenza DATE,
+    FOREIGN KEY (IDTransazione) REFERENCES Transazione(ID)
+);
 
---
--- Database: `cashflow`
---
 
--- --------------------------------------------------------
+-- Creation of Risparmi table
+CREATE TABLE Risparmi (
+    ID INT PRIMARY KEY,
+    ImportoRisparmiato DECIMAL(10, 2),
+    DataInizio DATE,
+    DataFine DATE,
+);
 
---
--- Table structure for table `account`
---
+-- Creation of Debit table
+CREATE TABLE Debit (
+    ID INT PRIMARY KEY,
+    ImportoDebito DECIMAL(10, 2),
+    NomeImporto VARCHAR(255),
+    DataConcessione DATE,
+    DataEstinsione DATE,
+    Note VARCHAR(255),
+);
 
-CREATE TABLE `account` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Creation of Credit table
+CREATE TABLE Credit (
+    ID INT PRIMARY KEY,
+    ImportoCredito DECIMAL(10, 2),
+    NomeImporto VARCHAR(255),
+    DataConcessione DATE,
+    DataEstinsione DATE,
+    Note VARCHAR(255),
+);
 
---
--- Dumping data for table `account`
---
+-- Creation of ObiettiviFinanziari table
+CREATE TABLE ObiettiviFinanziari (
+    ID INT PRIMARY KEY,
+    NomeObiettivo VARCHAR(255),
+    ImportoObiettivo DECIMAL(10, 2),
+    DataScadenza DATE,
+);
 
-INSERT INTO `account` (`id`, `name`) VALUES
-(1, 'Banca'),
-(2, 'cash');
+-- Creation of BudgetMax table 
+CREATE TABLE BudgetMax (
+    IDBudget INT PRIMARY KEY,
+    NomeBudget VARCHAR(255),
+    ImportoMax DECIMAL(10, 2),
+    DataInizio DATE,
+    DataFine DATE,
+);
 
--- --------------------------------------------------------
+-- Creation of Conto table
+CREATE TABLE Conto (
+    IDConto INT PRIMARY KEY,
+    NomeConto VARCHAR(255),
+    Saldo DECIMAL(10, 2)
+    IdRisparmio INT,
+    IDDebit INT,
+    IDCredit INT,
+    IDObiettivo INT,
+    FOREIGN KEY (IdRisparmio) REFERENCES Risparmi(ID),
+    FOREIGN KEY (IDDebit) REFERENCES Debit(ID),
+    FOREIGN KEY (IDCredit) REFERENCES Credit(ID),
+    FOREIGN KEY (IDObiettivo) REFERENCES ObiettiviFinanziari(ID),
+);
 
---
--- Table structure for table `categories`
---
+-- Creation of CategoriaPrimaria table
+CREATE TABLE CategoriaPrimaria (
+    ID INT PRIMARY KEY,
+    NomeCategoria VARCHAR(255),
+    DescrizioneCategoria VARCHAR(255)
+    IDBudget INT,
+    FOREIGN KEY (IDBudget) REFERENCES BudgetMax(IDBudget)
+);
 
-CREATE TABLE `categories` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Creation of CategoriaSecondaria table
+CREATE TABLE CategoriaSecondaria (
+    ID INT PRIMARY KEY,
+    IDCategoriaPrimaria INT,
+    NomeCategoria VARCHAR(255),
+    DescrizioneCategoria VARCHAR(255),
+    FOREIGN KEY (IDCategoriaPrimaria) REFERENCES CategoriaPrimaria(ID)
+);
 
---
--- Dumping data for table `categories`
---
+-- Creation of AssConti table
+CREATE TABLE AssConti (
+    IDAssegnazione INT PRIMARY KEY,
+    IDProfilo INT,
+    IDConto INT,
+    FOREIGN KEY (IDProfilo) REFERENCES Profili(IDProfilo),
+    FOREIGN KEY (IDConto) REFERENCES Conto(IDConto)
+);
 
-INSERT INTO `categories` (`id`, `name`) VALUES
-(1, 'Cibo'),
-(2, 'bevande');
+-- Creation of Profili table
+CREATE TABLE Profili (
+    IDProfilo INT PRIMARY KEY,
+    NomeProfilo VARCHAR(255),
+    Saldo_totale DECIMAL(10, 2),
+    Email VARCHAR(255),
+    Password VARCHAR(255)
+);
 
--- --------------------------------------------------------
+-- Creation of Template_Transazioni table
+CREATE TABLE Template_Transazioni (
+    IDTemplate INT PRIMARY KEY,
+    NomeTemplate VARCHAR(255),
+    Entrata_Uscita BOOLEAN,
+    Importo DECIMAL(10, 2),
+    IDConto INT,
+    IDCategoriaPrimaria INT,
+    IDCategoriaSecondaria INT,
+    Descrizione VARCHAR(255),
+    FOREIGN KEY (IDConto) REFERENCES Conto(IDConto),
+    FOREIGN KEY (IDCategoriaPrimaria) REFERENCES CategoriaPrimaria(ID),
+    FOREIGN KEY (IDCategoriaSecondaria) REFERENCES CategoriaSecondaria(ID)
+);
 
---
--- Table structure for table `position`
---
+-- Creation of Transazioni table
+CREATE TABLE Transazione (
+    ID INT PRIMARY KEY,
+    Entrata_Uscita BOOLEAN,
+    Importo DECIMAL(10, 2),
+    IDTemplate INT,
+    IDConto INT,
+    DataTransazione DATE,
+    IDCategoriaPrimaria INT,
+    IDCategoriaSecondaria INT,
+    Descrizione VARCHAR(255),
+    FOREIGN KEY (IDTemplate) REFERENCES Template_Transazioni(IDTemplate),
+    FOREIGN KEY (IDConto) REFERENCES Conto(IDConto),
+    FOREIGN KEY (IDCategoriaPrimaria) REFERENCES CategoriaPrimaria(ID),
+    FOREIGN KEY (IDCategoriaSecondaria) REFERENCES CategoriaSecondaria(ID)
+);
 
-CREATE TABLE `position` (
-  `id` int(11) NOT NULL,
-  `longitude` int(11) DEFAULT NULL,
-  `latitude` int(11) DEFAULT NULL,
-  `city_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `position`
---
 
-INSERT INTO `position` (`id`, `longitude`, `latitude`, `city_name`) VALUES
-(1, 44, 10, 'Bologna'),
-(40, 44, 10, 'Bologna'),
-(41, 44, 10, 'Bologna'),
-(42, 44, 10, 'Bologna'),
-(43, 44, 10, 'Bologna');
 
--- --------------------------------------------------------
 
---
--- Table structure for table `transaction`
---
 
-CREATE TABLE `transaction` (
-  `id` int(11) NOT NULL,
-  `isExpense` tinyint(1) NOT NULL,
-  `amount` double NOT NULL,
-  `account_id` int(11) DEFAULT NULL,
-  `category_id` int(11) DEFAULT NULL,
-  `position_id` int(11) DEFAULT NULL,
-  `transactionDate` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `transaction`
---
 
-INSERT INTO `transaction` (`id`, `isExpense`, `amount`, `account_id`, `category_id`, `position_id`, `transactionDate`) VALUES
-(45, 1, 21, 2, 2, 1, '2023-12-11 00:00:00');
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `account`
---
-ALTER TABLE `account`
-  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `position`
---
-ALTER TABLE `position`
-  ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `transaction`
---
-ALTER TABLE `transaction`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `account_id` (`account_id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `position_id` (`position_id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `account`
---
-ALTER TABLE `account`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
---
--- AUTO_INCREMENT for table `position`
---
-ALTER TABLE `position`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
---
--- AUTO_INCREMENT for table `transaction`
---
-ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `transaction`
---
-ALTER TABLE `transaction`
-  ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`Id`),
-  ADD CONSTRAINT `transaction_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  ADD CONSTRAINT `transaction_ibfk_3` FOREIGN KEY (`position_id`) REFERENCES `position` (`id`);
-COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Stored Procedures for Profilo table
+
+-- Create Profilo
+CREATE PROCEDURE CreateProfilo(IN p_NomeProfilo VARCHAR(255), IN p_Saldo_totale DECIMAL(10, 2), IN p_Email VARCHAR(255), IN p_Password VARCHAR(255))
+BEGIN
+    INSERT INTO Profili (NomeProfilo, Saldo_totale, Email, Password) VALUES (p_NomeProfilo, p_Saldo_totale, p_Email, p_Password);
+END;
+
+-- Update Profilo
+CREATE PROCEDURE UpdateProfilo(IN p_IDProfilo INT, IN p_NomeProfilo VARCHAR(255), IN p_Saldo_totale DECIMAL(10, 2), IN p_Email VARCHAR(255), IN p_Password VARCHAR(255))
+BEGIN
+    UPDATE Profili SET NomeProfilo = p_NomeProfilo, Saldo_totale = p_Saldo_totale, Email = p_Email, Password = p_Password WHERE IDProfilo = p_IDProfilo;
+END;
+
+-- Delete Profilo
+CREATE PROCEDURE DeleteProfilo(IN p_IDProfilo INT)
+BEGIN
+    DELETE FROM Profili WHERE IDProfilo = p_IDProfilo;
+END;
+
+
+
+
+
+-- Stored Procedures for Transazione table
+
+-- Create Transazione
+CREATE PROCEDURE CreateTransazione(...)
+BEGIN
+    -- INSERT statement for Transazione with parameters for each column
+END;
+
+-- Update Transazione
+CREATE PROCEDURE UpdateTransazione(...)
+BEGIN
+    -- UPDATE statement for Transazione with parameters for each column
+END;
+
+-- Delete Transazione
+CREATE PROCEDURE DeleteTransazione(IN p_ID INT)
+BEGIN
+    DELETE FROM Transazioni WHERE ID = p_ID;
+END;
+
+
+
+
+-- Stored Procedures for Conto table
+
+-- Create Conto
+CREATE PROCEDURE CreateConto(...)
+BEGIN
+    -- INSERT statement for Conto with parameters for each column
+END;
+
+-- Update Conto
+CREATE PROCEDURE UpdateConto(...)
+BEGIN
+    -- UPDATE statement for Conto with parameters for each column
+END;
+
+-- Delete Conto
+CREATE PROCEDURE DeleteConto(IN p_IDConto INT)
+BEGIN
+    DELETE FROM Conto WHERE IDConto = p_IDConto;
+END;
+
+
+
+
+-- Stored Procedures for Risparmi table
+
+-- Create Risparmi
+CREATE PROCEDURE CreateRisparmi(...)
+BEGIN
+    -- INSERT statement for Risparmi with parameters for each column
+END;
+
+-- Update Risparmi
+CREATE PROCEDURE UpdateRisparmi(...)
+BEGIN
+    -- UPDATE statement for Risparmi with parameters for each column
+END;
+
+-- Delete Risparmi
+CREATE PROCEDURE DeleteRisparmi(IN p_ID INT)
+BEGIN
+    DELETE FROM Risparmi WHERE ID = p_ID;
+END;
+
+
+
+
+-- Stored Procedures for PianificazionePagamento table
+
+-- Create PianificazionePagamento
+CREATE PROCEDURE CreatePianificazionePagamento(...)
+BEGIN
+    -- INSERT statement for PianificazionePagamento with parameters for each column
+END;
+
+-- Update PianificazionePagamento
+CREATE PROCEDURE UpdatePianificazionePagamento(...)
+BEGIN
+    -- UPDATE statement for PianificazionePagamento with parameters for each column
+END;
+
+-- Delete PianificazionePagamento
+CREATE PROCEDURE DeletePianificazionePagamento(IN p_ID INT)
+BEGIN
+    DELETE FROM PianificazionePagamento WHERE ID = p_ID;
+END;
+
+
+
+
+-- Stored Procedures for Budget table
+
+-- Create Budget
+CREATE PROCEDURE CreateBudget(...)
+BEGIN
+    -- INSERT statement for Budget with parameters for each column
+END;
+
+-- Update Budget
+CREATE PROCEDURE UpdateBudget(...)
+BEGIN
+    -- UPDATE statement for Budget with parameters for each column
+END;
+
+-- Delete Budget
+CREATE PROCEDURE DeleteBudget(IN p_IDBudget INT)
+BEGIN
+    DELETE FROM BudgetMassimo WHERE IDBudget = p_IDBudget;
+END;
