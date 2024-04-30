@@ -41,14 +41,26 @@ function displayTableData($data, $tableName)
 function displayAllTables()
 {
     $conti = getAllConti(); 
-    $categories = getAllPrimaryCategories();
+    $categoriePrimarie = getAllPrimaryCategories();
+    $categorieSecondarie = getAllSecondaryCategories();
     $transactions = getAllTransactions();
+    $profilo = getAllProfili();
+    $transactions_template = getAllTransactionsTemplate();
     $risparmi = getAllRisparmi();
     $obiettivi = getAllObiettivi();
+    $debiti = getAllDebiti();
+    $crediti = getAllCrediti();
+    $budgets = getAllBudgets();
 
-    displayTableData($conti, 'Conti');
-    displayTableData($categories, 'categories');
-    displayTableData($transactions, 'transaction');
-    displayTableData($risparmi, 'risparmi');
-    displayTableData($obiettivi, 'obiettivi');
+    displayTableData($transactions, '1 Transazioni'); //TODO
+    displayTableData($conti, '2 Conti');
+    displayTableData($categoriePrimarie, '3 Categorie Primaria');
+    displayTableData($categorieSecondarie, '4 Categorie Secondarie');
+    displayTableData($profilo, '5 Profilo');
+    displayTableData($transactions_template, '6 Template Transazioni');
+    displayTableData($risparmi, '7 Risparmi');
+    displayTableData($debiti, '8 Debiti');
+    displayTableData($crediti, '9 Crediti');
+    displayTableData($budgets, '10 Budget');
+    displayTableData($obiettivi, '11 Obiettivi');
 }

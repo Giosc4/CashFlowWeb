@@ -9,38 +9,54 @@
 
 <body>
     <h1>Creazione Template Transazione</h1>
-    <form action="../server/new_transaction_server.php" method="post">
+    <form action="../server/new_template_transaction_server.php" method="post">
 
-        <label for="isExpense">E' una spesa?</label>
-        <input type="checkbox" id="isExpense" name="isExpense"><br>
+        <label for="templateName">Nome del Template:</label>
+        <input type="text" id="templateName" name="templateName" required><br>
 
-        <label for="amount">Valore:</label>
-        <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" required><br>
+        <label for="entryType">Tipo di Transazione (Entrata/Uscita):</label>
+        <select id="entryType" name="entryType" required>
+            <option value="" disabled selected>Seleziona Tipo</option>
+            <option value="Entrata">Entrata</option>
+            <option value="Uscita">Uscita</option>
+        </select><br>
+
+        <label for="amount">Importo:</label>
+        <input type="number" id="amount" name="amount" step="0.01" required><br>
 
         <?php
         require_once '../server/other_functions.php';
-        $accounts  = getAllConti();
-        $categories = getAllPrimaryCategories();
+        $accounts = getAllConti();
+        $primaryCategories = getAllPrimaryCategories();
+        $secondaryCategories = getAllSecondaryCategories();
         ?>
 
-        <label for="accountId">Seleziona un conto:</label>
-        <select name="accountId" required>
-            <option value="" disabled selected>Please seleziona un conto</option>
-            <?php foreach ($accounts as $conto) : ?>
-                <option value="<?php echo $conto['id']; ?>"><?php echo $conto['name']; ?></option>
+        <label for="accountId">Seleziona un Conto:</label>
+        <select id="accountId" name="accountId" required>
+            <option value="" disabled selected>Seleziona un Conto</option>
+            <?php foreach ($accounts as $account) : ?>
+                <option value="<?php echo $account['IDConto']; ?>"><?php echo $account['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
-        <label for="categoryId">Seleziona un a Categoria Primaria:</label>
-        <select name="categoryId" required>
-            <option value="" disabled selected>Please seleziona un a Categoria Primaria</option>
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+        <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
+        <select id="primaryCategoryId" name="primaryCategoryId" required>
+            <option value="" disabled selected>Seleziona una Categoria Primaria</option>
+            <?php foreach ($primaryCategories as $category) : ?>
+                <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
-        <label for="transactionDate">Data Transazione:</label>
-        <input type="date" id="transactionDate" name="transactionDate" value="<?php echo date("Y-m-d"); ?>" required><br>
+        <label for="secondaryCategoryId">Seleziona una Categoria Secondaria:</label>
+        <select id="secondaryCategoryId" name="secondaryCategoryId">
+            <option value="" disabled selected>Seleziona una Categoria Secondaria</option>
+            <?php foreach ($secondaryCategories as $category) : ?>
+                <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
+            <?php endforeach; ?>
+        </select><br>
+
+        <label for="description">Descrizione:</label>
+        <textarea id="description" name="description"></textarea><br>
 
         <input type="submit" value="Crea Transazione">
     </form>

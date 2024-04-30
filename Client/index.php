@@ -9,10 +9,10 @@
 
 <body>
     <h1>Home Page</h1>
-    <ul>
+    <ol>
         <li><a href="new_transaction_client.php">Creazione Transazione</a></li>
         <li><a href="new_conto_client.php">Creazione Conto</a></li>
-        <li><a href="new_categoria_principale_client.php">Creazione Categoria Primaria</a></li>
+        <li><a href="new_categoria_primaria_client.php">Creazione Categoria Primaria</a></li>
         <li><a href="new_categoria_secondaria_client.php">Creazione Categoria Secondaria</a></li>
         <li><a href="new_profile_client.php">Creazione Profilo</a></li>
         <li><a href="new_template_transaction_client.php"> Creazione Template Transazione</a></li>
@@ -21,7 +21,7 @@
         <li><a href="new_credit_client.php">Creazione di un Credito</a></li>
         <li><a href="new_budget_client.php">Creazione di un Budget</a></li>
         <li><a href="new_obiettivo_client.php">Creazione di un Obiettivo</a></li>
-    </ul>
+    </ol>
 
     <h2>Contenuto delle tabelle</h2>
     <?php

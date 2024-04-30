@@ -38,25 +38,41 @@ function createConto($nome, $saldo)
     $stmt->close();
 }
 
-function createCategory($categoryName)
+function createPrimaryCategory($nomeCategoria, $descrizioneCategoria, $idBudget)
 {
-    global $conn, $insertCategoryQuery;
+    global $conn, $insertPrimaryCategoryQuery;
 
-    $stmt = $conn->prepare($insertCategoryQuery);
-    $stmt->bind_param("s", $categoryName);
-    $stmt->execute();
+    $stmt = $conn->prepare($insertPrimaryCategoryQuery);
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+
+    $stmt->bind_param("ssi", $nomeCategoria, $descrizioneCategoria, $idBudget);
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);  // Stampa l'errore di esecuzione
+    }
     $stmt->close();
 }
 
-function createPosition($longitude, $latitude, $cityName)
+function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizioneCategoria)
 {
-    global $conn, $insertPositionQuery;
+    global $conn, $insertSecondaryCategoryQuery;
 
-    $stmt = $conn->prepare($insertPositionQuery);
-    $stmt->bind_param("dds", $longitude, $latitude, $cityName);
-    $stmt->execute();
+    $stmt = $conn->prepare($insertSecondaryCategoryQuery);
+    if (!$stmt) {
+        die('Errore nella preparazione della query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("iss", $idCategoriaPrimaria, $nomeCategoria, $descrizioneCategoria);
+
+    if (!$stmt->execute()) {
+        die('Errore nell\'esecuzione della query: ' . $stmt->error);
+    }
+
     $stmt->close();
 }
+
 
 function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId)
 {
@@ -95,4 +111,114 @@ function createObiettivo($name, $amount, $date_inizio, $conto_id)
     }
 
     $stmt->close();
+}
+function createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
+{
+    global $conn, $insertTransactionTemplateQuery;
+
+    // Preparazione della query
+    $stmt = $conn->prepare($insertTransactionTemplateQuery);
+    if (!$stmt) {
+        die('Errore nella preparazione della query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("ssdiiss", $templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description);
+
+    if (!$stmt->execute()) {
+        die('Errore nell\'esecuzione della query: ' . $stmt->error);
+    }
+
+    $stmt->close();
+}
+
+
+function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto)
+{
+    global $conn, $insertDebitQuery;
+
+    $stmt = $conn->prepare($insertDebitQuery);
+
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+
+    $stmt->bind_param("sssssi", $ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto);
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+    }
+
+    $stmt->close();
+}
+
+
+// Funzione per creare un credito nel database
+function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto)
+{
+    global $conn, $insertCreditQuery;
+
+    $stmt = $conn->prepare($insertCreditQuery);
+
+    if (!$stmt) {
+        die('Errore nella preparazione della query: ' . $conn->error);
+    }
+
+    // Bind dei parametri
+    $stmt->bind_param("sssssi", $importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto);
+
+    if (!$stmt->execute()) {
+        die('Errore nell\'esecuzione della query: ' . $stmt->error);
+    }
+
+    $stmt->close();
+}
+
+
+function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate)
+{
+    global $conn, $insertBudgetQuery;
+
+    $stmt = $conn->prepare($insertBudgetQuery);
+
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+
+    $stmt->bind_param("sdss", $budgetName, $amount, $budgetStartDate, $budgetEndDate);
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+    }
+
+    $stmt->close();
+}
+
+function createProfile($nickname, $email, $password, $confirmPassword)
+{
+    global $conn, $insertProfileQuery;
+
+    if (empty($nickname) || empty($email) || empty($password) || $password !== $confirmPassword) {
+        return "Dati inseriti non validi.";
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $conn->prepare($insertProfileQuery);
+    if (!$stmt) {
+        return 'Errore nella preparazione della query: ' . $conn->error;
+    }
+
+    // Collegamento dei parametri alla query
+    $stmt->bind_param("sss", $nickname, $email, $hashedPassword);
+
+    // Esecuzione della query
+    if ($stmt->execute()) {
+        $stmt->close();
+        $conn->close();
+        return "Profilo creato con successo.";
+    } else {
+        $stmt->close();
+        $conn->close();
+        return 'Errore nell\'esecuzione della query: ' . $stmt->error;
+    }
 }

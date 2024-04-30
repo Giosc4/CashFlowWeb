@@ -9,16 +9,24 @@
 
 <body>
 
-    <form action="../server/new_categoria_principale_server.php" method="post">
+    <form action="../server/new_categoria_secondaria_server.php" method="post">
         <label for="categoryName">Category Name:</label><br>
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
         <label for="categoryId">Seleziona un a Categoria Primaria:</label>
+        <?php
+        require_once '../db/read_functions.php';
+        $categories = getAllPrimaryCategories();
+        ?>
         <select name="categoryId" required>
             <option value="" disabled selected>Please seleziona un a Categoria</option>
             <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>
+                <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>
+
+        <label for="categoryDescription">Category Description:</label><br>
+        <input type="text" id="categoryDescription" name="categoryDescription" required autocomplete="off"><br>
+        <br>
 
         <input type="submit" value="Create Category">
     </form>

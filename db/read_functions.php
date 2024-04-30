@@ -21,6 +21,57 @@ function getAllTransactions()
     return $transactions;
 }
 
+function getAllProfili()
+{
+    global $conn, $selectAllProfiliQuery;
+
+    $result = $conn->query($selectAllProfiliQuery);
+
+    $profili = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $profilo = [
+                'IDProfilo' => $row['IDProfilo'],
+                'NomeProfilo' => $row['NomeProfilo'],
+                'Saldo_totale' => $row['Saldo_totale'],
+                'Email' => $row['Email'],
+                'Password' => $row['Password']
+            ];
+            $profili[] = $profilo;
+        }
+    }
+
+    return $profili;
+}
+
+function getAllTransactionsTemplate()
+{
+    global $conn, $selectAllTransactionsTemplateQuery;
+
+    $result = $conn->query($selectAllTransactionsTemplateQuery);
+
+    $transactions_template = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $transaction = [
+                'NomeTemplate' => $row['NomeTemplate'],
+                'Entrata_Uscita' => $row['Entrata_Uscita'],
+                'Importo' => $row['Importo'],
+                'IDConto' => $row['IDConto'],
+                'IDCategoriaPrimaria' => $row['IDCategoriaPrimaria'],
+                'IDCategoriaSecondaria' => $row['IDCategoriaSecondaria'],
+                'Descrizione' => $row['Descrizione']
+            ];
+            $transactions_template[] = $transaction;
+        }
+    }
+
+    return $transactions_template;
+}
+
+
 function getAllConti()
 {
     global $conn, $selectAllContiQuery;
@@ -42,7 +93,6 @@ function getAllConti()
     return $conti;
 }
 
-
 function getAllPrimaryCategories()
 {
     global $conn, $selectAllPrimaryCategoriesQuery;
@@ -53,15 +103,39 @@ function getAllPrimaryCategories()
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            if (isset($row['id'])) {
-                $categories[] = new CategoriaPrimaria($row['name'], $row['descriprion'], $row['id']);
-            } else {
-                echo "Errore: Chiave 'id' non presente nell'array.";
-            }
+            $categories[] = [
+                'NomeCategoria' => $row['NomeCategoria'],
+                'DescrizioneCategoria' => $row['DescrizioneCategoria'],
+                'IDBudget' => $row['IDBudget'],
+                'ID' => $row['ID'],
+            ];
         }
     }
     return $categories;
 }
+
+
+function getAllSecondaryCategories()
+{
+    global $conn, $selectAllSecondaryCategoriesQuery;
+
+    $result = $conn->query($selectAllSecondaryCategoriesQuery);
+
+    $categories = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $categories[] = [
+                'NomeCategoria' => $row['NomeCategoria'],
+                'DescrizioneCategoria' => $row['DescrizioneCategoria'],
+                'IDCategoriaPrimaria' => $row['IDCategoriaPrimaria'],
+                'ID' => $row['ID'],
+            ];
+        }
+    }
+    return $categories;
+}
+
 
 function getAllRisparmi()
 {
@@ -74,8 +148,8 @@ function getAllRisparmi()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $risparmio = [
-                'IDRisparmio' => $row['ID'],
-                'Amount' => $row['ImportoRisparmiato'],
+                'id' => $row['id'],
+                'ImportoRisparmiato' => $row['ImportoRisparmiato'],
                 'DataInizio' => $row['DataInizio'],
                 'DataFine' => $row['DataFine'],
                 'IDConto' => $row['IDConto']
@@ -86,6 +160,31 @@ function getAllRisparmi()
 
     return $risparmi;
 }
+
+function getAllBudget()
+{
+    global $conn, $selectAllBudgetQuery;
+
+    $result = $conn->query($selectAllBudgetQuery);
+
+    $budgets = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $budget = [
+                'IDBudget' => $row['IDBudget'],
+                'NomeBudget' => $row['NomeBudget'],
+                'ImportoMax' => $row['ImportoMax'],
+                'DataInizio' => $row['DataInizio'],
+                'DataFine' => $row['DataFine'],
+            ];
+            $budgets[] = $budget;
+        }
+    }
+
+    return $budgets;
+}
+
 
 function getAllObiettivi()
 {
@@ -98,7 +197,7 @@ function getAllObiettivi()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $obiettivo = [
-                'IDObiettivo' => $row['ID'],
+                'id' => $row['id'],
                 'NomeObiettivo' => $row['NomeObiettivo'],
                 'ImportoObiettivo' => $row['ImportoObiettivo'],
                 'DataScadenza' => $row['DataScadenza'],
@@ -109,6 +208,83 @@ function getAllObiettivi()
     }
 
     return $obiettivi;
+}
+
+function getAllDebiti()
+{
+    global $conn, $selectAllDebitiQuery;
+
+    $result = $conn->query($selectAllDebitiQuery);
+
+    $debiti = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $debito = [
+                'id' => $row['id'],
+                'ImportoDebito' => $row['ImportoDebito'],
+                'NomeImporto' => $row['NomeImporto'],
+                'DataConcessione' => $row['DataConcessione'],
+                'DataEstinsione' => $row['DataEstinsione'],
+                'Note' => $row['Note'],
+                'IDConto' => $row['IDConto']
+            ];
+            $debiti[] = $debito;
+        }
+    }
+
+    return $debiti;
+}
+
+function getAllCrediti()
+{
+    global $conn, $selectAllCreditiQuery;
+
+    $result = $conn->query($selectAllCreditiQuery);
+
+    $crediti = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $credito = [
+                'id' => $row['id'],
+                'ImportoCredito' => $row['ImportoCredito'],
+                'NomeImporto' => $row['NomeImporto'],
+                'DataConcessione' => $row['DataConcessione'],
+                'DataEstinsione' => $row['DataEstinsione'],
+                'Note' => $row['Note'],
+                'IDConto' => $row['IDConto']
+            ];
+            $crediti[] = $credito;
+        }
+    }
+
+    return $crediti;
+}
+
+
+function getAllBudgets()
+{
+    global $conn, $selectAllBudgetQuery;
+
+    $result = $conn->query($selectAllBudgetQuery);
+
+    $Budgets = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $Budget = [
+                'IDBudget' => $row['IDBudget'],
+                'NomeBudget' => $row['NomeBudget'],
+                'ImportoMax' => $row['ImportoMax'],
+                'DataInizio' => $row['DataInizio'],
+                'DataFine' => $row['DataFine']
+            ];
+            $Budgets[] = $Budget;
+        }
+    }
+
+    return $Budgets;
 }
 
 

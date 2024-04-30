@@ -9,7 +9,7 @@
 
 <body>
 
-    <form action="new_credit_server.php" method="post">
+    <form action="../Server/new_credit_server.php" method="post">
 
         <label for="titolo">Titolo:</label>
         <input type="text" id="titolo" name="titolo" required><br>
@@ -23,10 +23,14 @@
         <input type="date" id="creditEstinsioneDate" name="creditEstinsioneDate" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <label for="contoId">Seleziona un Conto:</label>
+        <?php
+        include '../db/read_functions.php';
+        $conti = getAllConti();
+        ?>
         <select name="contoId" required>
             <option value="" disabled selected>Please seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
-                <option value="<?php echo $conto->id; ?>"><?php echo $conto->name; ?></option>
+                <option value="<?php echo $conto['IDConto']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form action="new_budget_server.php" method="post">
+    <form action="../server/new_budget_server.php" method="post">
 
         <label for="budgetName">Nome Budget:</label>
         <input type="text" id="budgetName" name="budgetName" required><br>
@@ -21,14 +21,7 @@
         <label for="budgetEndDate">Data Inizio Budget:</label>
         <input type="date" id="budgetEndDate" name="budgetEndDate" value="<?php echo date("Y-m-d"); ?>" required><br>
 
-        <label for="categoryId">Select a Category:</label>
-        <select name="categoryId" required>
-            <option value="" disabled selected>Please select a Category</option>
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category->id; ?>"><?php echo $category->name; ?></option>
-            <?php endforeach; ?>
-        </select><br>
-        <input type="submit" value="Create Budget">
+        <input type="submit" value="Crea Categoria">
 
     </form>
 </body>

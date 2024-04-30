@@ -14,11 +14,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // $idContoFromNome = getIdContoFromNome($contoId);
         // echo $idContoFromNome;
 
-            createObiettivo($obiettivoName, $obiettivoAmount, $obiettivoDateInizio, $contoId);
-            header("Location: ../client/index.php");
-            exit();
+        createObiettivo($obiettivoName, $obiettivoAmount, $obiettivoDateInizio, $contoId);
+        header("Location: ../client/index.php");
+        exit();
     } else {
         echo "Errore: Tutti i campi sono obbligatori.";
     }
 }
-?>
