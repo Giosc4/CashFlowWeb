@@ -4,16 +4,17 @@ require_once '../db/queries.php';
 require_once '../db/read_functions.php';
 
 
-
-// Controlla se il form è stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Assegna i dati inviati dal form a variabili
+    // Assign data sent from the form to variables
     $budgetName = $_POST['budgetName'];
     $amount = $_POST['amount'];
     $budgetStartDate = $_POST['budgetStartDate'];
     $budgetEndDate = $_POST['budgetEndDate'];
+    $primaryCategoryId = $_POST['primaryCategoryId']; 
 
-    createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate);
+    // Function to create a new budget with a primary category
+    createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategoryId);
     header("Location: ../client/index.php");
     exit();
 }
+

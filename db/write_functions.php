@@ -29,13 +29,16 @@ function createConto($nome, $saldo)
 
     $stmt = $conn->prepare($insertContoQuery);
     $stmt->bind_param("sd", $nome, $saldo);
-    if (!$stmt->execute()) {
-        die('Errore durante l\'inserimento del conto: ' . $stmt->error);
+
+    if ($stmt->execute()) {
+        return $conn->insert_id; // Returns the auto-increment ID of the last inserted row
+    } else {
+        return false;
     }
-    $stmt->close();
 }
 
-function createPrimaryCategory($nomeCategoria, $descrizioneCategoria, $idBudget)
+
+function createPrimaryCategory($nomeCategoria, $descrizioneCategoria)
 {
     global $conn, $insertPrimaryCategoryQuery;
 
@@ -44,12 +47,15 @@ function createPrimaryCategory($nomeCategoria, $descrizioneCategoria, $idBudget)
         die('Error in prepare statement: ' . $conn->error);
     }
 
-    $stmt->bind_param("ssi", $nomeCategoria, $descrizioneCategoria, $idBudget);
+    $stmt->bind_param("ss", $nomeCategoria, $descrizioneCategoria);
 
     if (!$stmt->execute()) {
-        die('Error in execute statement: ' . $stmt->error);  // Stampa l'errore di esecuzione
+        die('Error in execute statement: ' . $stmt->error);
     }
+    $newCategoryId = $stmt->insert_id;
     $stmt->close();
+
+    return $newCategoryId;
 }
 
 function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizioneCategoria)
@@ -171,7 +177,7 @@ function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $no
 }
 
 
-function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate)
+function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategory)
 {
     global $conn, $insertBudgetQuery;
 
@@ -181,7 +187,7 @@ function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate)
         die('Error in prepare statement: ' . $conn->error);
     }
 
-    $stmt->bind_param("sdss", $budgetName, $amount, $budgetStartDate, $budgetEndDate);
+    $stmt->bind_param("sdssi", $budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategory);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);
@@ -218,4 +224,35 @@ function createProfile($nickname, $email, $password, $confirmPassword)
         $conn->close();
         return 'Errore nell\'esecuzione della query: ' . $stmt->error;
     }
+}
+function associaContoAProfilo($profiloID, $contoID)
+{
+
+    global $conn, $associateProfileToContoQuery;
+
+    $stmt = $conn->prepare($associateProfileToContoQuery);
+    $stmt->bind_param("ii", $profiloID, $contoID);
+
+    if (!$stmt->execute()) {
+        die('Errore durante l\'associazione profilo-conto: ' . $stmt->error);
+    }
+    $stmt->close();
+}
+
+function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
+{
+    global $conn, $associateProfileToCategoryQuery;
+
+    $stmt = $conn->prepare($associateProfileToCategoryQuery);
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+
+    $stmt->bind_param("ii", $IDProfilo, $IDCategoriaPrimaria);
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+    }
+
+    $stmt->close();
 }

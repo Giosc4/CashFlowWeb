@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
+if (!isset($_SESSION['email'])) {
+    header("Location: ../client/log_in_profile_client.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +30,8 @@
         <li><a href="new_credit_client.php">Creazione di un Credito</a></li>
         <li><a href="new_budget_client.php">Creazione di un Budget</a></li>
         <li><a href="new_obiettivo_client.php">Creazione di un Obiettivo</a></li>
+
+         <a href="../server/logout.php">Logout</a> 
     </ol>
 
     <h2>Contenuto delle tabelle</h2>

@@ -52,7 +52,7 @@ function displayAllTables()
     $crediti = getAllCrediti();
     $budgets = getAllBudgets();
 
-    displayTableData($transactions, '1 Transazioni'); //TODO
+    displayTableData($transactions, '1 Transazioni'); 
     displayTableData($conti, '2 Conti');
     displayTableData($categoriePrimarie, '3 Categorie Primaria');
     displayTableData($categorieSecondarie, '4 Categorie Secondarie');

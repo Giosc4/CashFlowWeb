@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
+if (!isset($_SESSION['email'])) {
+    header("Location: ../client/log_in_profile_client.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="it">
 
@@ -18,7 +27,7 @@
         <label for="categoryBudget">Budget della Categoria (opzionale):</label><br>
         <?php
         include '../db/read_functions.php';
-        $budgets = getAllBudget();
+        $budgets = getAllBudgets();
         ?>
         <select name="budgetId">
             <option value="" selected>Scegli un Budget (opzionale)</option>

@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
+if (!isset($_SESSION['email'])) {
+    header("Location: ../client/log_in_profile_client.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +29,22 @@
         <input type="date" id="budgetStartDate" name="budgetStartDate" value="<?php echo date("Y-m-d"); ?>" required><br>
         <label for="budgetEndDate">Data Inizio Budget:</label>
         <input type="date" id="budgetEndDate" name="budgetEndDate" value="<?php echo date("Y-m-d"); ?>" required><br>
+        <label for="primaryCategory">Categoria Primaria:</label>
+
+
+        <?php
+        require_once '../db/read_functions.php';
+        $primaryCategories = getAllPrimaryCategories();
+        ?>
+
+        <!-- Primary Category Selection -->
+        <label for="primaryCategoryId">Select a Primary Category:</label>
+        <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
+            <option value="" disabled selected>Please select a Primary Category</option>
+            <?php foreach ($primaryCategories as $category) : ?>
+                <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
+            <?php endforeach; ?>
+        </select><br>
 
         <input type="submit" value="Crea Categoria">
 

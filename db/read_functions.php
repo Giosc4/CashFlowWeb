@@ -3,6 +3,25 @@ require_once '../db/db_connection.php';
 require_once '../db/queries.php';
 
 
+// questa funzione controlla se esiste un utente con la stessa email
+function userExists($email)
+{
+    global $conn, $selectUserByEmailQuery;
+
+    $stmt = $conn->prepare($selectUserByEmailQuery);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $stmt->close();
+        return true;
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
 function getAllTransactions()
 {
     global $conn, $selectAllTransactionsQuery;
@@ -105,7 +124,6 @@ function getAllPrimaryCategories()
             $categories[] = [
                 'NomeCategoria' => $row['NomeCategoria'],
                 'DescrizioneCategoria' => $row['DescrizioneCategoria'],
-                'IDBudget' => $row['IDBudget'],
                 'ID' => $row['ID'],
             ];
         }
@@ -184,30 +202,6 @@ function getAllRisparmi()
     }
 
     return $risparmi;
-}
-
-function getAllBudget()
-{
-    global $conn, $selectAllBudgetQuery;
-
-    $result = $conn->query($selectAllBudgetQuery);
-
-    $budgets = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $budget = [
-                'IDBudget' => $row['IDBudget'],
-                'NomeBudget' => $row['NomeBudget'],
-                'ImportoMax' => $row['ImportoMax'],
-                'DataInizio' => $row['DataInizio'],
-                'DataFine' => $row['DataFine'],
-            ];
-            $budgets[] = $budget;
-        }
-    }
-
-    return $budgets;
 }
 
 
@@ -303,7 +297,8 @@ function getAllBudgets()
                 'NomeBudget' => $row['NomeBudget'],
                 'ImportoMax' => $row['ImportoMax'],
                 'DataInizio' => $row['DataInizio'],
-                'DataFine' => $row['DataFine']
+                'DataFine' => $row['DataFine'],
+                'IDPrimaryCategory' => $row['IDPrimaryCategory']
             ];
             $Budgets[] = $Budget;
         }
@@ -337,4 +332,90 @@ function getIdContoFromNome($nomeConto)
 
     $stmt->close();
     return null;
+}
+
+function getProfiloByEmail($email) {
+    global $conn, $selectUserByEmailQuery; 
+
+    $stmt = $conn->prepare($selectUserByEmailQuery);
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
+        return false;
+    }
+
+    $stmt->bind_param("s", $email);
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $stmt->close();
+        return $row; // Return the whole row as an associative array.
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
+
+function getIDProfiloByEmail($email)
+{
+    global $conn, $selectIDProfileByEmailQuery;
+
+    $stmt = $conn->prepare($selectIDProfileByEmailQuery);
+    if (!$stmt) {
+        error_log("MySQL prepare error: " . $conn->error);
+        return false;
+    }
+
+    $stmt->bind_param("s", $email);
+    if (!$stmt->execute()) {
+        error_log("Execute error: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $stmt->close();
+        return $row['IDProfilo'];
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
+
+function logInProfile($email, $password)
+{
+    global $conn, $selectIDProfileByEmailQuery;
+
+    $stmt = $conn->prepare($selectIDProfileByEmailQuery);
+    $stmt->bind_param("s", $email);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            // Password is correct, start a new session and save the email to the session
+            session_start();
+            $_SESSION['email'] = $email;
+            $stmt->close();
+            return true;
+        } else {
+            // Password is incorrect
+            echo "Errore: La password non è corretta.";
+        }
+    } else {
+        // No account found with the provided email
+        echo "Errore: Nessun account trovato con l'email '$email'.";
+    }
+
+    $stmt->close();
+    return false;
 }

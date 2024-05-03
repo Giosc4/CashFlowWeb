@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['email'])) {
+    header("Location: ../client/index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +32,21 @@
 
         <input type="submit" value="Crea Profilo">
     </form>
+
+    <?php
+    if (isset($_GET['error'])) {
+        if ($_GET['error'] === 'emptyfields') {
+            echo "<p>Dati inseriti non validi.</p>";
+        } else if ($_GET['error'] === 'invalidEmail') {
+            echo "<p>Email non valida.</p>";
+        } else if ($_GET['error'] === 'pswdsDontMatch') {
+            echo "<p>Le password non corrispondono.v";
+        } else if ($_GET['error'] === 'userExists') {
+            echo "<p>Utente già esistente.</p>";
+        }
+    }
+    ?>
+
 </body>
 
 </html>
