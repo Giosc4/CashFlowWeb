@@ -2,40 +2,41 @@
 require_once '../db/write_functions.php';
 require_once '../db/queries.php';
 require_once '../db/read_functions.php';
-require_once '../server/classes.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['amount'], $_POST['accountId'], $_POST['categoryId'])) {
-        $isExpense = isset($_POST['isExpense']) ? true : false;
-        $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : 0.0;
-        $accountId = isset($_POST['accountId']) ? intval($_POST['accountId']) : null;
-        $categoryId = isset($_POST['categoryId']) ? intval($_POST['categoryId']) : null;
-        $positionCity = 1; // Default value
-        $transactionDate = isset($_POST['transactionDate']) ? $_POST['transactionDate'] : date("Y-m-d");
+    if (isset($_POST['amount'], $_POST['accountId'], $_POST['primaryCategoryId'], $_POST['secondaryCategoryId'], $_POST['transactionDate'])) {
+        $isExpense = isset($_POST['isExpense']) && $_POST['isExpense'] === 'on';
+        $amount = floatval($_POST['amount']);
+        $accountId = intval($_POST['accountId']);
+        $primaryCategoryId = intval($_POST['primaryCategoryId']);
+        $secondaryCategoryId = intval($_POST['secondaryCategoryId']);
+        $transactionDate = $_POST['transactionDate'];
 
         $account = getAccountById($accountId);
-        $category = getCategoryById($categoryId);
+        $primaryCategory = getCategoryById($primaryCategoryId);
+        $secondaryCategory = getCategoryById($secondaryCategoryId);
 
-        if ($accountId !== null && $categoryId !== null) {
-            saveTransaction($isExpense, $amount, $account, $category, $positionCity, $transactionDate);
+        if ($account !== null && $primaryCategory !== null && $secondaryCategory !== null) {
+            saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate);
             header("Location: ../client/index.php");
             exit();
         } else {
-            header("Location: ../error.php");
+            header("Location: ../error.php?error=invalidInput");
             exit();
         }
     } else {
-        header("Location: ../error1.php");
+        header("Location: ../error1.php?error=missingFields");
         exit();
     }
 }
+
 
 function getAccountById($accountId)
 {
     $accounts = getAllConti();
 
     foreach ($accounts as $account) {
-        if (property_exists($account, 'id') && $account['id'] == $accountId) {
+        if ($account['IDConto'] == $accountId) {
             return $account;
         }
     }
@@ -45,10 +46,10 @@ function getAccountById($accountId)
 
 function getCategoryById($categoryId)
 {
-    $categories = getAllPrimaryCategories();
+    $categories = array_merge(getAllPrimaryCategories(), getAllSecondaryCategories());
 
     foreach ($categories as $category) {
-        if ($category['id'] == $categoryId) {
+        if ($category['ID'] == $categoryId) {
             return $category;
         }
     }

@@ -1,7 +1,6 @@
 <?php
 require_once '../db/db_connection.php';
 require_once '../db/queries.php';
-require_once '../server/classes.php';
 
 
 function getAllTransactions()
@@ -134,6 +133,32 @@ function getAllSecondaryCategories()
         }
     }
     return $categories;
+}
+
+function getSecondaryFromPrimaryCategories($primaryCategoryID)
+{
+    global $conn, $selectSecondaryFromPrimaryQuery;
+
+    $stmt = $conn->prepare($selectSecondaryFromPrimaryQuery);
+    $stmt->bind_param("i", $primaryCategoryID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $secondaryCategories = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $secondaryCategories[] = [
+                'ID' => $row['ID'],
+                'NomeCategoria' => $row['NomeCategoria'],
+                'DescrizioneCategoria' => $row['DescrizioneCategoria'],
+                'IDCategoriaPrimaria' => $row['IDCategoriaPrimaria']
+            ];
+        }
+    }
+
+    $stmt->close();
+    return $secondaryCategories;
 }
 
 

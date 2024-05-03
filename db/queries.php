@@ -23,6 +23,9 @@ $selectAllBudgetQuery = "SELECT * FROM `budgetmax`";
 $selectAllTransactionsTemplateQuery = "SELECT * FROM `template_transazioni`";
 $selectAllProfiliQuery = "SELECT * FROM `Profili`";
 
+
+$selectSecondaryFromPrimaryQuery = "SELECT * FROM `categoriasecondaria` WHERE `IDCategoriaPrimaria` = ?";
+
 $selectAccountByNameQuery = "SELECT * FROM `account` WHERE `name` = ?";
 $selectCategoryByNameQuery = "SELECT * FROM `categories` WHERE `name` = ?";
 $selectIdContoFromNomeQuery = "SELECT `IDConto` FROM `conto` WHERE `NomeConto` = ?";

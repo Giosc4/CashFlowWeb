@@ -1,7 +1,7 @@
 <?php
 require_once '../db/write_functions.php';
 require_once '../db/read_functions.php';
-require_once '../server/classes.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["obiettivoName"]) && isset($_POST["obiettivoAmount"]) && isset($_POST["obiettivoDateInizio"]) && isset($_POST["contoId"])) {

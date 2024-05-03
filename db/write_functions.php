@@ -1,7 +1,6 @@
 <?php
 require_once '../db/db_connection.php';
 require_once '../db/queries.php';
-require_once '../server/classes.php';
 
 function saveTransaction($isExpense, $amount, $account, $category, $positionCity, $transactionDate)
 {
