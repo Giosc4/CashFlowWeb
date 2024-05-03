@@ -1,5 +1,5 @@
 <?php
-$insertTransactionQuery = "INSERT INTO `transaction` (isExpense, amount, account_id, category_id, position_id, transactionDate) VALUES (?, ?, ?, ?, ?, ?)";
+$insertTransactionQuery = "INSERT INTO `transazione` (Entrata_Uscita, Importo, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria,  Descrizione) VALUES (?, ?, ?, ?, ?, ?, ?)";$insertContoQuery = "INSERT INTO `conto` (`NomeConto`, `Saldo`) VALUES (?, ?)";
 $insertContoQuery = "INSERT INTO `conto` (`NomeConto`, `Saldo`) VALUES (?, ?)";
 $insertPrimaryCategoryQuery = "INSERT INTO `categoriaprimaria` (NomeCategoria, DescrizioneCategoria, IDBudget) VALUES (?, ?, ?)";
 $insertSecondaryCategoryQuery = "INSERT INTO `categoriasecondaria` (IDCategoriaPrimaria, NomeCategoria, DescrizioneCategoria) VALUES (?, ?, ?)";

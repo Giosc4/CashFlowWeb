@@ -4,21 +4,21 @@ require_once '../db/queries.php';
 require_once '../db/read_functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['amount'], $_POST['accountId'], $_POST['primaryCategoryId'], $_POST['secondaryCategoryId'], $_POST['transactionDate'])) {
+    if (isset($_POST['amount'], $_POST['accountId'], $_POST['primaryCategoryId'], $_POST['transactionDate'])) {
         $isExpense = isset($_POST['isExpense']) && $_POST['isExpense'] === 'on';
         $amount = floatval($_POST['amount']);
         $accountId = intval($_POST['accountId']);
         $primaryCategoryId = intval($_POST['primaryCategoryId']);
-        $secondaryCategoryId = intval($_POST['secondaryCategoryId']);
+        $secondaryCategoryId = isset($_POST['secondaryCategoryId']) ? intval($_POST['secondaryCategoryId']) : null;
         $transactionDate = $_POST['transactionDate'];
 
         $account = getAccountById($accountId);
         $primaryCategory = getCategoryById($primaryCategoryId);
         $secondaryCategory = getCategoryById($secondaryCategoryId);
 
-        if ($account !== null && $primaryCategory !== null && $secondaryCategory !== null) {
-            saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate);
-            header("Location: ../client/index.php");
+        if ($account !== null && $primaryCategory !== null && $amount > 0) {
+             saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate);
+             header("Location: ../client/index.php");
             exit();
         } else {
             header("Location: ../error.php?error=invalidInput");
