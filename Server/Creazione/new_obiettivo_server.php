@@ -1,6 +1,6 @@
 <?php
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
+require_once '../../db/write_functions.php';
+require_once '../../db/read_functions.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // echo $idContoFromNome;
 
         createObiettivo($obiettivoName, $obiettivoAmount, $obiettivoDateInizio, $contoId);
-        header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/index.php");
+        header("Location: ../../client/index.php");
         exit();
     } else {
         echo "Errore: Tutti i campi sono obbligatori.";

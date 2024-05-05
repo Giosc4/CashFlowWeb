@@ -1,7 +1,7 @@
 <?php
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/queries.php';
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
+require_once '../../db/write_functions.php';
+require_once '../../db/queries.php';
+require_once '../../db/read_functions.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($idContoFromNome) {
             createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $idContoFromNome);
-            header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/index.php");
+            header("Location: ../../client/index.php");
             exit();
         } else {
             echo "Errore: Il conto selezionato non esiste.";

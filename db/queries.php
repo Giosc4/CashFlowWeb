@@ -1,5 +1,6 @@
 <?php
-$insertTransactionQuery = "INSERT INTO `transazione` (Is_Expense, Importo, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria) VALUES (?, ?, ?, ?, ?, ?)";
+$insertTransactionQuery = "INSERT INTO transazione (Is_Expense, Importo, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria) VALUES (?, ?, ?, ?, ?, ?)";
+
 $insertContoQuery = "INSERT INTO `conto` (`NomeConto`, `Saldo`) VALUES (?, ?)";
 $insertPrimaryCategoryQuery = "INSERT INTO `categoriaprimaria` (NomeCategoria, DescrizioneCategoria) VALUES (?, ?)";
 $insertSecondaryCategoryQuery = "INSERT INTO `categoriasecondaria` (IDCategoriaPrimaria, NomeCategoria, DescrizioneCategoria) VALUES (?, ?, ?)";
@@ -26,11 +27,11 @@ $selectAllTransactionsTemplateQuery = "SELECT * FROM `template_transazioni`";
 $selectAllProfiliQuery = "SELECT * FROM `Profili`";
 
 $selectUserByEmailQuery = "SELECT * FROM `Profili` WHERE `Email` = ?";
-$selectIDProfileByEmailQuery = "SELECT IDProfilo  FROM `Profili` WHERE `Email` = ?";
+$selectIDProfileByEmailQuery = "SELECT ID  FROM `Profili` WHERE `Email` = ?";
 $selectSecondaryFromPrimaryQuery = "SELECT * FROM `categoriasecondaria` WHERE `IDCategoriaPrimaria` = ?";
 $selectAccountByNameQuery = "SELECT * FROM `account` WHERE `name` = ?";
 $selectCategoryByNameQuery = "SELECT * FROM `categories` WHERE `name` = ?";
-$selectIdContoFromNomeQuery = "SELECT `IDConto` FROM `conto` WHERE `NomeConto` = ?";
+$selectIdContoFromNomeQuery = "SELECT ID FROM `conto` WHERE `NomeConto` = ?";
 $selectAccountByIdQuery = "SELECT * FROM `account` WHERE `ID` = ?";
 $selectCategoryByIdQuery = "SELECT * FROM `categories` WHERE `ID` = ?";
 $selectTransactionFromIDQuery = "SELECT * FROM `transazione` WHERE `ID` = ?";

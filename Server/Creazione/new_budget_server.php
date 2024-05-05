@@ -1,7 +1,7 @@
 <?php
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/queries.php';
-require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/vdb/read_functions.php';
+require_once '../../db/write_functions.php';
+require_once '../../db/queries.php';
+require_once '../../vdb/read_functions.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

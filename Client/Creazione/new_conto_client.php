@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/Server/creazione/new_conto_server.php" method="post">
+    <form action="../../Server/Creazione/new_conto_server.php" method="post">
         <label for="nome">Nome:</label>
         <input type="text" name="nome" id="nome" required><br>
 

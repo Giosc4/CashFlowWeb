@@ -1,22 +1,20 @@
 <?php
 
-function saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate)
+function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)
 {
     global $conn, $insertTransactionQuery;
 
     $stmt = $conn->prepare($insertTransactionQuery);
+
     if (!$stmt) {
-        error_log('SQL Error: ' . $conn->error);
         die('Error in prepare statement: ' . $conn->error);
     }
     
-    $stmt->bind_param("idisii", $isExpense, $amount, $account, $transactionDate, $primaryCategory, $secondaryCategory);
+    $stmt->bind_param("idisii", $isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);
     }
-
-    $stmt->close();
 }
 
 

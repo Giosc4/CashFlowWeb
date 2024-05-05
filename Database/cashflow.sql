@@ -82,7 +82,7 @@ CREATE TABLE `conto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `credit` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `ImportoCredito` decimal(10,2) DEFAULT NULL,
   `NomeImporto` varchar(255) DEFAULT NULL,
   `DataConcessione` date DEFAULT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `credit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `debit` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `ImportoDebito` decimal(10,2) DEFAULT NULL,
   `NomeImporto` varchar(255) DEFAULT NULL,
   `DataConcessione` date DEFAULT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE `debit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `obiettivifinanziari` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `NomeObiettivo` varchar(255) DEFAULT NULL,
   `ImportoObiettivo` decimal(10,2) DEFAULT NULL,
   `DataScadenza` date DEFAULT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE `profili_categoriaprimaria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `risparmi` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `ImportoRisparmiato` decimal(10,2) DEFAULT NULL,
   `DataInizio` date DEFAULT NULL,
   `DataFine` date DEFAULT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `template_transazioni` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `transazione` (
-  `id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `Is_Expense` tinyint(1) DEFAULT NULL,
   `Importo` decimal(10,2) DEFAULT NULL,
   `IDTemplate` int(11) DEFAULT NULL,
@@ -205,15 +205,15 @@ ALTER TABLE `conto`
   ADD PRIMARY KEY (`IDConto`);
 
 ALTER TABLE `credit`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `credit_conto_fk` (`IDConto`);
 
 ALTER TABLE `debit`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `debit_conto_fk` (`IDConto`);
 
 ALTER TABLE `obiettivifinanziari`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `obiettivi_conto_fk` (`IDConto`);
 
 ALTER TABLE `profili`
@@ -225,7 +225,7 @@ ALTER TABLE `profili_categoriaprimaria`
   ADD KEY `fk_profili_categoriaprimaria_categoria` (`IDCategoriaPrimaria`);
 
 ALTER TABLE `risparmi`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `risparmi_conto_fk` (`IDConto`);
 
 ALTER TABLE `template_transazioni`
@@ -235,7 +235,7 @@ ALTER TABLE `template_transazioni`
   ADD KEY `template_transazioni_secondaria_fk` (`IDCategoriaSecondaria`);
 
 ALTER TABLE `transazione`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `transazione_template_fk` (`IDTemplate`),
   ADD KEY `transazione_conto_fk` (`IDConto`),
   ADD KEY `transazione_primaria_fk` (`IDCategoriaPrimaria`),
@@ -255,25 +255,25 @@ ALTER TABLE `conto`
   MODIFY `IDConto` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `credit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `debit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `obiettivifinanziari`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `profili`
   MODIFY `IDProfilo` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `risparmi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `template_transazioni`
   MODIFY `IDTemplate` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `transazione`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 
 ALTER TABLE `assconti`
