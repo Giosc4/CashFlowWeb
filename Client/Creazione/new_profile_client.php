@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['email'])) {
-    header("Location: ../client/index.php");
+    header("Location: client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -15,11 +15,10 @@ if (isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="../server/new_profile_server.php" method="post">
+    <form action="http://localhost/CashFlowWeb/server/creazione/new_profile_server.php" method="post">
         <h1>Crea Profilo</h1>
         <label for="name">Nickname:</label>
         <input type="text" id="name" name="name" required><br>
-
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br>
@@ -40,10 +39,12 @@ if (isset($_SESSION['email'])) {
         } else if ($_GET['error'] === 'invalidEmail') {
             echo "<p>Email non valida.</p>";
         } else if ($_GET['error'] === 'pswdsDontMatch') {
-            echo "<p>Le password non corrispondono.v";
+            echo "<p>Le password non corrispondono.</p>";
         } else if ($_GET['error'] === 'userExists') {
             echo "<p>Utente già esistente.</p>";
         }
+    } else {
+        echo "<p>Compila tutti i campi per creare un nuovo profilo.</p>";
     }
     ?>
 

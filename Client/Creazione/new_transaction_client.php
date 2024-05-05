@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -19,7 +19,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
     <h1>Creazione Transazione</h1>
-    <form action="../server/new_transaction_server.php" method="post">
+    <form action="../../server/creazione/new_transaction_server.php" method="post">
         <!-- Expense Checkbox -->
         <label for="isExpense">Is Expense:</label>
         <input type="checkbox" id="isExpense" name="isExpense"><br>
@@ -30,7 +30,7 @@ if (!isset($_SESSION['email'])) {
 
         <!-- PHP to load accounts and categories -->
         <?php
-        require_once '../server/other_functions.php';
+        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/other_functions.php';
         $accounts = getAllConti();
         $primaryCategories = getAllPrimaryCategories();
         ?>
@@ -40,7 +40,7 @@ if (!isset($_SESSION['email'])) {
         <select id="accountId" name="accountId" required>
             <option value="" disabled selected>Please select the Account</option>
             <?php foreach ($accounts as $account) : ?>
-                <option value="<?php echo $account['IDConto']; ?>"><?php echo $account['NomeConto']; ?></option>
+                <option value="<?php echo $account['ID']; ?>"><?php echo $account['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
@@ -55,7 +55,7 @@ if (!isset($_SESSION['email'])) {
 
         <!-- Secondary Category Selection -->
         <label for="secondaryCategoryId">Select a Secondary Category:</label>
-        <select id="secondaryCategoryId" name="secondaryCategoryId" required>
+        <select id="secondaryCategoryId" name="secondaryCategoryId">
             <option value="" disabled selected>Please select a Secondary Category</option>
         </select><br>
 

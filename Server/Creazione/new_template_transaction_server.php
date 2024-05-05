@@ -1,5 +1,5 @@
 <?php
-require_once '../db/write_functions.php';
+require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $templateName = $_POST['templateName'];
@@ -12,6 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description);
 
-    header('Location: ../client/index.php');
+    header('Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/index.php');
     exit();
 }

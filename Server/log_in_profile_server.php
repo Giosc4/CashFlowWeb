@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../db/read_functions.php';
+include_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];

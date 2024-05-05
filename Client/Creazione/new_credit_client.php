@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -18,7 +18,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
 
-    <form action="../Server/new_credit_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/Server/creazione/new_credit_server.php" method="post">
 
         <label for="titolo">Titolo:</label>
         <input type="text" id="titolo" name="titolo" required><br>
@@ -33,13 +33,13 @@ if (!isset($_SESSION['email'])) {
 
         <label for="contoId">Seleziona un Conto:</label>
         <?php
-        include '../db/read_functions.php';
+        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $conti = getAllConti();
         ?>
         <select name="contoId" required>
             <option value="" disabled selected>Please seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
-                <option value="<?php echo $conto['IDConto']; ?>"><?php echo $conto['NomeConto']; ?></option>
+                <option value="<?php echo $conto['ID']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

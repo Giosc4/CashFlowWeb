@@ -1,32 +1,29 @@
 <?php
-require_once '../db/write_functions.php';
-require_once '../db/queries.php';
-require_once '../db/read_functions.php';
+require_once '../../db/queries.php';
+require_once '../../db/read_functions.php';
+require_once '../../db/write_functions.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['amount'], $_POST['accountId'], $_POST['primaryCategoryId'], $_POST['transactionDate'])) {
         $isExpense = isset($_POST['isExpense']) && $_POST['isExpense'] === 'on';
-        $amount = floatval($_POST['amount']);
-        $accountId = intval($_POST['accountId']);
-        $primaryCategoryId = intval($_POST['primaryCategoryId']);
+        $amount = $_POST['amount'];
+        $accountId = $_POST['accountId'];
+        $primaryCategoryId = $_POST['primaryCategoryId'];
         $secondaryCategoryId = isset($_POST['secondaryCategoryId']) ? intval($_POST['secondaryCategoryId']) : null;
         $transactionDate = $_POST['transactionDate'];
 
-        $account = getAccountById($accountId);
-        $primaryCategory = getCategoryById($primaryCategoryId);
-        $secondaryCategory = getCategoryById($secondaryCategoryId);
-
-        if ($account !== null && $primaryCategory !== null && $amount > 0) {
-             saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate);
-             header("Location: ../client/index.php");
+        if ($accountId !== null && $primaryCategoryId !== null && $amount > 0) {
+            $isExpenseFlag = $isExpense ? 1 : 0;
+            $secondaryCategoryId = $secondaryCategoryId ? $secondaryCategoryId : 0;
+            saveTransaction($isExpenseFlag, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $transactionDate);
+            header("Location:  ../../client/index.php");
             exit();
         } else {
-            header("Location: ../error.php?error=invalidInput");
-            exit();
+            $_SESSION['error'] = "Errore: Conto o categoria non trovati.";
         }
     } else {
-        header("Location: ../error1.php?error=missingFields");
-        exit();
+        $_SESSION['error'] = "Errore: Tutti i campi sono obbligatori.";
     }
 }
 
@@ -36,7 +33,7 @@ function getAccountById($accountId)
     $accounts = getAllConti();
 
     foreach ($accounts as $account) {
-        if ($account['IDConto'] == $accountId) {
+        if ($account['ID'] == $accountId) {
             return $account;
         }
     }

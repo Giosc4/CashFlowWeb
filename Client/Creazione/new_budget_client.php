@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -13,11 +13,11 @@ if (!isset($_SESSION['email'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Creazione Budget</title>
 </head>
 
 <body>
-    <form action="../server/new_budget_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_budget_server.php" method="post">
 
         <label for="budgetName">Nome Budget:</label>
         <input type="text" id="budgetName" name="budgetName" required><br>
@@ -33,7 +33,7 @@ if (!isset($_SESSION['email'])) {
 
 
         <?php
-        require_once '../db/read_functions.php';
+        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $primaryCategories = getAllPrimaryCategories();
         ?>
 

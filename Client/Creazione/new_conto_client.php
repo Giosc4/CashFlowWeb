@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="../Server/new_conto_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/Server/creazione/new_conto_server.php" method="post">
         <label for="nome">Nome:</label>
         <input type="text" name="nome" id="nome" required><br>
 

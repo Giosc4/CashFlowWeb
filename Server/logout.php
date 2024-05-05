@@ -8,5 +8,5 @@ session_unset();
 session_destroy();
 
 // Reindirizza l'utente alla pagina di accesso dopo il logout
-header("Location: ../client/log_in_profile_client.php");
+header("Location: /CashFlowWeb/client/log_in_profile_client.php");
 exit();

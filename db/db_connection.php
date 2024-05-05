@@ -2,7 +2,7 @@
 $servername = "localhost"; 
 $username = "root";   
 $password = "";      
-$dbname = "CashFlow";  
+$dbname = "CashFlowWeb";  
 
 // Connessione al database
 $conn = new mysqli($servername, $username, $password, $dbname);

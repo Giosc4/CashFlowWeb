@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -18,7 +18,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
     <h1>Creazione Template Transazione</h1>
-    <form action="../server/new_template_transaction_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_template_transaction_server.php" method="post">
 
         <label for="templateName">Nome del Template:</label>
         <input type="text" id="templateName" name="templateName" required><br>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['email'])) {
         <input type="number" id="amount" name="amount" step="0.01" required><br>
 
         <?php
-        require_once '../server/other_functions.php';
+        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/other_functions.php';
         $accounts = getAllConti();
         $primaryCategories = getAllPrimaryCategories();
         $secondaryCategories = getAllSecondaryCategories();
@@ -44,7 +44,7 @@ if (!isset($_SESSION['email'])) {
         <select id="accountId" name="accountId" required>
             <option value="" disabled selected>Seleziona un Conto</option>
             <?php foreach ($accounts as $account) : ?>
-                <option value="<?php echo $account['IDConto']; ?>"><?php echo $account['NomeConto']; ?></option>
+                <option value="<?php echo $account['ID']; ?>"><?php echo $account['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

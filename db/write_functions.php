@@ -1,6 +1,4 @@
 <?php
-require_once '../db/db_connection.php';
-require_once '../db/queries.php';
 
 function saveTransaction($isExpense, $amount, $account, $primaryCategory, $secondaryCategory, $transactionDate)
 {
@@ -8,12 +6,11 @@ function saveTransaction($isExpense, $amount, $account, $primaryCategory, $secon
 
     $stmt = $conn->prepare($insertTransactionQuery);
     if (!$stmt) {
+        error_log('SQL Error: ' . $conn->error);
         die('Error in prepare statement: ' . $conn->error);
     }
-
-    $description = "Transaction for " . $primaryCategory['NomeCategoria'];
-    $isExpenseFlag = $isExpense ? 1 : 0;
-    $stmt->bind_param("idisiis", $isExpenseFlag, $amount, $account['IDConto'], $transactionDate, $primaryCategory['ID'], $secondaryCategory['ID'], $description);
+    
+    $stmt->bind_param("idisii", $isExpense, $amount, $account, $transactionDate, $primaryCategory, $secondaryCategory);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);

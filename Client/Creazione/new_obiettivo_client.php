@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="../server/new_obiettivo_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_obiettivo_server.php" method="post">
 
         <label for="obiettivoName">Name:</label>
         <input type="text" id="obiettivoName" name="obiettivoName" required><br>
@@ -29,14 +29,14 @@ if (!isset($_SESSION['email'])) {
         <input type="date" id="obiettivoDateInizio" name="obiettivoDateInizio" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <?php
-        include '../db/read_functions.php';
+        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $conti = getAllConti();
         ?>
         <label for="contoId">Select an Account:</label>
         <select name="contoId" required>
             <option value="" disabled selected>Please select an Account</option>
             <?php foreach ($conti as $conto) : ?>
-                <option value="<?php echo $conto['IDConto']; ?>"><?php echo $conto['NomeConto']; ?></option>
+                <option value="<?php echo $conto['ID']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

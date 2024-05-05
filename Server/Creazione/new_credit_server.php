@@ -1,6 +1,6 @@
 <?php
-require_once '../db/write_functions.php';
-require_once '../db/read_functions.php';
+require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
+require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
 
 
 // Processo il form se è stato inviato
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $description = $_POST["description"];
 
         createCredit($amount, $titolo, $creditConcessioneDate, $creditEstinsioneDate, $description, $contoId);
-        header("Location: ../client/index.php");
+        header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/index.php");
         exit();
     }
 }

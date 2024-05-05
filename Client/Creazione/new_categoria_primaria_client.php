@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="../Server/new_categoria_primaria_server.php" method="POST">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/Server/creazione/new_categoria_primaria_server.php" method="POST">
         <label for="categoryName">Nome della Categoria Primaria:</label><br>
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
 
@@ -26,7 +26,7 @@ if (!isset($_SESSION['email'])) {
 
         <label for="categoryBudget">Budget della Categoria (opzionale):</label><br>
         <?php
-        include '../db/read_functions.php';
+        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $budgets = getAllBudgets();
         ?>
         <select name="budgetId">

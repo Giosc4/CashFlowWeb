@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -18,12 +18,12 @@ if (!isset($_SESSION['email'])) {
 
 <body>
 
-    <form action="../server/new_categoria_secondaria_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_categoria_secondaria_server.php" method="post">
         <label for="categoryName">Category Name:</label><br>
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
         <label for="categoryId">Seleziona un a Categoria Primaria:</label>
         <?php
-        require_once '../db/read_functions.php';
+        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $categories = getAllPrimaryCategories();
         ?>
         <select name="categoryId" required>

@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: ../client/log_in_profile_client.php");
+    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="../server/new_risparmio_server.php" method="post">
+    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_risparmio_server.php" method="post">
 
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" required><br>
@@ -29,7 +29,7 @@ if (!isset($_SESSION['email'])) {
         <input type="date" id="risparmioDateFine" name="risparmioDateFine" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <?php
-        include '../db/read_functions.php';
+        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
         $conti = getAllConti();
         ?>
         <label for="contoId">Seleziona un Conto:</label>

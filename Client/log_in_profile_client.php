@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
 </head>
+
 <body>
     <h1>Log In</h1>
-    <form action="../server/log_in_profile_server.php" method="post">
+    <form action="/cashflowweb/server/log_in_profile_server.php" method="post">
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br>
         <label for="password">Password:</label><br>
@@ -25,4 +27,5 @@
     }
     ?>
 </body>
+
 </html>

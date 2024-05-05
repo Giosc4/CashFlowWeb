@@ -1,8 +1,9 @@
 <?php
-require_once '../db/write_functions.php';
-require_once '../db/queries.php';
-require_once '../db/read_functions.php';
+require 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/write_functions.php';
+require 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/queries.php';
+require 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
 
+//\Server\other_functions.php
 
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)
@@ -17,18 +18,19 @@ function displayTableData($data, $tableName)
         foreach ($data[0] as $key => $value) {
             echo "<th>$key</th>";
         }
+        echo "<th>Action</th>";
 
         echo "</tr>";
-
-        // Stampa i dati della tabella
+        // Print the data of the table
         foreach ($data as $row) {
             echo "<tr>";
             foreach ($row as $value) {
                 echo "<td>$value</td>";
-
             }
-            echo "</tr>";
 
+            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button style='background-color: red; color: white;'>Modifica</button></a></td>";
+
+            echo "</tr>";
         }
 
         echo "</table>";
@@ -40,7 +42,7 @@ function displayTableData($data, $tableName)
 // Visualizza i dati delle tabelle
 function displayAllTables()
 {
-    $conti = getAllConti(); 
+    $conti = getAllConti();
     $categoriePrimarie = getAllPrimaryCategories();
     $categorieSecondarie = getAllSecondaryCategories();
     $transactions = getAllTransactions();
@@ -52,7 +54,7 @@ function displayAllTables()
     $crediti = getAllCrediti();
     $budgets = getAllBudgets();
 
-    displayTableData($transactions, '1 Transazioni'); 
+    displayTableData($transactions, '1 Transazioni');
     displayTableData($conti, '2 Conti');
     displayTableData($categoriePrimarie, '3 Categorie Primaria');
     displayTableData($categorieSecondarie, '4 Categorie Secondarie');

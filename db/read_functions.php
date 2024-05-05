@@ -1,6 +1,6 @@
 <?php
-require_once '../db/db_connection.php';
-require_once '../db/queries.php';
+require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/db_connection.php';
+require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/queries.php';
 
 
 // questa funzione controlla se esiste un utente con la stessa email
@@ -50,7 +50,7 @@ function getAllProfili()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $profilo = [
-                'IDProfilo' => $row['IDProfilo'],
+                'ID' => $row['ID'],
                 'NomeProfilo' => $row['NomeProfilo'],
                 'Saldo_totale' => $row['Saldo_totale'],
                 'Email' => $row['Email'],
@@ -101,7 +101,7 @@ function getAllConti()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $conto = [
-                'IDConto' => $row['IDConto'],
+                'ID' => $row['ID'],
                 'NomeConto' => $row['NomeConto'],
                 'Saldo' => $row['Saldo']
             ];
@@ -191,7 +191,7 @@ function getAllRisparmi()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $risparmio = [
-                'id' => $row['id'],
+                'ID' => $row['ID'],
                 'ImportoRisparmiato' => $row['ImportoRisparmiato'],
                 'DataInizio' => $row['DataInizio'],
                 'DataFine' => $row['DataFine'],
@@ -216,7 +216,7 @@ function getAllObiettivi()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $obiettivo = [
-                'id' => $row['id'],
+                'ID' => $row['ID'],
                 'NomeObiettivo' => $row['NomeObiettivo'],
                 'ImportoObiettivo' => $row['ImportoObiettivo'],
                 'DataScadenza' => $row['DataScadenza'],
@@ -240,7 +240,7 @@ function getAllDebiti()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $debito = [
-                'id' => $row['id'],
+                'ID' => $row['ID'],
                 'ImportoDebito' => $row['ImportoDebito'],
                 'NomeImporto' => $row['NomeImporto'],
                 'DataConcessione' => $row['DataConcessione'],
@@ -266,7 +266,7 @@ function getAllCrediti()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $credito = [
-                'id' => $row['id'],
+                'ID' => $row['ID'],
                 'ImportoCredito' => $row['ImportoCredito'],
                 'NomeImporto' => $row['NomeImporto'],
                 'DataConcessione' => $row['DataConcessione'],
@@ -293,7 +293,7 @@ function getAllBudgets()
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $Budget = [
-                'IDBudget' => $row['IDBudget'],
+                'ID' => $row['ID'],
                 'NomeBudget' => $row['NomeBudget'],
                 'ImportoMax' => $row['ImportoMax'],
                 'DataInizio' => $row['DataInizio'],
@@ -320,7 +320,7 @@ function getIdContoFromNome($nomeConto)
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if (isset($row['IDConto'])) {
-            $idConto = $row['IDConto'];
+            $idConto = $row['ID'];
             $stmt->close();
             return $idConto;
         } else {
@@ -381,7 +381,7 @@ function getIDProfiloByEmail($email)
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
         $stmt->close();
-        return $row['IDProfilo'];
+        return $row['ID'];
     } else {
         $stmt->close();
         return false;
@@ -418,4 +418,31 @@ function logInProfile($email, $password)
 
     $stmt->close();
     return false;
+}
+
+function getTransactionFromID($id) {
+    global $conn, $selectTransactionFromIDQuery;  
+
+    $stmt = $conn->prepare($selectTransactionFromIDQuery);
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
+        return false;
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $stmt->close();
+        return $row;  
+    } else {
+        $stmt->close();
+        return false;  
+    }
 }
