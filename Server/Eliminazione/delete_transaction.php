@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = deleteTransaction($transactionID);
 
     if ($result) {
-        header("Location: ../../client/index.php"); // Redirect to the client page after successful deletion
+        header("Location: ../../client/index.php"); 
         exit();
     } else {
         echo "An error occurred while deleting the transaction. Please try again.";

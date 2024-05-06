@@ -438,3 +438,37 @@ function deleteAccount($accountId)
 
     return true;
 }
+
+function updateTemplateTransaction($templateId, $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
+{
+    global $conn, $updateTemplateTransactionQuery;
+
+    $stmt = $conn->prepare($updateTemplateTransactionQuery);
+    $stmt->bind_param("sidiiisi", $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description, $templateId);
+
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+function deleteTemplateTransaction($templateId)
+{
+    global $conn, $deleteTemplateTransactionQuery;
+
+    $stmt = $conn->prepare($deleteTemplateTransactionQuery);
+    $stmt->bind_param("i", $templateId);
+
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}

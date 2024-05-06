@@ -18,26 +18,23 @@ if (!isset($_SESSION['email'])) {
 
 <body>
     <h1>Creazione Template Transazione</h1>
-    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_template_transaction_server.php" method="post">
+    <form action="/CashFlowWeb/server/creazione/new_template_transaction_server.php" method="post">
 
         <label for="templateName">Nome del Template:</label>
         <input type="text" id="templateName" name="templateName" required><br>
 
-        <label for="entryType">Tipo di Transazione (Entrata/Uscita):</label>
-        <select id="entryType" name="entryType" required>
-            <option value="" disabled selected>Seleziona Tipo</option>
-            <option value="Entrata">Entrata</option>
-            <option value="Uscita">Uscita</option>
-        </select><br>
+        <label for="isExpense">Is Expense:</label>
+        <input type="checkbox" id="isExpense" name="isExpense"><br>
 
         <label for="amount">Importo:</label>
         <input type="number" id="amount" name="amount" step="0.01" required><br>
 
         <?php
-        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/other_functions.php';
-        $accounts = getAllConti();
-        $primaryCategories = getAllPrimaryCategories();
-        $secondaryCategories = getAllSecondaryCategories();
+        require '../../db/read_functions.php';
+        global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
+        $accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
+        $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecondariaFromEmail);
         ?>
 
         <label for="accountId">Seleziona un Conto:</label>

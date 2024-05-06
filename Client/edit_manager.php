@@ -30,7 +30,7 @@ switch ($tableName) {
     case '5 Utenti':
         header("Location: /CashFlowWeb/client/modifica/edit_users.php?id=$id");
         break;
-    case '6 Template Transazioni ':
+    case '6 Template Transazioni':
         header("Location: /CashFlowWeb/client/modifica/edit_template_transactions.php?id=$id");
         break;
     case '7 Risparmi':

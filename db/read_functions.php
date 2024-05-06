@@ -49,7 +49,8 @@ function getSecondaryFromPrimaryCategories($primaryCategoryID)
     $stmt->close();
 }
 
-function getSecondaryCategoryFromID($categoryId){
+function getSecondaryCategoryFromID($categoryId)
+{
     global $conn, $selectSecondaryCategoryFromIDQuery;
 
     $stmt = $conn->prepare($selectSecondaryCategoryFromIDQuery);
@@ -65,7 +66,6 @@ function getSecondaryCategoryFromID($categoryId){
         $stmt->close();
         return false;
     }
-
 }
 
 function getAccountById($accountId)
@@ -107,6 +107,26 @@ function getCategoryById($categoryId)
     }
 }
 */
+
+function getTemplateTransactionFromID($templateId)
+{
+    global $conn, $selectTemplateTransactionFromIDQuery;
+
+    $stmt = $conn->prepare($selectTemplateTransactionFromIDQuery);
+    $stmt->bind_param("i", $templateId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return null;
+    }
+}
+
 
 function getIdContoFromNome($nomeConto)
 {
