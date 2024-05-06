@@ -27,7 +27,8 @@ if (!isset($_SESSION['email'])) {
         <label for="categoryBudget">Budget della Categoria (opzionale):</label><br>
         <?php
         include '../../db/read_functions.php';
-        $budgets = getAllBudgets();
+        global $selectBudgetFromEmail;
+        $budgets = getTableBYEmail($_SESSION['email'], $selectBudgetFromEmail);
         ?>
         <select name="budgetId">
             <option value="" selected>Scegli un Budget (opzionale)</option>

@@ -33,8 +33,9 @@ if (!isset($_SESSION['email'])) {
 
 
         <?php
-        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
-        $primaryCategories = getAllPrimaryCategories();
+        require '../../db/read_functions.php';
+        global  $selectCategoriaPrimariaFromEmail;
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);   
         ?>
 
         <!-- Primary Category Selection -->

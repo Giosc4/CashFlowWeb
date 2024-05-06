@@ -25,7 +25,6 @@ if (!isset($_SESSION['email'])) {
             <li><a href="/CashFlowWeb/Client/Creazione/new_conto_client.php">Creazione Conto</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_categoria_primaria_client.php">Creazione Categoria Primaria</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_categoria_secondaria_client.php">Creazione Categoria Secondaria</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_profile_client.php">Creazione Profilo</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_template_transaction_client.php"> Creazione Template Transazione</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_risparmio_client.php">Creazione di un Risparmio</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_debit_client.php">Creazione di un Debito</a></li>
@@ -39,6 +38,9 @@ if (!isset($_SESSION['email'])) {
 
     <h2>Contenuto delle tabelle</h2>
     <?php
+    require '../db/queries.php';
+    require '../db/read_functions.php';
+    require '../db/write_functions.php';
     require_once '../server/other_functions.php';
     displayAllTables(); ?>
 

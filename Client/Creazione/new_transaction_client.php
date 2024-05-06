@@ -30,9 +30,10 @@ if (!isset($_SESSION['email'])) {
 
         <!-- PHP to load accounts and categories -->
         <?php
-        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/other_functions.php';
-        $accounts = getAllConti();
-        $primaryCategories = getAllPrimaryCategories();
+        require '../../db/read_functions.php';
+        global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
+        $accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
         ?>
 
         <!-- Account Selection -->

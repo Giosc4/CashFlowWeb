@@ -1,4 +1,6 @@
 <?php
+require_once 'db_connection.php';
+require_once 'queries.php';
 
 function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)
 {
@@ -9,7 +11,7 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }
-    
+
     $stmt->bind_param("idisii", $isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId);
 
     if (!$stmt->execute()) {
@@ -250,4 +252,59 @@ function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
     }
 
     $stmt->close();
+}
+
+
+function updateTransaction($transactionData)
+{
+    global $conn, $updateTransactionQuery;
+
+    $stmt = $conn->prepare($updateTransactionQuery);
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+        return false;
+    }
+
+    $stmt->bind_param(
+        "idisiii",
+        $transactionData['Is_Expense'],
+        $transactionData['Importo'],
+        $transactionData['IDConto'],
+        $transactionData['DataTransazione'],
+        $transactionData['IDCategoriaPrimaria'],
+        $transactionData['IDCategoriaSecondaria'],
+        $transactionData['ID']
+    );
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+        return false;
+    }
+
+    $stmt->close();
+
+    return true;
+}
+
+
+function deleteTransaction($transactionID) {
+    global $conn, $deleteTransactionQuery;
+    
+    
+    $stmt = $conn->prepare($deleteTransactionQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+    
+    $stmt->bind_param("i", $transactionID);
+    
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+    
+    $stmt->close();
+    
+    return true;
 }

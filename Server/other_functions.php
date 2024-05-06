@@ -1,9 +1,4 @@
 <?php
-require '../db/write_functions.php';
-require '../db/queries.php';
-require '../db/read_functions.php';
-
-//\Server\other_functions.php
 
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)

@@ -33,8 +33,9 @@ if (!isset($_SESSION['email'])) {
 
         <label for="contoId">Seleziona un Conto:</label>
         <?php
-        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
-        $conti = getAllConti();
+        require '../../db/read_functions.php';
+        global $selectContoFromEmail;
+        $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         ?>
         <select name="contoId" required>
             <option value="" disabled selected>Please seleziona un Conto</option>

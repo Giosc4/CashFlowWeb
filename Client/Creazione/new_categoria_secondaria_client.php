@@ -21,14 +21,14 @@ if (!isset($_SESSION['email'])) {
     <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_categoria_secondaria_server.php" method="post">
         <label for="categoryName">Category Name:</label><br>
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
-        <label for="categoryId">Seleziona un a Categoria Primaria:</label>
+        <label for="categoryId">Seleziona un a Categoria Primaria:</label> <br>
         <?php
-        require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
-        $categories = getAllPrimaryCategories();
-        ?>
+        require '../../db/read_functions.php';
+        global  $selectCategoriaPrimariaFromEmail;
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);        ?>
         <select name="categoryId" required>
             <option value="" disabled selected>Please seleziona un a Categoria</option>
-            <?php foreach ($categories as $category) : ?>
+            <?php foreach ($primaryCategories as $category) : ?>
                 <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>

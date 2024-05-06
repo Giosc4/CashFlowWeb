@@ -29,8 +29,9 @@ if (!isset($_SESSION['email'])) {
         <input type="date" id="obiettivoDateInizio" name="obiettivoDateInizio" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <?php
-        include 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/read_functions.php';
-        $conti = getAllConti();
+       require '../../db/read_functions.php';
+       global $selectContoFromEmail;
+       $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         ?>
         <label for="contoId">Select an Account:</label>
         <select name="contoId" required>

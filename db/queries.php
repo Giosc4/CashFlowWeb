@@ -79,3 +79,6 @@ JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimar
 JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID 
 WHERE profili.Email = ?";
 
+
+$updateTransactionQuery = "UPDATE transazione SET Is_Expense = ?, Importo = ?, IDConto = ?, DataTransazione = ?, IDCategoriaPrimaria = ?, IDCategoriaSecondaria = ? WHERE ID = ?";
+$deleteTransactionQuery = "DELETE FROM transazione WHERE ID = ?";

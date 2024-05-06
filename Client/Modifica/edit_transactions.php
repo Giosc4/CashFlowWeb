@@ -3,12 +3,11 @@ session_start();
 
 // Ensure the user is logged in
 if (!isset($_SESSION['email'])) {
-    header("Location: /CashFlowWeb/client/log_in_profile_client.php");
+    header("Location: ../log_in_profile_client.php");
     exit();
 }
 
 require '../../db/read_functions.php';
-// require '../../server/other_functions.php';
 
 // Get transaction ID from query parameters
 $id = $_GET['id'] ?? null;
@@ -16,9 +15,10 @@ $id = $_GET['id'] ?? null;
 // Fetch the transaction details from the database using the transaction ID
 $transaction = $id ? getTransactionFromID($id) : null;
 
-// Fetch accounts and categories
-$accounts = getAllConti();
-$primaryCategories = getAllPrimaryCategories();
+global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail, $selectCategoriaSecondariaFromEmail;
+$accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
+$primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
+$secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecondariaFromEmail);
 
 // Check if transaction exists
 if (!$transaction) {
@@ -39,7 +39,7 @@ if (!$transaction) {
 <body>
     <h1>Edit Transaction</h1>
     <?php if ($transaction) : ?>
-        <form action="update_transaction.php" method="post">
+        <form action="../../server/modifica/update_transaction.php" method="post">
             <!-- Hidden field to send the transaction ID -->
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>">
 
@@ -60,13 +60,14 @@ if (!$transaction) {
                 <label for="date">Transaction Date:</label>
                 <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($transaction['DataTransazione']); ?>" required>
             </div>
-
             <!-- Account Selection -->
             <div>
                 <label for="accountId">Select an Account:</label>
                 <select id="accountId" name="accountId" required>
                     <?php foreach ($accounts as $account) : ?>
-                        <option value="<?php echo $account['ID']; ?>" <?php echo ($account['ID'] == $transaction['IDConto'] ? 'selected' : ''); ?>><?php echo $account['NomeConto']; ?></option>
+                        <option value="<?php echo htmlspecialchars($account['ID']); ?>" <?php if ($account['ID'] == $transaction['IDConto']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($account['NomeConto']); ?>
+                        </option>
                     <?php endforeach; ?>
                 </select><br>
             </div>
@@ -75,9 +76,11 @@ if (!$transaction) {
             <div>
                 <label for="primaryCategoryId">Select a Primary Category:</label>
                 <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
-                    <option value="" disabled selected>Please select a Primary Category</option>
+                    <option value="" disabled <?php if (!$transaction['IDCategoriaPrimaria']) echo 'selected'; ?>>Please select a Primary Category</option>
                     <?php foreach ($primaryCategories as $category) : ?>
-                        <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
+                        <option value="<?php echo htmlspecialchars($category['ID']); ?>" <?php if ($category['ID'] == $transaction['IDCategoriaPrimaria']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($category['NomeCategoria']); ?>
+                        </option>
                     <?php endforeach; ?>
                 </select><br>
             </div>
@@ -87,6 +90,7 @@ if (!$transaction) {
                 <label for="secondaryCategoryId">Select a Secondary Category:</label>
                 <select id="secondaryCategoryId" name="secondaryCategoryId" >
                     <option value="" disabled selected>Please select a Secondary Category</option>
+                    <!-- Secondary categories will be populated here based on the primary category selected -->
                 </select><br>
             </div>
 
@@ -97,7 +101,7 @@ if (!$transaction) {
         </form>
 
         <!-- Form to delete the transaction -->
-        <form action="delete_transaction.php" method="post">
+        <form action="../../server/eliminazione/delete_transaction.php" method="post">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>">
             <button type="submit" style="background-color: red; color: white;">Delete Transaction</button>
         </form>
@@ -111,7 +115,7 @@ if (!$transaction) {
             console.log("Primary Category ID: ", primaryCategoryId); // Debugging line
 
             $.ajax({
-                url: 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/get_secondary_categories.php', // Ensure this is the correct relative path
+                url: 'Server/get_secondary_categories.php', // Relative path corrected
                 type: 'GET',
                 data: {
                     primaryCategoryId: primaryCategoryId
