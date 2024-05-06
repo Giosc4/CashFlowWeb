@@ -29,12 +29,11 @@ $selectAllProfiliQuery = "SELECT * FROM `Profili`";
 $selectUserByEmailQuery = "SELECT * FROM `Profili` WHERE `Email` = ?";
 $selectIDProfileByEmailQuery = "SELECT ID  FROM `Profili` WHERE `Email` = ?";
 $selectSecondaryFromPrimaryQuery = "SELECT * FROM `categoriasecondaria` WHERE `IDCategoriaPrimaria` = ?";
-$selectAccountByNameQuery = "SELECT * FROM `account` WHERE `name` = ?";
-$selectCategoryByNameQuery = "SELECT * FROM `categories` WHERE `name` = ?";
 $selectIdContoFromNomeQuery = "SELECT ID FROM `conto` WHERE `NomeConto` = ?";
-$selectAccountByIdQuery = "SELECT * FROM `account` WHERE `ID` = ?";
-$selectCategoryByIdQuery = "SELECT * FROM `categories` WHERE `ID` = ?";
+$selectAccountByIdQuery = "SELECT * FROM `conto` WHERE `ID` = ?";
+$selectCategoriaPrimariaByIdQuery = "SELECT * FROM `categoriaprimaria` WHERE `ID` = ?";
 $selectTransactionFromIDQuery = "SELECT * FROM `transazione` WHERE `ID` = ?";
+$selectSecondaryCategoryFromIDQuery = "SELECT * FROM `categoriasecondaria` WHERE `ID` = ?";
 
 $selectContoFromEmail = "SELECT conto.* FROM conto                           JOIN assconti ON conto.ID = assconti.IDConto                JOIN profili ON assconti.IDProfilo = profili.ID             WHERE profili.Email = ?";
 $selectCategoriaPrimariaFromEmail = "SELECT categoriaprimaria.* FROM categoriaprimaria JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID  WHERE profili.Email = ?";
@@ -82,3 +81,12 @@ WHERE profili.Email = ?";
 
 $updateTransactionQuery = "UPDATE transazione SET Is_Expense = ?, Importo = ?, IDConto = ?, DataTransazione = ?, IDCategoriaPrimaria = ?, IDCategoriaSecondaria = ? WHERE ID = ?";
 $deleteTransactionQuery = "DELETE FROM transazione WHERE ID = ?";
+
+$updatePrimaryCategoryQuery = "UPDATE categoriaprimaria SET NomeCategoria = ?,     DescrizioneCategoria = ? WHERE ID = ?";
+$deletePrimaryCategoryQuery = "DELETE FROM categoriaprimaria WHERE ID = ?";
+
+$updateContoQuery = "UPDATE conto SET NomeConto = ?, Saldo = ? WHERE ID = ?";
+$deleteContoQuery = "DELETE FROM conto WHERE ID = ?";
+
+$updateSecondaryCategoryQuery = "UPDATE categoriasecondaria SET  NomeCategoria = ?, DescrizioneCategoria = ?, IDCategoriaPrimaria = ? WHERE ID = ?";
+$deleteSecondaryCategoryQuery = "DELETE FROM categoriasecondaria WHERE ID = ?";

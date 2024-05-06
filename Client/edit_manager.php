@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
+    header("Location: ../client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -24,11 +24,36 @@ switch ($tableName) {
     case '3 Categorie Primaria':
         header("Location: /CashFlowWeb/client/modifica/edit_primary_categories.php?id=$id");
         break;
-    // Add more cases as needed for each table
+    case '4 Categorie Secondarie':
+        header("Location: /CashFlowWeb/client/modifica/edit_secondary_categories.php?id=$id");
+        break;
+    case '5 Utenti':
+        header("Location: /CashFlowWeb/client/modifica/edit_users.php?id=$id");
+        break;
+    case '6 Template Transazioni ':
+        header("Location: /CashFlowWeb/client/modifica/edit_template_transactions.php?id=$id");
+        break;
+    case '7 Risparmi':
+        header("Location: /CashFlowWeb/client/modifica/edit_saving.php?id=$id");
+        break;
+
+    case '8 Debito':
+        header("Location: /CashFlowWeb/client/modifica/edit_debt.php?id=$id");
+        break;
+    case '9 Credito':
+        header("Location: /CashFlowWeb/client/modifica/edit_credit.php?id=$id");
+        break;
+    case '10 Budget':
+        header("Location: /CashFlowWeb/client/modifica/edit_budget.php?id=$id");
+        break;
+
+    case '11 Obiettivi':
+        header("Location: /CashFlowWeb/client/modifica/edit_goals.php?id=$id");
+        break;
     default:
-        echo "Invalid table name or ID"; // Handle error or unknown table
+        echo "Invalid table name or ID";
         break;
 }
 
-exit(); // Ensure no further execution of script after redirection
+exit();
 ?>

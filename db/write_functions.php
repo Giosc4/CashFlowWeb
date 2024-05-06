@@ -287,24 +287,154 @@ function updateTransaction($transactionData)
 }
 
 
-function deleteTransaction($transactionID) {
+function deleteTransaction($transactionID)
+{
     global $conn, $deleteTransactionQuery;
-    
-    
+
+
     $stmt = $conn->prepare($deleteTransactionQuery);
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
     }
-    
+
     $stmt->bind_param("i", $transactionID);
-    
+
     if (!$stmt->execute()) {
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
-    
+
     $stmt->close();
-    
+
+    return true;
+}
+
+function updatePrimaryCategory($categoryId, $categoryName, $categoryDescription)
+{
+    global $conn, $updatePrimaryCategoryQuery;
+
+    $stmt = $conn->prepare($updatePrimaryCategoryQuery);
+    if (!$stmt) {
+        die('Errore nella preparazione della query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("ssi", $categoryName, $categoryDescription, $categoryId);
+
+    if (!$stmt->execute()) {
+        die('Errore nell\'esecuzione della query: ' . $stmt->error);
+    }
+
+    $stmt->close();
+
+    return true;
+}
+
+function deletePrimaryCategory($categoryID)
+{
+    global $conn, $deletePrimaryCategoryQuery;
+
+    $stmt = $conn->prepare($deletePrimaryCategoryQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $categoryID);
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+
+    return true;
+}
+
+function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId, $categoryDescription) {
+    global $conn, $updateSecondaryCategoryQuery;
+
+    $stmt = $conn->prepare($updateSecondaryCategoryQuery);
+    if (!$stmt) {
+        echo "Error preparing statement: " . $conn->error;
+        return false;
+    }
+
+    $bind = $stmt->bind_param("ssii", $categoryName, $categoryDescription, $primaryCategoryId, $categoryId);
+    if (!$bind) {
+        echo "Error binding parameters: " . $stmt->error;
+        return false;
+    }
+
+    $execute = $stmt->execute();
+    if (!$execute) {
+        echo "Error executing update: " . $stmt->error;
+        return false;
+    }
+
+    return true;
+}
+
+// Funzione per eliminare una categoria secondaria
+function deleteSecondaryCategory($categoryId)
+{
+    global $conn, $deleteSecondaryCategoryQuery;
+
+    $stmt = $conn->prepare($deleteSecondaryCategoryQuery);
+    if (!$stmt) {
+        throw new Exception('Error preparing query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("i", $categoryId);
+    if (!$stmt->execute()) {
+        $stmt->close();
+        throw new Exception('Error executing query: ' . $stmt->error);
+    }
+
+    $stmt->close();
+    return true;
+}
+
+
+function updateAccount($accountId, $accountName, $accountBalance)
+{
+    global $conn, $updateContoQuery;
+
+    $stmt = $conn->prepare($updateContoQuery);
+    if (!$stmt) {
+        die('Errore nella preparazione della query: ' . $conn->error);
+    }
+
+    $stmt->bind_param("sdi", $accountName, $accountBalance, $accountId);
+
+    if (!$stmt->execute()) {
+        die('Errore nell\'esecuzione della query: ' . $stmt->error);
+    }
+
+    $stmt->close();
+
+    return true;
+}
+
+function deleteAccount($accountId)
+{
+    global $conn, $deleteContoQuery;
+
+    $stmt = $conn->prepare($deleteContoQuery);
+    if (!$stmt) {
+        echo 'Errore nella preparazione della query: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $accountId);
+
+    if (!$stmt->execute()) {
+        echo 'Errore nell\'esecuzione della query: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+
     return true;
 }

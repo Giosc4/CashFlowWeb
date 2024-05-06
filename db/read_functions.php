@@ -45,11 +45,68 @@ function getSecondaryFromPrimaryCategories($primaryCategoryID)
         }
     }
 
-    $stmt->close();
     return $secondaryCategories;
+    $stmt->close();
 }
 
+function getSecondaryCategoryFromID($categoryId){
+    global $conn, $selectSecondaryCategoryFromIDQuery;
 
+    $stmt = $conn->prepare($selectSecondaryCategoryFromIDQuery);
+    $stmt->bind_param("i", $categoryId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return false;
+    }
+
+}
+
+function getAccountById($accountId)
+{
+    global $conn, $selectAccountByIdQuery;
+
+    $stmt = $conn->prepare($selectAccountByIdQuery);
+    $stmt->bind_param("i", $accountId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return null;
+    }
+}
+
+/*
+function getCategoryById($categoryId)
+{
+    global $conn, $selectCategoryByIdQuery;
+
+    $stmt = $conn->prepare($selectCategoryByIdQuery);
+    $stmt->bind_param("i", $categoryId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return null;
+    }
+}
+*/
 
 function getIdContoFromNome($nomeConto)
 {
@@ -193,7 +250,24 @@ function getTransactionFromID($id)
 }
 
 
+function getPrimaryCategoryById($categoryId)
+{
+    global $conn, $selectCategoriaPrimariaByIdQuery;
 
+    $stmt = $conn->prepare($selectCategoriaPrimariaByIdQuery);
+    $stmt->bind_param("i", $categoryId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
 
 
 function getTableBYEmail($email, $query)

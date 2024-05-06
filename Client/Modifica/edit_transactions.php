@@ -39,7 +39,7 @@ if (!$transaction) {
 <body>
     <h1>Edit Transaction</h1>
     <?php if ($transaction) : ?>
-        <form action="../../server/modifica/update_transaction.php" method="post">
+        <form action="../../server/modifica/edit_transaction_server.php" method="post">
             <!-- Hidden field to send the transaction ID -->
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>">
 

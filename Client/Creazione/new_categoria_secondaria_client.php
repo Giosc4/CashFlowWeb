@@ -18,7 +18,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
 
-    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_categoria_secondaria_server.php" method="post">
+    <form action="../../Server/creazione/new_categoria_secondaria_server.php" method="post">
         <label for="categoryName">Category Name:</label><br>
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
         <label for="categoryId">Seleziona un a Categoria Primaria:</label> <br>
@@ -34,7 +34,7 @@ if (!isset($_SESSION['email'])) {
         </select><br>
 
         <label for="categoryDescription">Category Description:</label><br>
-        <input type="text" id="categoryDescription" name="categoryDescription" required autocomplete="off"><br>
+        <input type="text" id="categoryDescription" name="categoryDescription" autocomplete="off"><br>
         <br>
 
         <input type="submit" value="Create Category">

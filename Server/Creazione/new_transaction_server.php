@@ -28,28 +28,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
-function getAccountById($accountId)
-{
-    $accounts = getAllConti();
 
-    foreach ($accounts as $account) {
-        if ($account['ID'] == $accountId) {
-            return $account;
-        }
-    }
-
-    return null;
-}
-
-function getCategoryById($categoryId)
-{
-    $categories = array_merge(getAllPrimaryCategories(), getAllSecondaryCategories());
-
-    foreach ($categories as $category) {
-        if ($category['ID'] == $categoryId) {
-            return $category;
-        }
-    }
-
-    return null;
-}
