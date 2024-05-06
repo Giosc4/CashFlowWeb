@@ -17,7 +17,7 @@
         <input type="submit" value="Log In">
     </form>
 
-    <a href="../client/new_profile_client.php">Crea un nuovo profilo</a>
+    <a href="../client/creazione/new_profile_client.php">Crea un nuovo profilo</a>
 
     <?php
     session_start();

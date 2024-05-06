@@ -334,8 +334,9 @@ function getIdContoFromNome($nomeConto)
     return null;
 }
 
-function getProfiloByEmail($email) {
-    global $conn, $selectUserByEmailQuery; 
+function getProfiloByEmail($email)
+{
+    global $conn, $selectUserByEmailQuery;
 
     $stmt = $conn->prepare($selectUserByEmailQuery);
     if (!$stmt) {
@@ -420,8 +421,9 @@ function logInProfile($email, $password)
     return false;
 }
 
-function getTransactionFromID($id) {
-    global $conn, $selectTransactionFromIDQuery;  
+function getTransactionFromID($id)
+{
+    global $conn, $selectTransactionFromIDQuery;
 
     $stmt = $conn->prepare($selectTransactionFromIDQuery);
     if (!$stmt) {
@@ -440,9 +442,28 @@ function getTransactionFromID($id) {
     $result = $stmt->get_result();
     if ($row = $result->fetch_assoc()) {
         $stmt->close();
-        return $row;  
+        return $row;
     } else {
         $stmt->close();
-        return false;  
+        return false;
     }
+}
+
+
+
+
+
+function getTableBYEmail($email, $query)
+{
+    global $conn;
+
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = [];
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+    return $data;
 }

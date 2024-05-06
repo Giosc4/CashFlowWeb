@@ -35,3 +35,47 @@ $selectIdContoFromNomeQuery = "SELECT ID FROM `conto` WHERE `NomeConto` = ?";
 $selectAccountByIdQuery = "SELECT * FROM `account` WHERE `ID` = ?";
 $selectCategoryByIdQuery = "SELECT * FROM `categories` WHERE `ID` = ?";
 $selectTransactionFromIDQuery = "SELECT * FROM `transazione` WHERE `ID` = ?";
+
+$selectContoFromEmail = "SELECT conto.* FROM conto                           JOIN assconti ON conto.ID = assconti.IDConto                JOIN profili ON assconti.IDProfilo = profili.ID             WHERE profili.Email = ?";
+$selectCategoriaPrimariaFromEmail = "SELECT categoriaprimaria.* FROM categoriaprimaria JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID  WHERE profili.Email = ?";
+$selectCategoriaSecondariaFromEmail = "SELECT categoriasecondaria.* FROM categoriasecondaria 
+                                        JOIN categoriaprimaria ON categoriasecondaria.IDCategoriaPrimaria = categoriaprimaria.ID 
+                                        JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria 
+                                        JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID 
+                                        WHERE profili.Email = ?";
+$selectTransazioniFromEmail = "SELECT transazione.* FROM transazione 
+JOIN conto ON transazione.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectTransazioniTemplateFromEmail = "SELECT template_transazioni.* FROM template_transazioni 
+JOIN conto ON template_transazioni.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectRisparmiFromEmail = "SELECT risparmi.* FROM risparmi 
+JOIN conto ON risparmi.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectObiettiviFromEmail = "SELECT obiettivifinanziari.* FROM obiettivifinanziari 
+JOIN conto ON obiettivifinanziari.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectDebitiFromEmail = "SELECT debit.* FROM debit 
+JOIN conto ON debit.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectCreditiFromEmail = "SELECT credit.* FROM credit 
+JOIN conto ON credit.IDConto = conto.ID 
+JOIN assconti ON conto.ID = assconti.IDConto 
+JOIN profili ON assconti.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+$selectBudgetFromEmail = "SELECT budgetmax.* FROM budgetmax 
+JOIN categoriaprimaria ON budgetmax.IDPrimaryCategory = categoriaprimaria.ID 
+JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria 
+JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID 
+WHERE profili.Email = ?";
+

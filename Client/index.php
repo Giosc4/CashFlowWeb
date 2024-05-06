@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
+    header("Location: ./log_in_profile_client.php");
     exit();
 }
 ?>
@@ -39,7 +39,7 @@ if (!isset($_SESSION['email'])) {
 
     <h2>Contenuto delle tabelle</h2>
     <?php
-    require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/server/other_functions.php';
+    require_once '../server/other_functions.php';
     displayAllTables(); ?>
 
 </body>
