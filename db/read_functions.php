@@ -333,3 +333,23 @@ function getSavingFromID($risparmioId)
         return null;  
     }
 }
+
+function getBudgetFromID($budgetID){
+
+    global $conn, $selectBudgetFromIDQuery;
+
+    $stmt = $conn->prepare($selectBudgetFromIDQuery);
+    $stmt->bind_param("i", $budgetID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
+    } else {
+        $stmt->close();
+        return false;
+    }
+
+}

@@ -18,6 +18,7 @@ $account = $accountId ? getAccountById($accountId) : null;
 // Check se l'account esiste
 if (!$account) {
     echo "Account non trovato.";
+    header("Location: /CashFlowWeb/client/index.php");
     exit();
 }
 ?>

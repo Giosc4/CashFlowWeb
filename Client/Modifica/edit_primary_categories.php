@@ -18,6 +18,7 @@ $category = $categoryId ? getPrimaryCategoryById($categoryId) : null;
 // Check se la categoria esiste
 if (!$category) {
     echo "Categoria non trovata.";
+    header("Location: /CashFlowWeb/client/index.php");
     exit();
 }
 ?>

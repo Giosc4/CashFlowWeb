@@ -18,6 +18,7 @@ $category =  getSecondaryCategoryFromID($categoryId);
 // Check se la categoria esiste
 if (!$category) {
     echo "Secondary Category not found 1.";
+    header("Location: /CashFlowWeb/client/index.php");
     exit();
 }
 

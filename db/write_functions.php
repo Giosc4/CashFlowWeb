@@ -508,3 +508,57 @@ function deleteRisparmio($risparmioId)
     $stmt->close();
     return true;
 }
+
+function updateBudget($budgetData)
+{
+    global $conn, $updateBudgetQuery;
+
+    $stmt = $conn->prepare($updateBudgetQuery);
+    if (!$stmt) {
+        die('Error in prepare statement: ' . $conn->error);
+        return false;
+    }
+
+    // Assicurati che l'ordine e i tipi di bind_param corrispondano ai dati del budget
+    $stmt->bind_param(
+        "sdssii",
+        $budgetData['NomeBudget'],
+        $budgetData['ImportoMax'],
+        $budgetData['DataInizio'],
+        $budgetData['DataFine'],
+        $budgetData['IDPrimaryCategory'],
+        $budgetData['ID']
+    );
+
+    if (!$stmt->execute()) {
+        die('Error in execute statement: ' . $stmt->error);
+        return false;
+    }
+
+    $stmt->close();
+
+    return true;
+}
+
+function deleteBudget($budgetID)
+{
+    global $conn, $deleteBudgetQuery;
+
+    $stmt = $conn->prepare($deleteBudgetQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $budgetID);
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+
+    return true;
+}
+    

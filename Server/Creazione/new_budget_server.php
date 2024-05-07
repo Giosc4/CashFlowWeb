@@ -1,7 +1,7 @@
 <?php
 require_once '../../db/write_functions.php';
 require_once '../../db/queries.php';
-require_once '../../vdb/read_functions.php';
+require_once '../../db/read_functions.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Function to create a new budget with a primary category
     createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategoryId);
-    header("Location: ../client/index.php");
+    header("Location: ../../client/index.php");
     exit();
 }
 

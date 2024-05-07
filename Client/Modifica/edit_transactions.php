@@ -23,6 +23,7 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
 // Check if transaction exists
 if (!$transaction) {
     echo "Transaction not found.";
+    header("Location: /CashFlowWeb/client/index.php");
     exit();
 }
 ?>
@@ -88,7 +89,7 @@ if (!$transaction) {
             <!-- Secondary Category Selection -->
             <div>
                 <label for="secondaryCategoryId">Select a Secondary Category:</label>
-                <select id="secondaryCategoryId" name="secondaryCategoryId" >
+                <select id="secondaryCategoryId" name="secondaryCategoryId">
                     <option value="" disabled selected>Please select a Secondary Category</option>
                     <!-- Secondary categories will be populated here based on the primary category selected -->
                 </select><br>

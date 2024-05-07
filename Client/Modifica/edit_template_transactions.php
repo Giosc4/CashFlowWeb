@@ -19,6 +19,7 @@ $templateData = getTemplateTransactionFromID($templateId);
 
 if (!$templateData) {
     echo "Template transazione non trovato.";
+    header("Location: /CashFlowWeb/client/index.php");
     exit();
 }
 
