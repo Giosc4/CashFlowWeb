@@ -352,7 +352,8 @@ function deletePrimaryCategory($categoryID)
     return true;
 }
 
-function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId, $categoryDescription) {
+function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId, $categoryDescription)
+{
     global $conn, $updateSecondaryCategoryQuery;
 
     $stmt = $conn->prepare($updateSecondaryCategoryQuery);
@@ -462,6 +463,41 @@ function deleteTemplateTransaction($templateId)
 
     $stmt = $conn->prepare($deleteTemplateTransactionQuery);
     $stmt->bind_param("i", $templateId);
+
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+function updateRisparmio($risparmioId, $amount, $risparmioDateInizio, $risparmioDateFine, $contoId)
+{
+    global $conn, $updateRisparmioQuery;
+
+    $stmt = $conn->prepare($updateRisparmioQuery);
+    $stmt->bind_param("dssii", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $risparmioId);
+
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+
+function deleteRisparmio($risparmioId)
+{
+    global $conn, $deleteRisparmioQuery;
+
+    $stmt = $conn->prepare($deleteRisparmioQuery);
+    $stmt->bind_param("i", $risparmioId);
 
     if (!$stmt->execute()) {
         error_log("Execute failed: " . $stmt->error);

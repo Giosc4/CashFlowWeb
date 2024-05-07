@@ -35,6 +35,7 @@ $selectCategoriaPrimariaByIdQuery = "SELECT * FROM `categoriaprimaria` WHERE `ID
 $selectTransactionFromIDQuery = "SELECT * FROM `transazione` WHERE `ID` = ?";
 $selectSecondaryCategoryFromIDQuery = "SELECT * FROM `categoriasecondaria` WHERE `ID` = ?";
 $selectTemplateTransactionFromIDQuery = "SELECT * FROM template_transazioni WHERE ID = ?";
+$selectSavingFromIDQuery = "SELECT * FROM `risparmi` WHERE `ID` = ?";
 
 $selectContoFromEmail = "SELECT conto.* FROM conto                           JOIN assconti ON conto.ID = assconti.IDConto                JOIN profili ON assconti.IDProfilo = profili.ID             WHERE profili.Email = ?";
 $selectCategoriaPrimariaFromEmail = "SELECT categoriaprimaria.* FROM categoriaprimaria JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID  WHERE profili.Email = ?";
@@ -94,6 +95,7 @@ $deleteSecondaryCategoryQuery = "DELETE FROM categoriasecondaria WHERE ID = ?";
 
 $updateTemplateTransactionQuery = "UPDATE template_transazioni SET NomeTemplate = ?, Is_Expense = ?, Importo = ?, IDConto = ?, IDCategoriaPrimaria = ?, IDCategoriaSecondaria = ?, Descrizione = ? WHERE ID = ?";
 $deleteTemplateTransactionQuery  = "DELETE FROM template_transazioni WHERE ID = ?";
+
 
 $updateRisparmioQuery = "UPDATE risparmi SET ImportoRisparmiato = ?, DataInizio = ?, DataFine = ?, IDConto = ? WHERE ID = ?";
 $deleteRisparmioQuery = "DELETE FROM risparmi WHERE ID = ?";

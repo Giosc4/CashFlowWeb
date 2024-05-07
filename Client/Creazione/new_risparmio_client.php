@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/server/creazione/new_risparmio_server.php" method="post">
+    <form action="/CashFlowWeb/server/creazione/new_risparmio_server.php" method="post">
 
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" required><br>
@@ -37,7 +37,7 @@ if (!isset($_SESSION['email'])) {
         <select name="contoId" required>
             <option value="" disabled selected>Please seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
-                <option value="<?php echo $conto['NomeConto']; ?>"><?php echo $conto['NomeConto']; ?></option>
+                <option value="<?php echo $conto['ID']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

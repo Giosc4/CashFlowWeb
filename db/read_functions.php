@@ -304,3 +304,32 @@ function getTableBYEmail($email, $query)
     }
     return $data;
 }
+
+function getSavingFromID($risparmioId)
+{
+    global $conn, $selectSavingFromIDQuery;
+
+    $stmt = $conn->prepare($selectSavingFromIDQuery);
+    if (!$stmt) {
+        error_log("MySQL prepare error: " . $conn->error);
+        return false;
+    }
+
+    $stmt->bind_param("i", $risparmioId);
+
+    if (!$stmt->execute()) {
+        error_log("Execute error: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $stmt->close();
+        return $row;  
+    } else {
+        $stmt->close();
+        return null;  
+    }
+}

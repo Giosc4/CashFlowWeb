@@ -13,15 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contoId = $_POST["contoId"];
 
         $idContoFromNome = getIdContoFromNome($contoId);
-        echo $idContoFromNome;
 
-        if ($idContoFromNome) {
-            createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $idContoFromNome);
-            header("Location: ../../client/index.php");
-            exit();
-        } else {
-            echo "Errore: Il conto selezionato non esiste.";
-        }
+        createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId);
+        header("Location: ../../client/index.php");
+        exit();
     } else {
         echo "Errore: Tutti i campi sono obbligatori.";
     }
