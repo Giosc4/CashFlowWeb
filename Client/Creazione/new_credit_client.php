@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
-    header("Location: C:/Users/giova/xampp/htdocs/CashFlowWeb/client/log_in_profile_client.php");
+    header("Location:  /client/log_in_profile_client.php");
     exit();
 }
 ?>
@@ -18,7 +18,7 @@ if (!isset($_SESSION['email'])) {
 
 <body>
 
-    <form action="C:/Users/giova/xampp/htdocs/CashFlowWeb/Server/creazione/new_credit_server.php" method="post">
+    <form action=" ../../server/creazione/new_credit_server.php" method="post">
 
         <label for="titolo">Titolo:</label>
         <input type="text" id="titolo" name="titolo" required><br>

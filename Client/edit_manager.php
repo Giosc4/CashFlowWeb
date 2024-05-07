@@ -37,8 +37,8 @@ switch ($tableName) {
         header("Location: /CashFlowWeb/client/modifica/edit_saving.php?id=$id");
         break;
 
-    case '8 Debito':
-        header("Location: /CashFlowWeb/client/modifica/edit_debt.php?id=$id");
+    case '8 Debiti':
+        header("Location: /CashFlowWeb/client/modifica/edit_debito.php?id=$id");
         break;
     case '9 Credito':
         header("Location: /CashFlowWeb/client/modifica/edit_credit.php?id=$id");

@@ -64,7 +64,7 @@ function displayAllTables()
     displayTableData($transactions_template, '6 Template Transazioni');
     displayTableData($risparmi, '7 Risparmi');
     displayTableData($debiti, '8 Debiti');
-    displayTableData($crediti, '9 Crediti');
+    displayTableData($crediti, '9 Credito');
     displayTableData($budgets, '10 Budget');
     displayTableData($obiettivi, '11 Obiettivi');
 }

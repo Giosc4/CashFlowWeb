@@ -37,6 +37,8 @@ $selectSecondaryCategoryFromIDQuery = "SELECT * FROM `categoriasecondaria` WHERE
 $selectTemplateTransactionFromIDQuery = "SELECT * FROM template_transazioni WHERE ID = ?";
 $selectSavingFromIDQuery = "SELECT * FROM `risparmi` WHERE `ID` = ?";
 $selectBudgetFromIDQuery = "SELECT * FROM `budgetmax` WHERE `ID` = ?";
+$selectDebitFromIDQuery = "SELECT * FROM `debit` WHERE `ID` = ?";
+$selectCreditFromIDQuery = "SELECT * FROM `credit` WHERE `ID` = ?";
 
 $selectContoFromEmail = "SELECT conto.* FROM conto                           JOIN assconti ON conto.ID = assconti.IDConto                JOIN profili ON assconti.IDProfilo = profili.ID             WHERE profili.Email = ?";
 $selectCategoriaPrimariaFromEmail = "SELECT categoriaprimaria.* FROM categoriaprimaria JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID  WHERE profili.Email = ?";
@@ -102,3 +104,9 @@ $deleteRisparmioQuery = "DELETE FROM risparmi WHERE ID = ?";
 
 $updateBudgetQuery = "UPDATE budgetmax SET NomeBudget = ?, ImportoMax = ?, DataInizio = ?, DataFine = ?, IDPrimaryCategory = ? WHERE ID = ?";
 $deleteBudgetQuery = "DELETE FROM budgetmax WHERE ID = ?";
+
+$updateDebitoQuery = "UPDATE debit SET ImportoDebito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
+$deleteDebitoQuery = "DELETE FROM debit WHERE ID = ?";
+
+$updateCreditoQuery = "UPDATE credit SET ImportoCredito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
+$deleteCreditoQuery = "DELETE FROM credit WHERE ID = ?";

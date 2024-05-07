@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $contoId = $_POST["contoId"];
         $description = $_POST["description"];
 
-        createDebit($titolo, $amount, $debitConcessioneDate, $debitEstinsioneDate, $description, $contoId);
+        createDebit($amount, $titolo,  $debitConcessioneDate, $debitEstinsioneDate, $description, $contoId);
         header("Location: ../../client/index.php");
         exit();
     }

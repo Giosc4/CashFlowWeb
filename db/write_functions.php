@@ -561,4 +561,112 @@ function deleteBudget($budgetID)
 
     return true;
 }
-    
+
+function updateDebito($debtData)
+{
+    global $conn, $updateDebitoQuery;
+
+
+    $stmt = $conn->prepare($updateDebitoQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param(
+        "dssssii",
+        $debtData['ImportoDebito'],
+        $debtData['NomeImporto'],
+        $debtData['DataConcessione'],
+        $debtData['DataEstinsione'],
+        $debtData['Note'],
+        $debtData['IDConto'],
+        $debtData['ID']
+    );
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+function deleteDebito($debtID)
+{
+    global $conn, $deleteDebitoQuery;
+
+
+    $stmt = $conn->prepare($deleteDebitoQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $debtID);
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+function updateCredit($creditData)
+{
+    global $conn, $updateCreditoQuery;
+
+    // Update the query to include the new field
+    $updateCreditoQuery = "UPDATE crediti SET ImportoCredito = ?, NomeCredito = ?, DataAccredito = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
+
+    $stmt = $conn->prepare($updateCreditoQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    // Include the additional parameter in bind_param
+    $stmt->bind_param(
+        "dssssii",
+        $creditData['ImportoCredito'],
+        $creditData['NomeCredito'],
+        $creditData['DataAccredito'],
+        $creditData['DataEstinsione'], 
+        $creditData['Note'],
+        $creditData['IDConto'],
+        $creditData['ID']
+    );
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}
+
+
+function deleteCredit($creditID)
+{
+    global $conn, $deleteCreditoQuery;
+
+    $stmt = $conn->prepare($deleteCreditoQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return false;
+    }
+
+    $stmt->bind_param("i", $creditID);
+
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
+    return true;
+}

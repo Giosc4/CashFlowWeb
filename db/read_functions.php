@@ -327,14 +327,15 @@ function getSavingFromID($risparmioId)
 
     if ($row = $result->fetch_assoc()) {
         $stmt->close();
-        return $row;  
+        return $row;
     } else {
         $stmt->close();
-        return null;  
+        return null;
     }
 }
 
-function getBudgetFromID($budgetID){
+function getBudgetFromID($budgetID)
+{
 
     global $conn, $selectBudgetFromIDQuery;
 
@@ -351,5 +352,59 @@ function getBudgetFromID($budgetID){
         $stmt->close();
         return false;
     }
+}
 
+function getDebtFromID($id)
+{
+    global $conn, $selectDebitFromIDQuery;
+
+
+    $stmt = $conn->prepare($selectDebitFromIDQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return null;
+    }
+
+    $stmt->bind_param("i", $id);
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return null;
+    }
+
+    $result = $stmt->get_result();
+    if ($result->num_rows == 0) {
+        $stmt->close();
+        return null;
+    }
+
+    $debt = $result->fetch_assoc();
+    $stmt->close();
+    return $debt;
+}
+
+function getCreditFromID($id)
+{
+    global $conn, $selectCreditFromIDQuery;
+
+    $stmt = $conn->prepare($selectCreditFromIDQuery);
+    if (!$stmt) {
+        echo 'Error in prepare statement: ' . $conn->error;
+        return null;
+    }
+
+    $stmt->bind_param("i", $id);
+    if (!$stmt->execute()) {
+        echo 'Error in execute statement: ' . $stmt->error;
+        return null;
+    }
+
+    $result = $stmt->get_result();
+    if ($result->num_rows == 0) {
+        $stmt->close();
+        return null;
+    }
+
+    $credit = $result->fetch_assoc();
+    $stmt->close();
+    return $credit;
 }

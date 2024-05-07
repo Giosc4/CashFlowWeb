@@ -81,6 +81,10 @@ if (!$budget) {
                 <button type="submit">Save Changes</button>
             </div>
         </form>
+        <form action="../../server/eliminazione/delete_budget.php" method="post">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($budget['ID']); ?>">
+            <button type="submit" style="background-color: red; color: white;">Elimina Budget</button>
+        </form>
 
     <?php else : ?>
         <p>Budget not found.</p>
