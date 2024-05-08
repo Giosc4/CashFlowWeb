@@ -46,7 +46,6 @@ if (!isset($_SESSION['email'])) {
 
         <label for="categoriaPrimaria">Seleziona Categoria Primaria:</label>
         <?php
-        require '../../db/read_functions.php';
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
         ?>
         <select name="categoriaPrimariaId" required>
