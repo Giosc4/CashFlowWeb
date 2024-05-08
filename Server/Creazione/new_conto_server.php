@@ -14,7 +14,7 @@ require_once '../../db/read_functions.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["nome"]) && isset($_POST["saldo"])) {
         $nome = $_POST["nome"];
-        $saldo = $_POST["saldo"];
+        $saldo = $_POST["saldo"] ?? 0;
 
         // Crea il conto
         $contoID = createConto($nome, $saldo);

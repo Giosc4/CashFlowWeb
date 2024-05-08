@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $secondaryCategoryId = $_POST['secondaryCategoryId'];
     $description = $_POST['description'];
 
-    createTransactionTemplate($templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description);
+    $templateID =  createTransactionTemplate($templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description);
 
     header('Location: ../../client/index.php');
     exit();

@@ -116,7 +116,6 @@ function createTransactionTemplate($templateName, $entryType, $amount, $accountI
 {
     global $conn, $insertTransactionTemplateQuery;
 
-    // Preparazione della query
     $stmt = $conn->prepare($insertTransactionTemplateQuery);
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
@@ -128,9 +127,12 @@ function createTransactionTemplate($templateName, $entryType, $amount, $accountI
         die('Errore nell\'esecuzione della query: ' . $stmt->error);
     }
 
-    $stmt->close();
-}
+    $lastId = $conn->insert_id;
 
+    $stmt->close();
+
+    return $lastId;
+}
 
 function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto)
 {
@@ -566,7 +568,6 @@ function updateDebito($debtData)
 {
     global $conn, $updateDebitoQuery;
 
-
     $stmt = $conn->prepare($updateDebitoQuery);
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
@@ -574,13 +575,14 @@ function updateDebito($debtData)
     }
 
     $stmt->bind_param(
-        "dssssii",
+        "dssssiii",
         $debtData['ImportoDebito'],
         $debtData['NomeImporto'],
         $debtData['DataConcessione'],
         $debtData['DataEstinsione'],
         $debtData['Note'],
         $debtData['IDConto'],
+        $debtData['IDCategoriaPrimaria'],
         $debtData['ID']
     );
 
@@ -625,18 +627,17 @@ function updateCredit($creditData)
         return false;
     }
 
-    // Include the additional parameter in bind_param
     $stmt->bind_param(
-        "dssssii",
+        "dssssiii",
         $creditData['ImportoCredito'],
         $creditData['NomeCredito'],
         $creditData['DataConcessione'],
         $creditData['DataEstinsione'],
         $creditData['Note'],
         $creditData['IDConto'],
+        $creditData['IDCategoriaPrimaria'],
         $creditData['ID']
     );
-
 
     if (!$stmt->execute()) {
         echo 'Error in execute statement: ' . $stmt->error;
@@ -667,4 +668,33 @@ function deleteCredit($creditID)
 
     $stmt->close();
     return true;
+}
+
+
+function createTransactionFromTemplate($templateId)
+{
+    global $conn;
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "CALL CreateTransactionFromTemplate(?)";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $conn->error);
+    }
+
+    $stmt->bind_param('i', $templateId);
+
+    if ($stmt->execute()) {
+        echo "La transazione è stata creata con successo.";
+        return true;
+    } else {
+        echo "Errore nell'esecuzione: " . $stmt->error;
+        return false;
+    }
+
+    $stmt->close();
 }

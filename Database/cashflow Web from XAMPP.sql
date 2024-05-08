@@ -1,435 +1,407 @@
-SET
-  SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+CREATE DATABASE IF NOT EXISTS `cashflowweb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `cashflowweb`;
 
-SET
-  time_zone = "+00:00";
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `AllocateSavings`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AllocateSavings` (IN `SavingsID` INT)   BEGIN
+    DECLARE StartDate DATE;
+    DECLARE EndDate DATE;
+    DECLARE TotalAmount DECIMAL(10,2);
+    DECLARE AccountID INT;
+    DECLARE Days INT;
+    DECLARE DailyAmount DECIMAL(10,2);
 
-CREATE DATABASE IF NOT EXISTS `cashflow` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    SELECT DataInizio, DataFine, ImportoRisparmiato, IDConto
+    INTO StartDate, EndDate, TotalAmount, AccountID
+    FROM risparmi
+    WHERE ID = SavingsID;
 
-USE `cashflow`;
+    SET Days = DATEDIFF(EndDate, StartDate);
+    SET DailyAmount = TotalAmount / Days;
 
-DELIMITER $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_CreateConto` (
-  IN `NomeConto` VARCHAR(255),
-  IN `Saldo` DECIMAL(10, 2)
-) BEGIN
-INSERT INTO
-  Conto (NomeConto, Saldo)
-VALUES
-  (NomeConto, Saldo);
+    WHILE StartDate <= EndDate DO
+        UPDATE conto SET Saldo = Saldo - DailyAmount WHERE ID = AccountID;
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_CreateProfilo` (
-  IN `NomeProfilo` VARCHAR(255),
-  IN `Saldo_totale` DECIMAL(10, 2),
-  IN `Email` VARCHAR(255),
-  IN `Password` VARCHAR(255)
-) BEGIN
-INSERT INTO
-  Profili (NomeProfilo, Saldo_totale, Email, Password)
-VALUES
-  (NomeProfilo, Saldo_totale, Email, Password);
+        -- Aggiungi una transazione per il risparmio giornaliero
+        INSERT INTO transazione (Is_Expense, Importo, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria)
+        VALUES (1, DailyAmount, AccountID, StartDate, NULL, NULL);  -- Assumiendo che non ci siano categorie specifiche per questi risparmi
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_CreateTransazione` (
-  IN `Entrata_Uscita` BOOLEAN,
-  IN `Importo` DECIMAL(10, 2),
-  IN `IDTemplate` INT,
-  IN `IDConto` INT,
-  IN `DataTransazione` DATE,
-  IN `IDCategoriaPrimaria` INT,
-  IN `IDCategoriaSecondaria` INT,
-  IN `Descrizione` VARCHAR(255)
-) BEGIN
-INSERT INTO
-  Transazione (
-    Entrata_Uscita,
-    Importo,
-    IDTemplate,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria,
-    IDCategoriaSecondaria,
-    Descrizione
-  )
-VALUES
-  (
-    Entrata_Uscita,
-    Importo,
-    IDTemplate,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria,
-    IDCategoriaSecondaria,
-    Descrizione
-  );
+        SET StartDate = DATE_ADD(StartDate, INTERVAL 1 DAY);
+    END WHILE;
+END$$
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_DeleteConto` (IN `IDConto` INT) BEGIN
-DELETE FROM
-  Conto
-WHERE
-  IDConto = IDConto;
+DROP PROCEDURE IF EXISTS `AllocateSavingsDaily`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AllocateSavingsDaily` ()   BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE aSavingsID INT;
+    DECLARE cur CURSOR FOR SELECT ID FROM risparmi;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_DeleteProfilo` (IN `IDProfilo` INT) BEGIN
-DELETE FROM
-  Profili
-WHERE
-  IDProfilo = IDProfilo;
+    OPEN cur;
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_DeleteTransazione` (IN `ID` INT) BEGIN
-DELETE FROM
-  Transazione
-WHERE
-  ID = ID;
+    read_loop: LOOP
+        FETCH cur INTO aSavingsID;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        CALL AllocateSavings(aSavingsID);  -- Assumi che questa sia la funzione esistente che gestisce un singolo ID
+    END LOOP;
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_UpdateConto` (
-  IN `IDConto` INT,
-  IN `NomeConto` VARCHAR(255),
-  IN `Saldo` DECIMAL(10, 2)
-) BEGIN
-UPDATE
-  Conto
-SET
-  NomeConto = NomeConto,
-  Saldo = Saldo
-WHERE
-  IDConto = IDConto;
+    CLOSE cur;
+END$$
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_UpdateProfilo` (
-  IN `IDProfilo` INT,
-  IN `NomeProfilo` VARCHAR(255),
-  IN `Saldo_totale` DECIMAL(10, 2),
-  IN `Email` VARCHAR(255),
-  IN `Password` VARCHAR(255)
-) BEGIN
-UPDATE
-  Profili
-SET
-  NomeProfilo = NomeProfilo,
-  Saldo_totale = Saldo_totale,
-  Email = Email,
-  Password = Password
-WHERE
-  IDProfilo = IDProfilo;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateTransactionFromTemplate`(IN `TemplateID` INT)
+BEGIN
+    DECLARE ExpenseType TINYINT;
+    DECLARE Amount DECIMAL(10,2);
+    DECLARE AccountID INT;
+    DECLARE PrimaryCategoryID INT;
+    DECLARE SecondaryCategoryID INT;
+    DECLARE Description VARCHAR(255);
 
-END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `sp_UpdateTransazione` (
-  IN `ID` INT,
-  IN `Entrata_Uscita` BOOLEAN,
-  IN `Importo` DECIMAL(10, 2),
-  IN `IDTemplate` INT,
-  IN `IDConto` INT,
-  IN `DataTransazione` DATE,
-  IN `IDCategoriaPrimaria` INT,
-  IN `IDCategoriaSecondaria` INT,
-  IN `Descrizione` VARCHAR(255)
-) BEGIN
-UPDATE
-  Transazione
-SET
-  Entrata_Uscita = Entrata_Uscita,
-  Importo = Importo,
-  IDTemplate = IDTemplate,
-  IDConto = IDConto,
-  DataTransazione = DataTransazione,
-  IDCategoriaPrimaria = IDCategoriaPrimaria,
-  IDCategoriaSecondaria = IDCategoriaSecondaria,
-  Descrizione = Descrizione
-WHERE
-  ID = ID;
+    SELECT Is_Expense, Importo, IDConto, IDCategoriaPrimaria, IDCategoriaSecondaria, Descrizione
+    INTO ExpenseType, Amount, AccountID, PrimaryCategoryID, SecondaryCategoryID, Description
+    FROM template_transazioni
+    WHERE ID = TemplateID;
 
-END $ $ DELIMITER;
+    INSERT INTO transazione (Is_Expense, Importo, IDTemplate, IDConto, DataTransazione, IDCategoriaPrimaria, IDCategoriaSecondaria)
+    VALUES (ExpenseType, Amount, TemplateID, AccountID, CURDATE(), PrimaryCategoryID, SecondaryCategoryID);
+END$$
+DELIMITER ;
 
+DROP TABLE IF EXISTS `assconti`;
 CREATE TABLE `assconti` (
-  `IDAssegnazione` int(11) NOT NULL,
   `IDProfilo` int(11) DEFAULT NULL,
   `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `budgetmax`;
 CREATE TABLE `budgetmax` (
-  `IDBudget` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `NomeBudget` varchar(255) DEFAULT NULL,
-  `ImportoMax` decimal(10, 2) DEFAULT NULL,
+  `ImportoMax` decimal(10,2) DEFAULT NULL,
   `DataInizio` date DEFAULT NULL,
-  `DataFine` date DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `DataFine` date DEFAULT NULL,
+  `IDPrimaryCategory` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `categoriaprimaria`;
 CREATE TABLE `categoriaprimaria` (
   `ID` int(11) NOT NULL,
   `NomeCategoria` varchar(255) DEFAULT NULL,
-  `DescrizioneCategoria` varchar(255) DEFAULT NULL,
-  `IDBudget` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `DescrizioneCategoria` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `categoriasecondaria`;
 CREATE TABLE `categoriasecondaria` (
   `ID` int(11) NOT NULL,
   `IDCategoriaPrimaria` int(11) DEFAULT NULL,
   `NomeCategoria` varchar(255) DEFAULT NULL,
   `DescrizioneCategoria` varchar(255) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `conto`;
 CREATE TABLE `conto` (
-  `IDConto` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `NomeConto` varchar(255) DEFAULT NULL,
-  `Saldo` decimal(10, 2) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `Saldo` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `credit`;
 CREATE TABLE `credit` (
   `ID` int(11) NOT NULL,
-  `ImportoCredito` decimal(10, 2) DEFAULT NULL,
+  `ImportoCredito` decimal(10,2) DEFAULT NULL,
   `NomeImporto` varchar(255) DEFAULT NULL,
   `DataConcessione` date DEFAULT NULL,
   `DataEstinsione` date DEFAULT NULL,
   `Note` varchar(255) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `IDConto` int(11) DEFAULT NULL,
+  `IDCategoriaPrimaria` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `debit`;
 CREATE TABLE `debit` (
   `ID` int(11) NOT NULL,
-  `ImportoDebito` decimal(10, 2) DEFAULT NULL,
+  `ImportoDebito` decimal(10,2) DEFAULT NULL,
   `NomeImporto` varchar(255) DEFAULT NULL,
   `DataConcessione` date DEFAULT NULL,
   `DataEstinsione` date DEFAULT NULL,
   `Note` varchar(255) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `IDConto` int(11) DEFAULT NULL,
+  `IDCategoriaPrimaria` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TRIGGER IF EXISTS `after_debit_insert`;
+DELIMITER $$
+CREATE TRIGGER `after_debit_insert` AFTER INSERT ON `debit` FOR EACH ROW BEGIN
+  INSERT INTO transazione (
+    Is_Expense, 
+    Importo, 
+    IDConto, 
+    DataTransazione, 
+    IDCategoriaPrimaria, 
+    IDCategoriaSecondaria
+  )
+  VALUES (
+    1, 
+    NEW.ImportoDebito, 
+    NEW.IDConto, 
+    NEW.DataConcessione, 
+    NEW.IDCategoriaPrimaria, 
+    NULL  -- Presumendo che non ci sia una categoria secondaria da inserire qui
+  );
+END
+$$
+DELIMITER ;
 
+DROP TABLE IF EXISTS `obiettivifinanziari`;
 CREATE TABLE `obiettivifinanziari` (
   `ID` int(11) NOT NULL,
   `NomeObiettivo` varchar(255) DEFAULT NULL,
-  `ImportoObiettivo` decimal(10, 2) DEFAULT NULL,
+  `ImportoObiettivo` decimal(10,2) DEFAULT NULL,
   `DataScadenza` date DEFAULT NULL,
   `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `profili`;
 CREATE TABLE `profili` (
-  `IDProfilo` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `NomeProfilo` varchar(255) DEFAULT NULL,
-  `Saldo_totale` decimal(10, 2) DEFAULT NULL,
+  `Saldo_totale` decimal(10,2) DEFAULT NULL,
   `Email` varchar(255) DEFAULT NULL,
   `Password` varchar(255) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `profili_categoriaprimaria`;
+CREATE TABLE `profili_categoriaprimaria` (
+  `IDProfilo` int(11) NOT NULL,
+  `IDCategoriaPrimaria` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `risparmi`;
 CREATE TABLE `risparmi` (
   `ID` int(11) NOT NULL,
-  `ImportoRisparmiato` decimal(10, 2) DEFAULT NULL,
+  `ImportoRisparmiato` decimal(10,2) DEFAULT NULL,
   `DataInizio` date DEFAULT NULL,
   `DataFine` date DEFAULT NULL,
   `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `template_transazioni`;
 CREATE TABLE `template_transazioni` (
-  `IDTemplate` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
   `NomeTemplate` varchar(255) DEFAULT NULL,
-  `Entrata_Uscita` tinyint(1) DEFAULT NULL,
-  `Importo` decimal(10, 2) DEFAULT NULL,
+  `Is_Expense` tinyint(1) DEFAULT NULL,
+  `Importo` decimal(10,2) DEFAULT NULL,
   `IDConto` int(11) DEFAULT NULL,
   `IDCategoriaPrimaria` int(11) DEFAULT NULL,
   `IDCategoriaSecondaria` int(11) DEFAULT NULL,
   `Descrizione` varchar(255) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `transazione`;
 CREATE TABLE `transazione` (
   `ID` int(11) NOT NULL,
-  `Entrata_Uscita` tinyint(1) DEFAULT NULL,
-  `Importo` decimal(10, 2) DEFAULT NULL,
+  `Is_Expense` tinyint(1) DEFAULT NULL,
+  `Importo` decimal(10,2) DEFAULT NULL,
   `IDTemplate` int(11) DEFAULT NULL,
   `IDConto` int(11) DEFAULT NULL,
   `DataTransazione` date DEFAULT NULL,
   `IDCategoriaPrimaria` int(11) DEFAULT NULL,
-  `IDCategoriaSecondaria` int(11) DEFAULT NULL,
-  `Descrizione` varchar(255) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+  `IDCategoriaSecondaria` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TRIGGER IF EXISTS `CheckBudgetBeforeTransaction`;
+DELIMITER $$
+CREATE TRIGGER `CheckBudgetBeforeTransaction` BEFORE INSERT ON `transazione` FOR EACH ROW BEGIN
+    DECLARE MaxAmount DECIMAL(10,2);
+    DECLARE TotalSpent DECIMAL(10,2);
 
-DELIMITER $ $ CREATE TRIGGER `aggiornaSaldoDopoAggiornamento`
-AFTER
-UPDATE
-  ON `transazione` FOR EACH ROW BEGIN
-UPDATE
-  Conto
-SET
-  Saldo = Saldo - CASE
-    WHEN OLD.Entrata_Uscita = 1 THEN OLD.Importo
-    ELSE - OLD.Importo
-  END + CASE
-    WHEN NEW.Entrata_Uscita = 1 THEN NEW.Importo
-    ELSE - NEW.Importo
-  END
-WHERE
-  IDConto = NEW.IDConto;
+    SELECT ImportoMax INTO MaxAmount
+    FROM budgetmax
+    WHERE IDPrimaryCategory = NEW.IDCategoriaPrimaria AND CURDATE() BETWEEN DataInizio AND DataFine;
 
-END $ $ DELIMITER;
+    IF MaxAmount IS NOT NULL THEN
+        SELECT SUM(Importo) INTO TotalSpent
+        FROM transazione
+        WHERE IDCategoriaPrimaria = NEW.IDCategoriaPrimaria AND Is_Expense = 1;
 
-DELIMITER $ $ CREATE TRIGGER `aggiornaSaldoDopoEliminazione`
-AFTER
-  DELETE ON `transazione` FOR EACH ROW BEGIN
-UPDATE
-  Conto
-SET
-  Saldo = CASE
-    WHEN OLD.Entrata_Uscita = 1 THEN Saldo - OLD.Importo
-    ELSE Saldo + OLD.Importo
-  END
-WHERE
-  IDConto = OLD.IDConto;
+        IF (TotalSpent + NEW.Importo > MaxAmount) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Budget limit exceeded for this category.';
+        END IF;
+    END IF;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `after_transazione_delete`;
+DELIMITER $$
+CREATE TRIGGER `after_transazione_delete` AFTER DELETE ON `transazione` FOR EACH ROW BEGIN
+  IF OLD.Is_Expense = 1 THEN
+    UPDATE conto SET Saldo = Saldo + OLD.Importo
+    WHERE ID = OLD.IDConto;
+  ELSE
+    UPDATE conto SET Saldo = Saldo - OLD.Importo
+    WHERE ID = OLD.IDConto;
+  END IF;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `after_transazione_insert`;
+DELIMITER $$
+CREATE TRIGGER `after_transazione_insert` AFTER INSERT ON `transazione` FOR EACH ROW BEGIN
+  IF NEW.Is_Expense = 1 THEN
+    UPDATE conto SET Saldo = Saldo - NEW.Importo
+    WHERE ID = NEW.IDConto;
+  ELSE
+    UPDATE conto SET Saldo = Saldo + NEW.Importo
+    WHERE ID = NEW.IDConto;
+  END IF;
+END
+$$
+DELIMITER ;
+DROP TRIGGER IF EXISTS `after_transazione_update`;
+DELIMITER $$
+CREATE TRIGGER `after_transazione_update` AFTER UPDATE ON `transazione` FOR EACH ROW BEGIN
+  IF OLD.Is_Expense = 1 THEN
+    UPDATE conto SET Saldo = Saldo + OLD.Importo
+    WHERE ID = OLD.IDConto;
+  ELSE
+    UPDATE conto SET Saldo = Saldo - OLD.Importo
+    WHERE ID = OLD.IDConto;
+  END IF;
+  IF NEW.Is_Expense = 1 THEN
+    UPDATE conto SET Saldo = Saldo - NEW.Importo
+    WHERE ID = NEW.IDConto;
+  ELSE
+    UPDATE conto SET Saldo = Saldo + NEW.Importo
+    WHERE ID = NEW.IDConto;
+  END IF;
+END
+$$
+DELIMITER ;
 
-END $ $ DELIMITER;
 
-DELIMITER $ $ CREATE TRIGGER `aggiornaSaldoDopoInserimento`
-AFTER
-INSERT
-  ON `transazione` FOR EACH ROW BEGIN
-UPDATE
-  Conto
-SET
-  Saldo = CASE
-    WHEN NEW.Entrata_Uscita = 1 THEN Saldo + NEW.Importo
-    ELSE Saldo - NEW.Importo
-  END
-WHERE
-  IDConto = NEW.IDConto;
+ALTER TABLE `assconti`
+  ADD KEY `fk_assconti_profilo` (`IDProfilo`),
+  ADD KEY `fk_assconti_conto` (`IDConto`);
 
-END $ $ DELIMITER;
+ALTER TABLE `budgetmax`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `fk_budgetmax_primarycategory` (`IDPrimaryCategory`);
 
-ALTER TABLE
-  `assconti`
-ADD
-  PRIMARY KEY (`IDAssegnazione`),
-ADD
-  KEY `IDProfilo` (`IDProfilo`),
-ADD
-  KEY `IDConto` (`IDConto`);
+ALTER TABLE `categoriaprimaria`
+  ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE
-  `budgetmax`
-ADD
-  PRIMARY KEY (`IDBudget`);
+ALTER TABLE `categoriasecondaria`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `categoriasecondaria_primaria_fk` (`IDCategoriaPrimaria`);
 
-ALTER TABLE
-  `categoriaprimaria`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `IDBudget` (`IDBudget`);
+ALTER TABLE `conto`
+  ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE
-  `categoriasecondaria`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `IDCategoriaPrimaria` (`IDCategoriaPrimaria`);
+ALTER TABLE `credit`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `credit_conto_fk` (`IDConto`),
+  ADD KEY `fk_credit_categoriaprimaria` (`IDCategoriaPrimaria`);
 
-ALTER TABLE
-  `conto`
-ADD
-  PRIMARY KEY (`IDConto`);
+ALTER TABLE `debit`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `debit_conto_fk` (`IDConto`),
+  ADD KEY `fk_debit_categoriaprimaria` (`IDCategoriaPrimaria`);
 
-ALTER TABLE
-  `credit`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `fk_credit_conto` (`IDConto`);
+ALTER TABLE `obiettivifinanziari`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `obiettivi_conto_fk` (`IDConto`);
 
-ALTER TABLE
-  `debit`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `fk_debit_conto` (`IDConto`);
+ALTER TABLE `profili`
+  ADD PRIMARY KEY (`ID`);
 
-ALTER TABLE
-  `obiettivifinanziari`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `fk_obiettivi_conto` (`IDConto`);
+ALTER TABLE `profili_categoriaprimaria`
+  ADD PRIMARY KEY (`IDProfilo`,`IDCategoriaPrimaria`),
+  ADD KEY `fk_profili_categoriaprimaria_profilo` (`IDProfilo`),
+  ADD KEY `fk_profili_categoriaprimaria_categoria` (`IDCategoriaPrimaria`);
 
-ALTER TABLE
-  `profili`
-ADD
-  PRIMARY KEY (`IDProfilo`);
+ALTER TABLE `risparmi`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `risparmi_conto_fk` (`IDConto`);
 
-ALTER TABLE
-  `risparmi`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `fk_risparmi_conto` (`IDConto`);
+ALTER TABLE `template_transazioni`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `template_transazioni_conto_fk` (`IDConto`),
+  ADD KEY `template_transazioni_primaria_fk` (`IDCategoriaPrimaria`),
+  ADD KEY `template_transazioni_secondaria_fk` (`IDCategoriaSecondaria`);
 
-ALTER TABLE
-  `template_transazioni`
-ADD
-  PRIMARY KEY (`IDTemplate`),
-ADD
-  KEY `IDConto` (`IDConto`),
-ADD
-  KEY `IDCategoriaPrimaria` (`IDCategoriaPrimaria`),
-ADD
-  KEY `IDCategoriaSecondaria` (`IDCategoriaSecondaria`);
+ALTER TABLE `transazione`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `transazione_template_fk` (`IDTemplate`),
+  ADD KEY `transazione_conto_fk` (`IDConto`),
+  ADD KEY `transazione_primaria_fk` (`IDCategoriaPrimaria`),
+  ADD KEY `transazione_secondaria_fk` (`IDCategoriaSecondaria`);
 
-ALTER TABLE
-  `transazione`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `IDTemplate` (`IDTemplate`),
-ADD
-  KEY `IDConto` (`IDConto`),
-ADD
-  KEY `IDCategoriaPrimaria` (`IDCategoriaPrimaria`),
-ADD
-  KEY `IDCategoriaSecondaria` (`IDCategoriaSecondaria`);
 
-ALTER TABLE
-  `assconti`
-ADD
-  CONSTRAINT `assconti_ibfk_1` FOREIGN KEY (`IDProfilo`) REFERENCES `profili` (`IDProfilo`),
-ADD
-  CONSTRAINT `assconti_ibfk_2` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`);
+ALTER TABLE `budgetmax`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `categoriaprimaria`
-ADD
-  CONSTRAINT `categoriaprimaria_ibfk_1` FOREIGN KEY (`IDBudget`) REFERENCES `budgetmax` (`IDBudget`);
+ALTER TABLE `categoriaprimaria`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `categoriasecondaria`
-ADD
-  CONSTRAINT `categoriasecondaria_ibfk_1` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`);
+ALTER TABLE `categoriasecondaria`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `credit`
-ADD
-  CONSTRAINT `fk_credit_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`);
+ALTER TABLE `conto`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `debit`
-ADD
-  CONSTRAINT `fk_debit_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`);
+ALTER TABLE `credit`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `obiettivifinanziari`
-ADD
-  CONSTRAINT `fk_obiettivi_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`);
+ALTER TABLE `debit`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `risparmi`
-ADD
-  CONSTRAINT `fk_risparmi_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`);
+ALTER TABLE `obiettivifinanziari`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `template_transazioni`
-ADD
-  CONSTRAINT `template_transazioni_ibfk_1` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`),
-ADD
-  CONSTRAINT `template_transazioni_ibfk_2` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`),
-ADD
-  CONSTRAINT `template_transazioni_ibfk_3` FOREIGN KEY (`IDCategoriaSecondaria`) REFERENCES `categoriasecondaria` (`ID`);
+ALTER TABLE `profili`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE
-  `transazione`
-ADD
-  CONSTRAINT `transazione_ibfk_1` FOREIGN KEY (`IDTemplate`) REFERENCES `template_transazioni` (`IDTemplate`),
-ADD
-  CONSTRAINT `transazione_ibfk_2` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`IDConto`),
-ADD
-  CONSTRAINT `transazione_ibfk_3` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`),
-ADD
-  CONSTRAINT `transazione_ibfk_4` FOREIGN KEY (`IDCategoriaSecondaria`) REFERENCES `categoriasecondaria` (`ID`);
+ALTER TABLE `risparmi`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `template_transazioni`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `transazione`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `assconti`
+  ADD CONSTRAINT `fk_assconti_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_assconti_profilo` FOREIGN KEY (`IDProfilo`) REFERENCES `profili` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `budgetmax`
+  ADD CONSTRAINT `fk_budgetmax_primarycategory` FOREIGN KEY (`IDPrimaryCategory`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `categoriasecondaria`
+  ADD CONSTRAINT `categoriasecondaria_primaria_fk` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `credit`
+  ADD CONSTRAINT `credit_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_credit_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `debit`
+  ADD CONSTRAINT `debit_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_debit_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `risparmi`
+  ADD CONSTRAINT `risparmi_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `template_transazioni`
+  ADD CONSTRAINT `template_transazioni_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `transazione`
+  ADD CONSTRAINT `transazione_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DELIMITER $$
+DROP EVENT IF EXISTS `allocateSavingsEvent`$$
+CREATE DEFINER=`root`@`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2023-01-01 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily()$$
+
+DELIMITER ;

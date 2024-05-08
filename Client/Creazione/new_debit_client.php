@@ -44,6 +44,19 @@ if (!isset($_SESSION['email'])) {
             <?php endforeach; ?>
         </select><br>
 
+        <label for="categoriaPrimaria">Seleziona Categoria Primaria:</label>
+        <?php
+        require '../../db/read_functions.php';
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
+        ?>
+        <select name="categoriaPrimariaId" required>
+            <option value="" disabled selected>Seleziona una Categoria</option>
+            <?php foreach ($primaryCategories as $categoria) : ?>
+                <option value="<?php echo $categoria['ID']; ?>"><?php echo $categoria['NomeCategoria']; ?></option>
+            <?php endforeach; ?>
+        </select><br>
+
+
         <label for="description">Descrizione:</label>
         <input type="text" id="description" name="description"><br>
 

@@ -105,8 +105,8 @@ $deleteRisparmioQuery = "DELETE FROM risparmi WHERE ID = ?";
 $updateBudgetQuery = "UPDATE budgetmax SET NomeBudget = ?, ImportoMax = ?, DataInizio = ?, DataFine = ?, IDPrimaryCategory = ? WHERE ID = ?";
 $deleteBudgetQuery = "DELETE FROM budgetmax WHERE ID = ?";
 
-$updateDebitoQuery = "UPDATE debit SET ImportoDebito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
+$updateDebitoQuery = "UPDATE debit SET ImportoDebito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ?, IDCategoriaPrimaria = ?  WHERE ID = ?";
 $deleteDebitoQuery = "DELETE FROM debit WHERE ID = ?";
 
-$updateCreditoQuery = "UPDATE credit SET ImportoCredito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
+$updateCreditoQuery = "UPDATE credit SET ImportoCredito = ?, NomeImporto = ?, DataConcessione = ?, DataEstinsione = ?, Note = ?, IDConto = ?, IDCategoriaPrimaria = ?  WHERE ID = ?";
 $deleteCreditoQuery = "DELETE FROM credit WHERE ID = ?";
