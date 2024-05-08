@@ -38,41 +38,34 @@ if (!$credit) {
     <h1>Edit Credit</h1>
     <?php if ($credit) : ?>
         <form action="../../server/modifica/edit_credit_server.php" method="post">
-            <!-- Hidden field to send the credit ID -->
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($credit['ID']); ?>">
-
-            <!-- Field to edit the credit amount -->
             <div>
-                <label for="importoCredito">Credit Amount:</label>
-                <input type="number" id="importoCredito" name="ImportoCredito" value="<?php echo htmlspecialchars($credit['ImportoCredito']); ?>" step="0.01" required>
-            </div>
-
-            <!-- Field to edit the credit name -->
-            <div>
-                <label for="nomeCredito">Credit Name:</label>
+                <label for="nomeCredito">Nome Credito:</label>
                 <input type="text" id="nomeCredito" name="NomeCredito" value="<?php echo htmlspecialchars($credit['NomeImporto']); ?>" required>
             </div>
 
-            <!-- Field to edit the accreditation date -->
             <div>
-                <label for="dataAccredito">Accreditation Date:</label>
-                <input type="date" id="dataAccredito" name="DataAccredito" value="<?php echo htmlspecialchars($credit['DataConcessione']); ?>" required>
+                <label for="importoCredito">Importo Credito:</label>
+                <input type="number" id="importoCredito" name="ImportoCredito" value="<?php echo htmlspecialchars($credit['ImportoCredito']); ?>" step="0.01" required>
+            </div>
+
+            <div>
+                <label for="DataConcessione">Data Concessione:</label>
+                <input type="date" id="DataConcessione" name="DataConcessione" value="<?php echo htmlspecialchars($credit['DataConcessione']); ?>" required>
             </div>
 
             <div>
                 <label for="dataEstinsione">Data Estinsione:</label>
-                <input type="date" id="dataAccredito" name="DataAccredito" value="<?php echo htmlspecialchars($credit['DataEstinsione']); ?>" required>
+                <input type="date" id="dataEstinsione" name="dataEstinsione" value="<?php echo htmlspecialchars($credit['DataEstinsione']); ?>">
             </div>
 
-            <!-- Field to edit the notes -->
             <div>
                 <label for="note">Notes:</label>
                 <textarea id="note" name="Note"><?php echo htmlspecialchars($credit['Note']); ?></textarea>
             </div>
 
-            <!-- Account Selection -->
             <div>
-                <label for="IDConto">Select an Account:</label>
+                <label for="IDConto">Seleziona un conto:</label>
                 <select id="IDConto" name="IDConto" required>
                     <?php foreach ($accounts as $account) : ?>
                         <option value="<?php echo htmlspecialchars($account['ID']); ?>" <?php if ($account['ID'] == $credit['IDConto']) echo 'selected'; ?>>
@@ -82,10 +75,13 @@ if (!$credit) {
                 </select><br>
             </div>
 
-            <!-- Submit button to save changes -->
             <div>
-                <button type="submit">Save Changes</button>
+                <button type="submit">Salva Cambiamenti</button>
             </div>
+        </form>
+        <form action="../../server/eliminazione/delete_crdit.php" method="post">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($debit['ID']); ?>">
+            <button type="submit" style="background-color: red; color: white;">Elimina Credito</button>
         </form>
     <?php else : ?>
         <p>Credit not found.</p>

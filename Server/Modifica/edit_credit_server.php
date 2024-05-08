@@ -3,7 +3,7 @@ session_start();
 
 // Ensure the user is logged in
 if (!isset($_SESSION['email'])) {
-    header("Location: ../log_in_profile_client.php");
+    header("Location: ../../log_in_profile_client.php");
     exit();
 }
 
@@ -15,39 +15,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $creditID = $_POST['id'] ?? null;
     $importoCredito = $_POST['ImportoCredito'] ?? null;
     $nomeCredito = $_POST['NomeCredito'] ?? null;
-    $dataAccredito = $_POST['DataAccredito'] ?? null;
-    $dataEstinsione = $_POST['DataEstinsione'] ?? null;  // Added field
+    $DataConcessione = $_POST['DataConcessione'] ?? null;
+    $dataEstinsione = $_POST['dataEstinsione'] ?? null;  
     $note = $_POST['Note'] ?? null;
     $IDConto = $_POST['IDConto'] ?? null;
-
-    // Validate required fields
-    if (!$creditID || !$importoCredito || !$nomeCredito || !$dataAccredito || !$dataEstinsione || !$IDConto) {
-        echo "Required fields are missing or have invalid data.";
-        exit();
-    }
 
     // Prepare data for update
     $creditData = [
         'ID' => $creditID,
         'ImportoCredito' => $importoCredito,
         'NomeCredito' => $nomeCredito,
-        'DataAccredito' => $dataAccredito,
-        'DataEstinsione' => $dataEstinsione, // Correctly pass the new date field
+        'DataConcessione' => $DataConcessione,
+        'DataEstinsione' => $dataEstinsione, 
         'Note' => $note,
         'IDConto' => $IDConto
     ];
 
-    // Attempt to update the credit
-    $result = updateCredit($creditData);
-
-    if ($result) {
+    echo $dataConcessione;
+    if (updateCredit($creditData)) {
         header("Location: ../../client/index.php");
         exit();
     } else {
         echo "An error occurred while updating the credit. Please try again.";
+        header("Location: ../../client/index.php?error=update_credit");
+        exit();
     }
 } else {
     // Not a POST request
     echo "Invalid request method.";
+    header("Location: ../../client/index.php?error=update_credit");
     exit();
 }

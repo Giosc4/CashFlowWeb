@@ -619,9 +619,6 @@ function updateCredit($creditData)
 {
     global $conn, $updateCreditoQuery;
 
-    // Update the query to include the new field
-    $updateCreditoQuery = "UPDATE crediti SET ImportoCredito = ?, NomeCredito = ?, DataAccredito = ?, DataEstinsione = ?, Note = ?, IDConto = ? WHERE ID = ?";
-
     $stmt = $conn->prepare($updateCreditoQuery);
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
@@ -633,12 +630,13 @@ function updateCredit($creditData)
         "dssssii",
         $creditData['ImportoCredito'],
         $creditData['NomeCredito'],
-        $creditData['DataAccredito'],
-        $creditData['DataEstinsione'], 
+        $creditData['DataConcessione'],
+        $creditData['DataEstinsione'],
         $creditData['Note'],
         $creditData['IDConto'],
         $creditData['ID']
     );
+
 
     if (!$stmt->execute()) {
         echo 'Error in execute statement: ' . $stmt->error;
