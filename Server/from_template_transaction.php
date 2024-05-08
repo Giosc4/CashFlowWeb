@@ -1,5 +1,5 @@
 <?php
-require '../db/write_functions.php';
+require_once '../db/write_functions.php';
 
 $templateId = $_GET['templateID'];
 

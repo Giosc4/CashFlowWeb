@@ -33,7 +33,7 @@ if (!isset($_SESSION['email'])) {
 
 
         <?php
-        require '../../db/read_functions.php';
+        require_once '../../db/read_functions.php';
         global  $selectCategoriaPrimariaFromEmail;
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);   
         ?>

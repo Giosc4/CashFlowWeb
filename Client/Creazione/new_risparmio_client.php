@@ -29,7 +29,7 @@ if (!isset($_SESSION['email'])) {
         <input type="date" id="risparmioDateFine" name="risparmioDateFine" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <?php
-        require '../../db/read_functions.php';
+        require_once '../../db/read_functions.php';
         global $selectContoFromEmail;
         $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         ?>

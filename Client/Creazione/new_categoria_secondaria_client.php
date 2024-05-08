@@ -23,7 +23,7 @@ if (!isset($_SESSION['email'])) {
         <input type="text" id="categoryName" name="categoryName" required autocomplete="off"><br>
         <label for="categoryId">Seleziona un a Categoria Primaria:</label> <br>
         <?php
-        require '../../db/read_functions.php';
+        require_once '../../db/read_functions.php';
         global  $selectCategoriaPrimariaFromEmail;
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);        ?>
         <select name="categoryId" required>

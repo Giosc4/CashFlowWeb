@@ -1,7 +1,12 @@
 <?php
-require_once '../../db/write_functions.php';
+require_once '../../db/delete_functions.php';
+require_once '../../db/update_functions.php';
+require_once '../../db/fromID_functions.php';
 require_once '../../db/queries.php';
 require_once '../../db/read_functions.php';
+require_once '../../db/write_functions.php';
+
+
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,11 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $amount = $_POST['amount'];
     $budgetStartDate = $_POST['budgetStartDate'];
     $budgetEndDate = $_POST['budgetEndDate'];
-    $primaryCategoryId = $_POST['primaryCategoryId']; 
+    $primaryCategoryId = $_POST['primaryCategoryId'];
 
     // Function to create a new budget with a primary category
     createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategoryId);
     header("Location: ../../client/index.php");
     exit();
 }
-

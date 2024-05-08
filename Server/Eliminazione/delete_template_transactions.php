@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-require '../../db/write_functions.php'; 
+require_once '../../db/write_functions.php'; 
 $templateId = $_POST['id'] ?? null; // Recupera l'ID del template di transazione dalla richiesta POST
 
 if (!$templateId) {

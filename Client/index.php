@@ -1,5 +1,13 @@
 <?php
 session_start();
+require_once '../db/delete_functions.php';
+require_once '../db/update_functions.php';
+require_once '../db/fromID_functions.php';
+require_once '../db/queries.php';
+require_once '../db/read_functions.php';
+require_once '../db/write_functions.php';
+require_once '../server/other_functions.php';
+
 
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
@@ -38,10 +46,7 @@ if (!isset($_SESSION['email'])) {
 
     <h2>Contenuto delle tabelle</h2>
     <?php
-    require '../db/queries.php';
-    require '../db/read_functions.php';
-    require '../db/write_functions.php';
-    require_once '../server/other_functions.php';
+
     displayAllTables(); ?>
 
 </body>

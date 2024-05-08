@@ -1,5 +1,6 @@
 <?php
 
+
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)
 {

@@ -30,7 +30,7 @@ if (!isset($_SESSION['email'])) {
 
         <!-- PHP to load accounts and categories -->
         <?php
-        require '../../db/read_functions.php';
+        require_once '../../db/read_functions.php';
         global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
         $accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);

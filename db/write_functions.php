@@ -2,6 +2,7 @@
 require_once 'db_connection.php';
 require_once 'queries.php';
 
+
 function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)
 {
     global $conn, $insertTransactionQuery;
@@ -19,7 +20,6 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
     }
 }
 
-
 function createConto($nome, $saldo)
 {
     global $conn, $insertContoQuery;
@@ -28,7 +28,7 @@ function createConto($nome, $saldo)
     $stmt->bind_param("sd", $nome, $saldo);
 
     if ($stmt->execute()) {
-        return $conn->insert_id; // Returns the auto-increment ID of the last inserted row
+        return $conn->insert_id;
     } else {
         return false;
     }
@@ -112,6 +112,7 @@ function createObiettivo($name, $amount, $date_inizio, $conto_id)
 
     $stmt->close();
 }
+
 function createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
 {
     global $conn, $insertTransactionTemplateQuery;
@@ -153,8 +154,6 @@ function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstins
     $stmt->close();
 }
 
-
-// Funzione per creare un credito nel database
 function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto)
 {
     global $conn, $insertCreditQuery;
@@ -174,7 +173,6 @@ function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $no
 
     $stmt->close();
 }
-
 
 function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategory)
 {
@@ -210,10 +208,8 @@ function createProfile($nickname, $email, $password, $confirmPassword)
         return 'Errore nella preparazione della query: ' . $conn->error;
     }
 
-    // Collegamento dei parametri alla query
     $stmt->bind_param("sss", $nickname, $email, $hashedPassword);
 
-    // Esecuzione della query
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -224,6 +220,7 @@ function createProfile($nickname, $email, $password, $confirmPassword)
         return 'Errore nell\'esecuzione della query: ' . $stmt->error;
     }
 }
+
 function associaContoAProfilo($profiloID, $contoID)
 {
 
@@ -254,420 +251,6 @@ function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
     }
 
     $stmt->close();
-}
-
-
-function updateTransaction($transactionData)
-{
-    global $conn, $updateTransactionQuery;
-
-    $stmt = $conn->prepare($updateTransactionQuery);
-    if (!$stmt) {
-        die('Error in prepare statement: ' . $conn->error);
-        return false;
-    }
-
-    $stmt->bind_param(
-        "idisiii",
-        $transactionData['Is_Expense'],
-        $transactionData['Importo'],
-        $transactionData['IDConto'],
-        $transactionData['DataTransazione'],
-        $transactionData['IDCategoriaPrimaria'],
-        $transactionData['IDCategoriaSecondaria'],
-        $transactionData['ID']
-    );
-
-    if (!$stmt->execute()) {
-        die('Error in execute statement: ' . $stmt->error);
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-
-function deleteTransaction($transactionID)
-{
-    global $conn, $deleteTransactionQuery;
-
-
-    $stmt = $conn->prepare($deleteTransactionQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $transactionID);
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function updatePrimaryCategory($categoryId, $categoryName, $categoryDescription)
-{
-    global $conn, $updatePrimaryCategoryQuery;
-
-    $stmt = $conn->prepare($updatePrimaryCategoryQuery);
-    if (!$stmt) {
-        die('Errore nella preparazione della query: ' . $conn->error);
-    }
-
-    $stmt->bind_param("ssi", $categoryName, $categoryDescription, $categoryId);
-
-    if (!$stmt->execute()) {
-        die('Errore nell\'esecuzione della query: ' . $stmt->error);
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function deletePrimaryCategory($categoryID)
-{
-    global $conn, $deletePrimaryCategoryQuery;
-
-    $stmt = $conn->prepare($deletePrimaryCategoryQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $categoryID);
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId, $categoryDescription)
-{
-    global $conn, $updateSecondaryCategoryQuery;
-
-    $stmt = $conn->prepare($updateSecondaryCategoryQuery);
-    if (!$stmt) {
-        echo "Error preparing statement: " . $conn->error;
-        return false;
-    }
-
-    $bind = $stmt->bind_param("ssii", $categoryName, $categoryDescription, $primaryCategoryId, $categoryId);
-    if (!$bind) {
-        echo "Error binding parameters: " . $stmt->error;
-        return false;
-    }
-
-    $execute = $stmt->execute();
-    if (!$execute) {
-        echo "Error executing update: " . $stmt->error;
-        return false;
-    }
-
-    return true;
-}
-
-// Funzione per eliminare una categoria secondaria
-function deleteSecondaryCategory($categoryId)
-{
-    global $conn, $deleteSecondaryCategoryQuery;
-
-    $stmt = $conn->prepare($deleteSecondaryCategoryQuery);
-    if (!$stmt) {
-        throw new Exception('Error preparing query: ' . $conn->error);
-    }
-
-    $stmt->bind_param("i", $categoryId);
-    if (!$stmt->execute()) {
-        $stmt->close();
-        throw new Exception('Error executing query: ' . $stmt->error);
-    }
-
-    $stmt->close();
-    return true;
-}
-
-
-function updateAccount($accountId, $accountName, $accountBalance)
-{
-    global $conn, $updateContoQuery;
-
-    $stmt = $conn->prepare($updateContoQuery);
-    if (!$stmt) {
-        die('Errore nella preparazione della query: ' . $conn->error);
-    }
-
-    $stmt->bind_param("sdi", $accountName, $accountBalance, $accountId);
-
-    if (!$stmt->execute()) {
-        die('Errore nell\'esecuzione della query: ' . $stmt->error);
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function deleteAccount($accountId)
-{
-    global $conn, $deleteContoQuery;
-
-    $stmt = $conn->prepare($deleteContoQuery);
-    if (!$stmt) {
-        echo 'Errore nella preparazione della query: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $accountId);
-
-    if (!$stmt->execute()) {
-        echo 'Errore nell\'esecuzione della query: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function updateTemplateTransaction($templateId, $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
-{
-    global $conn, $updateTemplateTransactionQuery;
-
-    $stmt = $conn->prepare($updateTemplateTransactionQuery);
-    $stmt->bind_param("sidiiisi", $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description, $templateId);
-
-    if (!$stmt->execute()) {
-        error_log("Execute failed: " . $stmt->error);
-        $stmt->close();
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-function deleteTemplateTransaction($templateId)
-{
-    global $conn, $deleteTemplateTransactionQuery;
-
-    $stmt = $conn->prepare($deleteTemplateTransactionQuery);
-    $stmt->bind_param("i", $templateId);
-
-    if (!$stmt->execute()) {
-        error_log("Execute failed: " . $stmt->error);
-        $stmt->close();
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-function updateRisparmio($risparmioId, $amount, $risparmioDateInizio, $risparmioDateFine, $contoId)
-{
-    global $conn, $updateRisparmioQuery;
-
-    $stmt = $conn->prepare($updateRisparmioQuery);
-    $stmt->bind_param("dssii", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $risparmioId);
-
-    if (!$stmt->execute()) {
-        error_log("Execute failed: " . $stmt->error);
-        $stmt->close();
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-
-function deleteRisparmio($risparmioId)
-{
-    global $conn, $deleteRisparmioQuery;
-
-    $stmt = $conn->prepare($deleteRisparmioQuery);
-    $stmt->bind_param("i", $risparmioId);
-
-    if (!$stmt->execute()) {
-        error_log("Execute failed: " . $stmt->error);
-        $stmt->close();
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-function updateBudget($budgetData)
-{
-    global $conn, $updateBudgetQuery;
-
-    $stmt = $conn->prepare($updateBudgetQuery);
-    if (!$stmt) {
-        die('Error in prepare statement: ' . $conn->error);
-        return false;
-    }
-
-    // Assicurati che l'ordine e i tipi di bind_param corrispondano ai dati del budget
-    $stmt->bind_param(
-        "sdssii",
-        $budgetData['NomeBudget'],
-        $budgetData['ImportoMax'],
-        $budgetData['DataInizio'],
-        $budgetData['DataFine'],
-        $budgetData['IDPrimaryCategory'],
-        $budgetData['ID']
-    );
-
-    if (!$stmt->execute()) {
-        die('Error in execute statement: ' . $stmt->error);
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function deleteBudget($budgetID)
-{
-    global $conn, $deleteBudgetQuery;
-
-    $stmt = $conn->prepare($deleteBudgetQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $budgetID);
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-
-    return true;
-}
-
-function updateDebito($debtData)
-{
-    global $conn, $updateDebitoQuery;
-
-    $stmt = $conn->prepare($updateDebitoQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param(
-        "dssssiii",
-        $debtData['ImportoDebito'],
-        $debtData['NomeImporto'],
-        $debtData['DataConcessione'],
-        $debtData['DataEstinsione'],
-        $debtData['Note'],
-        $debtData['IDConto'],
-        $debtData['IDCategoriaPrimaria'],
-        $debtData['ID']
-    );
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-function deleteDebito($debtID)
-{
-    global $conn, $deleteDebitoQuery;
-
-
-    $stmt = $conn->prepare($deleteDebitoQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $debtID);
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-function updateCredit($creditData)
-{
-    global $conn, $updateCreditoQuery;
-
-    $stmt = $conn->prepare($updateCreditoQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param(
-        "dssssiii",
-        $creditData['ImportoCredito'],
-        $creditData['NomeCredito'],
-        $creditData['DataConcessione'],
-        $creditData['DataEstinsione'],
-        $creditData['Note'],
-        $creditData['IDConto'],
-        $creditData['IDCategoriaPrimaria'],
-        $creditData['ID']
-    );
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-    return true;
-}
-
-
-function deleteCredit($creditID)
-{
-    global $conn, $deleteCreditoQuery;
-
-    $stmt = $conn->prepare($deleteCreditoQuery);
-    if (!$stmt) {
-        echo 'Error in prepare statement: ' . $conn->error;
-        return false;
-    }
-
-    $stmt->bind_param("i", $creditID);
-
-    if (!$stmt->execute()) {
-        echo 'Error in execute statement: ' . $stmt->error;
-        return false;
-    }
-
-    $stmt->close();
-    return true;
 }
 
 

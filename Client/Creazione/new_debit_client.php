@@ -33,7 +33,7 @@ if (!isset($_SESSION['email'])) {
 
         <label for="contoId">Seleziona un Conto:</label>
         <?php
-        require '../../db/read_functions.php';
+        require_once '../../db/read_functions.php';
         global $selectContoFromEmail;
         $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         ?>
