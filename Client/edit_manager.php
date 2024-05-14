@@ -46,10 +46,6 @@ switch ($tableName) {
     case '10 Budget':
         header("Location: /CashFlowWeb/client/modifica/edit_budget.php?id=$id");
         break;
-
-    case '11 Obiettivi':
-        header("Location: /CashFlowWeb/client/modifica/edit_goals.php?id=$id");
-        break;
     default:
         echo "Invalid table name or ID";
         break;

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../../client/index.php");
         exit();
     } else {
-        echo "An error occurred while updating the budget. Please try again.";
+        echo "An error occurred while updating the budget. Per favore try again.";
     }
 } else {
     // Not a POST request

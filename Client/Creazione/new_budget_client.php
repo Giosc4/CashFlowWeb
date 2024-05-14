@@ -39,9 +39,9 @@ if (!isset($_SESSION['email'])) {
         ?>
 
         <!-- Primary Category Selection -->
-        <label for="primaryCategoryId">Select a Primary Category:</label>
-        <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
-            <option value="" disabled selected>Please select a Primary Category</option>
+        <label for="primaryCategoryId">Seleziona la Categoria Primaria:</label>
+        <select id="primaryCategoryId" name="primaryCategoryId" required>
+            <option value="" disabled selected>Seleziona la Categoria Primaria</option>
             <?php foreach ($primaryCategories as $category) : ?>
                 <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>

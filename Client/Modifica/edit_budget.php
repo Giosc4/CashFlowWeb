@@ -53,7 +53,7 @@ if (!$budget) {
 
             <!-- Field to edit the budget maximum amount -->
             <div>
-                <label for="importoMax">Maximum Amount:</label>
+                <label for="importoMax">Maximum Importo:</label>
                 <input type="number" id="importoMax" name="ImportoMax" value="<?php echo htmlspecialchars($budget['ImportoMax']); ?>" step="0.01" required>
             </div>
 
@@ -71,9 +71,9 @@ if (!$budget) {
 
             <!-- Primary Category Selection -->
             <div>
-                <label for="primaryCategoryId">Select a Primary Category:</label>
+                <label for="primaryCategoryId">Seleziona la Categoria Primaria:</label>
                 <select id="primaryCategoryId" name="IDPrimaryCategory" required>
-                    <option value="" disabled <?php if (!$budget['IDPrimaryCategory']) echo 'selected'; ?>>Please select a Primary Category</option>
+                    <option value="" disabled <?php if (!$budget['IDPrimaryCategory']) echo 'selected'; ?>>Seleziona la Categoria Primaria</option>
                     <?php foreach ($primaryCategories as $category) : ?>
                         <option value="<?php echo htmlspecialchars($category['ID']); ?>" <?php if ($category['ID'] == $budget['IDPrimaryCategory']) echo 'selected'; ?>>
                             <?php echo htmlspecialchars($category['NomeCategoria']); ?>

@@ -20,15 +20,12 @@ if (!isset($_SESSION['email'])) {
 <body>
     <h1>Creazione Transazione</h1>
     <form action="../../server/creazione/new_transaction_server.php" method="post">
-        <!-- Expense Checkbox -->
-        <label for="isExpense">Is Expense:</label>
+        <label for="isExpense">è una spesa:</label>
         <input type="checkbox" id="isExpense" name="isExpense"><br>
 
-        <!-- Amount Input -->
-        <label for="amount">Amount:</label>
+        <label for="amount">Importo:</label>
         <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" required><br>
 
-        <!-- PHP to load accounts and categories -->
         <?php
         require_once '../../db/read_functions.php';
         global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
@@ -36,55 +33,48 @@ if (!isset($_SESSION['email'])) {
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
         ?>
 
-        <!-- Account Selection -->
-        <label for="accountId">Select an Account:</label>
+        <label for="accountId">Seleziona un Conto:</label>
         <select id="accountId" name="accountId" required>
-            <option value="" disabled selected>Please select the Account</option>
+            <option value="" disabled selected>Per favore select the Account</option>
             <?php foreach ($accounts as $account) : ?>
                 <option value="<?php echo $account['ID']; ?>"><?php echo $account['NomeConto']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
-        <!-- Primary Category Selection -->
-        <label for="primaryCategoryId">Select a Primary Category:</label>
+        <label for="primaryCategoryId">Seleziona la Categoria Primaria:</label>
         <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
-            <option value="" disabled selected>Please select a Primary Category</option>
+            <option value="" disabled selected>Seleziona la Categoria Primaria</option>
             <?php foreach ($primaryCategories as $category) : ?>
                 <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
-        <!-- Secondary Category Selection -->
-        <label for="secondaryCategoryId">Select a Secondary Category:</label>
+        <label for="secondaryCategoryId">Seleziona la Categoria Secondaria:</label>
         <select id="secondaryCategoryId" name="secondaryCategoryId">
-            <option value="" disabled selected>Please select a Secondary Category</option>
+            <option value="" disabled selected>Per favore Seleziona la Categoria Secondaria</option>
         </select><br>
 
-        <!-- Transaction Date -->
         <label for="transactionDate">Transaction Date:</label>
         <input type="date" id="transactionDate" name="transactionDate" value="<?php echo date("Y-m-d"); ?>" required><br>
 
-        <!-- Submit Button -->
         <input type="submit" value="Crea Transazione">
     </form>
 
     <script>
         function updateSecondaryCategories() {
             var primaryCategoryId = $('#primaryCategoryId').val();
-            console.log("Primary Category ID: ", primaryCategoryId); // Debugging line
 
             $.ajax({
-                url: '../server/get_secondary_categories.php', // Ensure this is the correct relative path
+                url: '../server/get_secondary_categories.php',
                 type: 'GET',
                 data: {
                     primaryCategoryId: primaryCategoryId
                 },
                 dataType: 'json',
                 success: function(categories) {
-                    console.log("Received Categories:", categories); // Debugging line
                     var $secondarySelect = $('#secondaryCategoryId');
-                    $secondarySelect.empty(); // Remove old options
-                    $secondarySelect.append('<option disabled selected>Please select a Secondary Category</option>');
+                    $secondarySelect.empty();
+                    $secondarySelect.append('<option disabled selected>Per favore Seleziona la Categoria Secondaria</option>');
                     categories.forEach(function(category) {
                         $secondarySelect.append($('<option>', {
                             value: category.ID,
@@ -93,7 +83,7 @@ if (!isset($_SESSION['email'])) {
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.log("Error:", xhr.responseText); // Debugging line
+                    console.log("Error:", xhr.responseText);
                 }
             });
         }

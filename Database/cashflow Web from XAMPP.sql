@@ -97,7 +97,7 @@ CLOSE cur;
 
 END $ $ DROP PROCEDURE IF EXISTS `CreateTransactionFromTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
 
-DECLARE Amount DECIMAL(10, 2);
+DECLARE Importo DECIMAL(10, 2);
 
 DECLARE AccountID INT;
 
@@ -114,7 +114,7 @@ SELECT
   IDCategoriaPrimaria,
   IDCategoriaSecondaria,
   Descrizione INTO ExpenseType,
-  Amount,
+  Importo,
   AccountID,
   PrimaryCategoryID,
   SecondaryCategoryID,
@@ -137,7 +137,7 @@ INSERT INTO
 VALUES
   (
     ExpenseType,
-    Amount,
+    Importo,
     TemplateID,
     AccountID,
     CURDATE(),
@@ -265,16 +265,6 @@ VALUES
   );
 
 END $ $ DELIMITER;
-
-DROP TABLE IF EXISTS `obiettivifinanziari`;
-
-CREATE TABLE `obiettivifinanziari` (
-  `ID` int(11) NOT NULL,
-  `NomeObiettivo` varchar(255) DEFAULT NULL,
-  `ImportoObiettivo` decimal(10, 2) DEFAULT NULL,
-  `DataScadenza` date DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `profili`;
 
@@ -507,13 +497,6 @@ ADD
   KEY `fk_debit_categoriaprimaria` (`IDCategoriaPrimaria`);
 
 ALTER TABLE
-  `obiettivifinanziari`
-ADD
-  PRIMARY KEY (`ID`),
-ADD
-  KEY `obiettivi_conto_fk` (`IDConto`);
-
-ALTER TABLE
   `profili`
 ADD
   PRIMARY KEY (`ID`);
@@ -585,11 +568,6 @@ MODIFY
 
 ALTER TABLE
   `debit`
-MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE
-  `obiettivifinanziari`
 MODIFY
   `ID` int(11) NOT NULL AUTO_INCREMENT;
 

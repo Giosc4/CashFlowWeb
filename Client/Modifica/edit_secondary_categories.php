@@ -58,7 +58,7 @@ $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimari
             <div>
                 <label for="primaryCategoryId">Primary Category:</label><br>
                 <select id="primaryCategoryId" name="primaryCategoryId" required>
-                    <option value="" disabled>Select a Primary Category</option>
+                    <option value="" disabled>Seleziona la Categoria Primaria</option>
                     <?php foreach ($primaryCategories as $primaryCategory) : ?>
                         <option value="<?php echo htmlspecialchars($primaryCategory['ID']); ?>" <?php if ($primaryCategory['ID'] == $category['IDCategoriaPrimaria']) echo 'selected'; ?>>
                             <?php echo htmlspecialchars($primaryCategory['NomeCategoria']); ?>
@@ -67,7 +67,7 @@ $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimari
                 </select><br>
             </div>
             <div>
-                <label for="categoryDescription">Category Description:</label><br>
+                <label for="categoryDescription">Descrizione Categoria:</label><br>
                 <input type="text" id="categoryDescription" name="categoryDescription" value="<?php echo htmlspecialchars($category['DescrizioneCategoria']); ?>" autocomplete="off"><br>
             </div>
 

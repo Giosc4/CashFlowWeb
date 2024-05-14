@@ -49,7 +49,7 @@ $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($risparmio['ID']); ?>">
 
             <div>
-                <label for="amount">Amount:</label>
+                <label for="amount">Importo:</label>
                 <input type="number" id="amount" name="amount" step="0.01" autocomplete="off" value="<?php echo htmlspecialchars($risparmio['ImportoRisparmiato']); ?>" required><br>
             </div>
 

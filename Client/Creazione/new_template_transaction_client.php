@@ -23,7 +23,7 @@ if (!isset($_SESSION['email'])) {
         <label for="templateName">Nome del Template:</label>
         <input type="text" id="templateName" name="templateName" required><br>
 
-        <label for="isExpense">Is Expense:</label>
+        <label for="isExpense">è una spesa:</label>
         <input type="checkbox" id="isExpense" name="isExpense"><br>
 
         <label for="amount">Importo:</label>

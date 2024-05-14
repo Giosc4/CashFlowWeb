@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../../client/index.php");
         exit();
     } else {
-        echo "An error occurred while updating the transaction. Please try again.";
+        echo "An error occurred while updating the transaction. Per favore try again.";
     }
 } else {
     // Not a POST request

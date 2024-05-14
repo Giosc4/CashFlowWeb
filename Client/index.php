@@ -8,7 +8,6 @@ require_once '../db/read_functions.php';
 require_once '../db/write_functions.php';
 require_once '../server/other_functions.php';
 
-
 // Verifica se l'utente è loggato, altrimenti reindirizza alla pagina di accesso
 if (!isset($_SESSION['email'])) {
     header("Location: ./log_in_profile_client.php");
@@ -22,10 +21,23 @@ if (!isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <style>
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <h1>Home Page</h1>
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo '<div class="error-message">' . htmlspecialchars($_SESSION['error']) . '</div>';
+        unset($_SESSION['error']); 
+    }
+    ?>
     <div>
         <h3>Creazione</h3>
         <ol>
@@ -38,7 +50,6 @@ if (!isset($_SESSION['email'])) {
             <li><a href="/CashFlowWeb/Client/Creazione/new_debit_client.php">Creazione di un Debito</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_credit_client.php">Creazione di un Credito</a></li>
             <li><a href="/CashFlowWeb/Client/Creazione/new_budget_client.php">Creazione di un Budget</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_obiettivo_client.php">Creazione di un Obiettivo</a></li>
         </ol>
     </div>
 
@@ -46,9 +57,8 @@ if (!isset($_SESSION['email'])) {
 
     <h2>Contenuto delle tabelle</h2>
     <?php
-
-    displayAllTables(); ?>
-
+    displayAllTables();
+    ?>
 </body>
 
 </html>

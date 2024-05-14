@@ -27,13 +27,13 @@ if (!isset($_SESSION['email'])) {
         global  $selectCategoriaPrimariaFromEmail;
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);        ?>
         <select name="categoryId" required>
-            <option value="" disabled selected>Please seleziona un a Categoria</option>
+            <option value="" disabled selected>Per favore seleziona un a Categoria</option>
             <?php foreach ($primaryCategories as $category) : ?>
                 <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>
 
-        <label for="categoryDescription">Category Description:</label><br>
+        <label for="categoryDescription">Descrizione Categoria:</label><br>
         <input type="text" id="categoryDescription" name="categoryDescription" autocomplete="off"><br>
         <br>
 

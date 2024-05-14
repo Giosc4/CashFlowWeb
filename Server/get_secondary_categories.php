@@ -10,7 +10,7 @@ if (isset($_GET['primaryCategoryId'])) {
         echo json_encode($secondaryCategories);
     } else {
         header('Content-Type: application/json');
-        echo json_encode(["error" => "No categories found"]);
+        echo json_encode(["error" => "Nessuna categoria secondaria trovata"]);
     }
 } else {
     header('Content-Type: application/json');

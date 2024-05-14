@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../../client/index.php");
         exit();
     } else {
-        echo "An error occurred while updating the debt. Please try again.";
+        echo "An error occurred while updating the debt. Per favore try again.";
     }
 } else {
     // Not a POST request

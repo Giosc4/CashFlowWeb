@@ -8,7 +8,6 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
     global $conn, $insertTransactionQuery;
 
     $stmt = $conn->prepare($insertTransactionQuery);
-
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }
@@ -16,8 +15,13 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
     $stmt->bind_param("idisii", $isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId);
 
     if (!$stmt->execute()) {
-        die('Error in execute statement: ' . $stmt->error);
+        if ($stmt->errno == 45000) {  // Codice errore specifico per "Budget limit exceeded"
+            return ['success' => false, 'message' => 'Budget limit exceeded for this category.'];
+        } else {
+            die('Error in execute statement: ' . $stmt->error);
+        }
     }
+    return ['success' => true];
 }
 
 function createConto($nome, $saldo)
@@ -86,25 +90,6 @@ function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $con
     }
 
     $stmt->bind_param("dssi", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId);
-
-    if (!$stmt->execute()) {
-        die('Error in execute statement: ' . $stmt->error);
-    }
-
-    $stmt->close();
-}
-
-function createObiettivo($name, $amount, $date_inizio, $conto_id)
-{
-    global $conn, $insertObiettivoQuery;
-
-    $stmt = $conn->prepare($insertObiettivoQuery);
-
-    if (!$stmt) {
-        die('Error in prepare statement: ' . $conn->error);
-    }
-
-    $stmt->bind_param("sdsi", $name, $amount, $date_inizio, $conto_id);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);

@@ -50,7 +50,7 @@ if (!$debit) {
 
             <!-- Field to edit the debit amount -->
             <div>
-                <label for="importoDebito">debit Amount:</label>
+                <label for="importoDebito">debit Importo:</label>
                 <input type="number" id="importoDebito" name="ImportoDebito" value="<?php echo htmlspecialchars($debit['ImportoDebito']); ?>" step="0.01" required>
             </div>
 
@@ -80,7 +80,7 @@ if (!$debit) {
 
             <!-- Account Selection -->
             <div>
-                <label for="IDConto">Select an Account:</label>
+                <label for="IDConto">Seleziona un Conto:</label>
                 <select id="IDConto" name="IDConto" required>
                     <?php foreach ($accounts as $account) : ?>
                         <option value="<?php echo htmlspecialchars($account['ID']); ?>" <?php if ($account['ID'] == $debit['IDConto']) echo 'selected'; ?>>

@@ -49,7 +49,7 @@ function displayTableTemplate($data, $tableName)
             echo "<th>$key</th>";
         }
         echo "<th>Modifica</th>";
-        echo "<th>New</th>";
+        echo "<th>Nuovo</th>";
 
 
         echo "</tr>";
@@ -63,7 +63,7 @@ function displayTableTemplate($data, $tableName)
             echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button style='background-color: red; color: white;'>Modifica</button></a></td>";
 
             // voglio aggiungere una colonna con un pulsante verde con scritto 'Create Transaction' questo apre una pagina chiamata 'from_template_transaction.php' che prende l'id del template e crea una transazione con la stored procedure
-            echo "<td><a href='../server/from_template_transaction.php?templateID=" . $row['ID'] . "'><button style='background-color: green; color: white;'>Create Transaction</button></a></td>";
+            echo "<td><a href='../server/from_template_transaction.php?templateID=" . $row['ID'] . "'><button style='background-color: green; color: white;'>Crea Transazione</button></a></td>";
 
             echo "</tr>";
         }
@@ -90,7 +90,7 @@ function displayAllTables()
     $email = $_SESSION['email'];
     global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail,
         $selectCategoriaSecondariaFromEmail, $selectTransazioniFromEmail, $selectTransazioniTemplateFromEmail,
-        $selectRisparmiFromEmail, $selectObiettiviFromEmail, $selectDebitiFromEmail,  $selectCreditiFromEmail, $selectBudgetFromEmail;
+        $selectRisparmiFromEmail,  $selectDebitiFromEmail,  $selectCreditiFromEmail, $selectBudgetFromEmail;
 
     $conti = getTableBYEmail($email, $selectContoFromEmail);
     $categoriePrimarie = getTableBYEmail($email, $selectCategoriaPrimariaFromEmail);
@@ -98,7 +98,6 @@ function displayAllTables()
     $transactions = getTableBYEmail($email, $selectTransazioniFromEmail);
     $transactions_template = getTableBYEmail($email, $selectTransazioniTemplateFromEmail);
     $risparmi = getTableBYEmail($email, $selectRisparmiFromEmail);
-    $obiettivi = getTableBYEmail($email, $selectObiettiviFromEmail);
     $debiti = getTableBYEmail($email, $selectDebitiFromEmail);
     $crediti = getTableBYEmail($email, $selectCreditiFromEmail);
     $budgets = getTableBYEmail($email, $selectBudgetFromEmail);
@@ -112,5 +111,4 @@ function displayAllTables()
     displayTableData($debiti, '8 Debiti');
     displayTableData($crediti, '9 Credito');
     displayTableData($budgets, '10 Budget');
-    displayTableData($obiettivi, '11 Obiettivi');
 }

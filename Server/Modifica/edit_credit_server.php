@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../../client/index.php");
         exit();
     } else {
-        echo "An error occurred while updating the credit. Please try again.";
+        echo "An error occurred while updating the credit. Per favore try again.";
         header("Location: ../../client/index.php?error=update_credit");
         exit();
     }

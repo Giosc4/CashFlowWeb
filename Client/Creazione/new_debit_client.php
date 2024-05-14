@@ -38,7 +38,7 @@ if (!isset($_SESSION['email'])) {
         $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         ?>
         <select name="contoId" required>
-            <option value="" disabled selected>Please seleziona un Conto</option>
+            <option value="" disabled selected>Per favore seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
                 <option value="<?php echo $conto['ID']; ?>"><?php echo $conto['NomeConto']; ?></option>
             <?php endforeach; ?>

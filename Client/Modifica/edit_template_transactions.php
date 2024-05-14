@@ -52,7 +52,7 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
         <label for="templateName">Nome del Template:</label>
         <input type="text" id="templateName" name="templateName" value="<?php echo htmlspecialchars($templateData['NomeTemplate']); ?>" required><br>
 
-        <label for="isExpense">Is Expense:</label>
+        <label for="isExpense">è una spesa:</label>
         <input type="checkbox" id="isExpense" name="isExpense" <?php if ($templateData['Is_Expense']) echo 'checked'; ?>><br>
 
         <label for="amount">Importo:</label>
