@@ -35,7 +35,7 @@ if (!isset($_SESSION['email'])) {
     <?php
     if (isset($_SESSION['error'])) {
         echo '<div class="error-message">' . htmlspecialchars($_SESSION['error']) . '</div>';
-        unset($_SESSION['error']); 
+        unset($_SESSION['error']);
     }
     ?>
     <div>
@@ -53,7 +53,8 @@ if (!isset($_SESSION['email'])) {
         </ol>
     </div>
 
-    <a href="/CashFlowWeb/server/logout.php">Logout</a>
+    <a href="/CashFlowWeb/server/logout.php">Logout</a><br><br>
+    <a href="/CashFlowWeb/Client/exportData.php">Genera Report CSV</a>
 
     <h2>Contenuto delle tabelle</h2>
     <?php
