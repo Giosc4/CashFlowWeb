@@ -26,18 +26,28 @@ if (!isset($_SESSION['email'])) {
         <input type="date" id="risparmioDateInizio" name="risparmioDateInizio" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <label for="risparmioDateFine">Data Fine Risparmio:</label>
-        <input type="date" id="risparmioDateFine" name="risparmioDateFine" value="<?php echo date("Y-m-d"); ?>" required><br>
+        <input type="date" id="risparmioDateFine" name="risparmioDateFine" value="<?php echo date("Y-m-d", strtotime("+1 day")); ?>" required><br>
 
         <?php
         require_once '../../db/read_functions.php';
         global $selectContoFromEmail;
         $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
+        $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
         ?>
+        
         <label for="contoId">Seleziona un Conto:</label>
         <select name="contoId" required>
             <option value="" disabled selected>Per favore seleziona un Conto</option>
             <?php foreach ($conti as $conto) : ?>
                 <option value="<?php echo $conto['ID']; ?>"><?php echo $conto['NomeConto']; ?></option>
+            <?php endforeach; ?>
+        </select><br>
+
+        <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
+        <select id="primaryCategoryId" name="primaryCategoryId" required>
+            <option value="" disabled selected>Seleziona una Categoria Primaria</option>
+            <?php foreach ($primaryCategories as $category) : ?>
+                <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
             <?php endforeach; ?>
         </select><br>
 

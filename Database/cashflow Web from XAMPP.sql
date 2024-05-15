@@ -20,32 +20,44 @@ DECLARE Days INT;
 
 DECLARE DailyAmount DECIMAL(10, 2);
 
+DECLARE PrimaryCategoryID INT;
+
 -- Seleziona i dettagli del risparmio
 SELECT
   DataInizio,
   DataFine,
   ImportoRisparmiato,
-  IDConto INTO StartDate,
+  IDConto,
+  IDCategoriaPrimaria INTO StartDate,
   EndDate,
   TotalAmount,
-  AccountID
+  AccountID,
+  PrimaryCategoryID
 FROM
   risparmi
 WHERE
   ID = SavingsID;
 
--- Calcola il numero di giorni
+-- Calcola il numero di giorni (+1 per includere sia la DataInizio che la DataFine)
 SET
   Days = DATEDIFF(EndDate, StartDate) + 1;
 
--- +1 per includere sia la DataInizio che la DataFine
 -- Evita la divisione per zero
 IF Days > 0 THEN
 SET
   DailyAmount = TotalAmount / Days;
 
--- Loop attraverso ogni giorno
-WHILE StartDate <= EndDate DO -- Aggiorna il saldo del conto
+-- Controlla se il saldo del conto è sufficiente
+IF (
+  SELECT
+    Saldo
+  FROM
+    conto
+  WHERE
+    ID = AccountID
+) >= DailyAmount THEN -- Inserisce una transazione solo per il giorno corrente
+IF CURDATE() BETWEEN StartDate
+AND EndDate THEN -- Aggiorna il saldo del conto
 UPDATE
   conto
 SET
@@ -64,13 +76,18 @@ INSERT INTO
     IDCategoriaSecondaria
   )
 VALUES
-  (1, DailyAmount, AccountID, StartDate, NULL, NULL);
+  (
+    1,
+    DailyAmount,
+    AccountID,
+    CURDATE(),
+    PrimaryCategoryID,
+    NULL
+  );
 
--- Passa al giorno successivo
-SET
-  StartDate = DATE_ADD(StartDate, INTERVAL 1 DAY);
+END IF;
 
-END WHILE;
+END IF;
 
 END IF;
 
@@ -423,7 +440,8 @@ CREATE TABLE `risparmi` (
   `ImportoRisparmiato` decimal(10, 2) DEFAULT NULL,
   `DataInizio` date DEFAULT NULL,
   `DataFine` date DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL
+  `IDConto` int(11) DEFAULT NULL,
+  `IDCategoriaPrimaria` int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `template_transazioni`;
@@ -648,7 +666,9 @@ ALTER TABLE
 ADD
   PRIMARY KEY (`ID`),
 ADD
-  KEY `risparmi_conto_fk` (`IDConto`);
+  KEY `risparmi_conto_fk` (`IDConto`),
+ADD
+  KEY `fk_risparmi_categoriaprimaria` (`IDCategoriaPrimaria`);
 
 ALTER TABLE
   `template_transazioni`
@@ -771,6 +791,10 @@ ADD
 ALTER TABLE
   `risparmi`
 ADD
+  CONSTRAINT `fk_risparmi_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+SET
+  NULL ON UPDATE CASCADE,
+ADD
   CONSTRAINT `risparmi_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
@@ -807,7 +831,7 @@ SET
 ADD
   CONSTRAINT `transazione_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-14 15:24:21' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 16:46:17' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
+DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-15 12:01:45' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 16:46:17' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
 
 DECLARE debtCreditID INT;
 

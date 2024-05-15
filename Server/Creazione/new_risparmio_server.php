@@ -14,10 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $risparmioDateInizio = $_POST["risparmioDateInizio"];
         $risparmioDateFine = $_POST["risparmioDateFine"];
         $contoId = $_POST["contoId"];
+        $primaryCategoryId = $_POST['primaryCategoryId'];
 
         $idContoFromNome = getIdContoFromNome($contoId);
 
-        createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId);
+        createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId);
         header("Location: ../../client/index.php");
         exit();
     } else {

@@ -78,7 +78,7 @@ function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizi
 }
 
 
-function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId)
+function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId)
 {
     global $conn, $insertRisparmioQuery;
 
@@ -89,7 +89,7 @@ function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $con
         die('Error in prepare statement: ' . $conn->error);
     }
 
-    $stmt->bind_param("dssi", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId);
+    $stmt->bind_param("dssii", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);
