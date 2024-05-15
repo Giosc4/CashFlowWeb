@@ -120,7 +120,7 @@ function createTransactionTemplate($templateName, $entryType, $amount, $accountI
     return $lastId;
 }
 
-function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto)
+function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto, $IDCategoriaPrimaria)
 {
     global $conn, $insertDebitQuery;
 
@@ -130,7 +130,7 @@ function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstins
         die('Error in prepare statement: ' . $conn->error);
     }
 
-    $stmt->bind_param("sssssi", $ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto);
+    $stmt->bind_param("sssssii", $ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto, $IDCategoriaPrimaria);
 
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);
@@ -139,7 +139,7 @@ function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstins
     $stmt->close();
 }
 
-function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto)
+function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto, $IDCategoriaPrimaria)
 {
     global $conn, $insertCreditQuery;
 
@@ -150,7 +150,7 @@ function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $no
     }
 
     // Bind dei parametri
-    $stmt->bind_param("sssssi", $importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto);
+    $stmt->bind_param("sssssii", $importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto, $IDCategoriaPrimaria);
 
     if (!$stmt->execute()) {
         die('Errore nell\'esecuzione della query: ' . $stmt->error);

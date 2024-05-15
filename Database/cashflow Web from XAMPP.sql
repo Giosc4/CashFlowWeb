@@ -8,6 +8,252 @@ CREATE DATABASE IF NOT EXISTS `cashflowweb` DEFAULT CHARACTER SET utf8mb4 COLLAT
 
 USE `cashflowweb`;
 
+DELIMITER $ $ DROP PROCEDURE IF EXISTS `AllocateSavings` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavings` (IN `SavingsID` INT) BEGIN DECLARE StartDate DATE;
+
+DECLARE EndDate DATE;
+
+DECLARE TotalAmount DECIMAL(10, 2);
+
+DECLARE AccountID INT;
+
+DECLARE Days INT;
+
+DECLARE DailyAmount DECIMAL(10, 2);
+
+-- Seleziona i dettagli del risparmio
+SELECT
+  DataInizio,
+  DataFine,
+  ImportoRisparmiato,
+  IDConto INTO StartDate,
+  EndDate,
+  TotalAmount,
+  AccountID
+FROM
+  risparmi
+WHERE
+  ID = SavingsID;
+
+-- Calcola il numero di giorni
+SET
+  Days = DATEDIFF(EndDate, StartDate) + 1;
+
+-- +1 per includere sia la DataInizio che la DataFine
+-- Evita la divisione per zero
+IF Days > 0 THEN
+SET
+  DailyAmount = TotalAmount / Days;
+
+-- Loop attraverso ogni giorno
+WHILE StartDate <= EndDate DO -- Aggiorna il saldo del conto
+UPDATE
+  conto
+SET
+  Saldo = Saldo - DailyAmount
+WHERE
+  ID = AccountID;
+
+-- Aggiungi una transazione per il risparmio giornaliero
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria,
+    IDCategoriaSecondaria
+  )
+VALUES
+  (1, DailyAmount, AccountID, StartDate, NULL, NULL);
+
+-- Passa al giorno successivo
+SET
+  StartDate = DATE_ADD(StartDate, INTERVAL 1 DAY);
+
+END WHILE;
+
+END IF;
+
+END $ $ DROP PROCEDURE IF EXISTS `AllocateSavingsDaily` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavingsDaily` () BEGIN DECLARE done INT DEFAULT FALSE;
+
+DECLARE aSavingsID INT;
+
+DECLARE cur CURSOR FOR
+SELECT
+  ID
+FROM
+  risparmi
+WHERE
+  DataFine >= CURDATE();
+
+-- Seleziona solo i risparmi attivi
+DECLARE CONTINUE HANDLER FOR NOT FOUND
+SET
+  done = TRUE;
+
+OPEN cur;
+
+read_loop: LOOP FETCH cur INTO aSavingsID;
+
+IF done THEN LEAVE read_loop;
+
+END IF;
+
+-- Chiama il procedimento per allocare i risparmi
+CALL AllocateSavings(aSavingsID);
+
+END LOOP;
+
+CLOSE cur;
+
+END $ $ DROP PROCEDURE IF EXISTS `CreateTransactionFromTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
+
+DECLARE Amount DECIMAL(10, 2);
+
+DECLARE AccountID INT;
+
+DECLARE PrimaryCategoryID INT;
+
+DECLARE SecondaryCategoryID INT;
+
+DECLARE Description VARCHAR(255);
+
+SELECT
+  Is_Expense,
+  Importo,
+  IDConto,
+  IDCategoriaPrimaria,
+  IDCategoriaSecondaria,
+  Descrizione INTO ExpenseType,
+  Amount,
+  AccountID,
+  PrimaryCategoryID,
+  SecondaryCategoryID,
+  Description
+FROM
+  template_transazioni
+WHERE
+  ID = TemplateID;
+
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDTemplate,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria,
+    IDCategoriaSecondaria
+  )
+VALUES
+  (
+    ExpenseType,
+    Amount,
+    TemplateID,
+    AccountID,
+    CURDATE(),
+    PrimaryCategoryID,
+    SecondaryCategoryID
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `create_transaction_on_credit_termination` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_credit_termination` (IN `creditID` INT) BEGIN DECLARE currentDate DATE;
+
+DECLARE creditAmount DECIMAL(10, 2);
+
+DECLARE accountID INT;
+
+DECLARE primaryCategoryID INT;
+
+SET
+  currentDate = CURDATE();
+
+-- Recupera i dettagli del credito
+SELECT
+  ImportoCredito,
+  IDConto,
+  IDCategoriaPrimaria INTO creditAmount,
+  accountID,
+  primaryCategoryID
+FROM
+  credit
+WHERE
+  ID = creditID;
+
+-- Crea una nuova transazione per la terminazione del credito
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    0,
+    -- Credito (entrata)
+    creditAmount,
+    accountID,
+    currentDate,
+    primaryCategoryID
+  );
+
+-- Elimina il credito dopo aver creato la transazione
+DELETE FROM
+  credit
+WHERE
+  ID = creditID;
+
+END $ $ DROP PROCEDURE IF EXISTS `create_transaction_on_debit_termination` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_debit_termination` (IN `debitID` INT) BEGIN DECLARE currentDate DATE;
+
+DECLARE debitAmount DECIMAL(10, 2);
+
+DECLARE accountID INT;
+
+DECLARE primaryCategoryID INT;
+
+SET
+  currentDate = CURDATE();
+
+-- Recupera i dettagli del debito
+SELECT
+  ImportoDebito,
+  IDConto,
+  IDCategoriaPrimaria INTO debitAmount,
+  accountID,
+  primaryCategoryID
+FROM
+  debit
+WHERE
+  ID = debitID;
+
+-- Crea una nuova transazione per la terminazione del debito
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    1,
+    -- Debito (uscita)
+    debitAmount,
+    accountID,
+    currentDate,
+    primaryCategoryID
+  );
+
+-- Elimina il debito dopo aver creato la transazione
+DELETE FROM
+  debit
+WHERE
+  ID = debitID;
+
+END $ $ DELIMITER;
+
 DROP TABLE IF EXISTS `assconti`;
 
 CREATE TABLE `assconti` (
@@ -560,3 +806,88 @@ SET
   NULL ON UPDATE CASCADE,
 ADD
   CONSTRAINT `transazione_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-14 15:24:21' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 16:46:17' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
+
+DECLARE debtCreditID INT;
+
+DECLARE debtCreditType VARCHAR(10);
+
+DECLARE cur CURSOR FOR
+SELECT
+  ID,
+  'debit' AS type
+FROM
+  debit
+WHERE
+  DataEstinsione = CURDATE()
+UNION
+ALL
+SELECT
+  ID,
+  'credit' AS type
+FROM
+  credit
+WHERE
+  DataEstinsione = CURDATE();
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND
+SET
+  done = TRUE;
+
+OPEN cur;
+
+read_loop: LOOP FETCH cur INTO debtCreditID,
+debtCreditType;
+
+IF done THEN LEAVE read_loop;
+
+END IF;
+
+IF debtCreditType = 'debit' THEN
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+SELECT
+  1,
+  ImportoDebito,
+  IDConto,
+  DataEstinsione,
+  IDCategoriaPrimaria
+FROM
+  debit
+WHERE
+  ID = debtCreditID;
+
+ELSE
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+SELECT
+  0,
+  ImportoCredito,
+  IDConto,
+  DataEstinsione,
+  IDCategoriaPrimaria
+FROM
+  credit
+WHERE
+  ID = debtCreditID;
+
+END IF;
+
+END LOOP;
+
+CLOSE cur;
+
+END $ $ DELIMITER;

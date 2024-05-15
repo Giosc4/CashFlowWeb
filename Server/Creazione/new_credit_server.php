@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $creditEstinsioneDate = $_POST["creditEstinsioneDate"];
         $contoId = $_POST["contoId"];
         $description = $_POST["description"];
-        $categoriaPrimariaId = $_POST["categoriaPrimariaId"];  // Nuovo campo per la categoria
+        $categoriaPrimariaId = $_POST["categoriaPrimariaId"];  
 
         createCredit($amount, $titolo, $creditConcessioneDate, $creditEstinsioneDate, $description, $contoId, $categoriaPrimariaId); // Assicurati che createCredit accetti il nuovo parametro
         header("Location: ../../client/index.php");
