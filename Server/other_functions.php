@@ -91,7 +91,7 @@ function displayTableDebitCredit($data, $tableName, $type)
 
 
         echo "</tr>";
-        // Print the data of the table
+        // Stampa i dati della tabella
         foreach ($data as $row) {
             echo "<tr>";
             foreach ($row as $value) {
@@ -112,13 +112,6 @@ function displayTableDebitCredit($data, $tableName, $type)
     }
 }
 
-
-
-//    createTransactionFromTemplate($templateID);
-
-
-
-// Visualizza i dati delle tabelle
 function displayAllTables()
 {
     if (!isset($_SESSION['email'])) {
