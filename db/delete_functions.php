@@ -1,10 +1,10 @@
 <?php
 function deleteTransaction($transactionID)
 {
-    global $conn, $deleteTransactionQuery;
+    global $conn, $deleteTransaction ;
 
 
-    $stmt = $conn->prepare($deleteTransactionQuery);
+    $stmt = $conn->prepare($deleteTransaction );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
@@ -25,9 +25,9 @@ function deleteTransaction($transactionID)
 
 function deletePrimaryCategory($categoryID)
 {
-    global $conn, $deletePrimaryCategoryQuery;
+    global $conn, $deletePrimaryCategory ;
 
-    $stmt = $conn->prepare($deletePrimaryCategoryQuery);
+    $stmt = $conn->prepare($deletePrimaryCategory );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
@@ -47,9 +47,9 @@ function deletePrimaryCategory($categoryID)
 
 function deleteSecondaryCategory($categoryId)
 {
-    global $conn, $deleteSecondaryCategoryQuery;
+    global $conn, $deleteSecondaryCategory ;
 
-    $stmt = $conn->prepare($deleteSecondaryCategoryQuery);
+    $stmt = $conn->prepare($deleteSecondaryCategory );
     if (!$stmt) {
         throw new Exception('Error preparing query: ' . $conn->error);
     }
@@ -66,9 +66,9 @@ function deleteSecondaryCategory($categoryId)
 
 function deleteAccount($accountId)
 {
-    global $conn, $deleteContoQuery;
+    global $conn, $deleteConto ;
 
-    $stmt = $conn->prepare($deleteContoQuery);
+    $stmt = $conn->prepare($deleteConto );
     if (!$stmt) {
         echo 'Errore nella preparazione della query: ' . $conn->error;
         return false;
@@ -88,9 +88,9 @@ function deleteAccount($accountId)
 
 function deleteTemplateTransaction($templateId)
 {
-    global $conn, $deleteTemplateTransactionQuery;
+    global $conn, $deleteTemplateTransaction ;
 
-    $stmt = $conn->prepare($deleteTemplateTransactionQuery);
+    $stmt = $conn->prepare($deleteTemplateTransaction );
     $stmt->bind_param("i", $templateId);
 
     if (!$stmt->execute()) {
@@ -105,9 +105,9 @@ function deleteTemplateTransaction($templateId)
 
 function deleteRisparmio($risparmioId)
 {
-    global $conn, $deleteRisparmioQuery;
+    global $conn, $deleteRisparmio ;
 
-    $stmt = $conn->prepare($deleteRisparmioQuery);
+    $stmt = $conn->prepare($deleteRisparmio );
     $stmt->bind_param("i", $risparmioId);
 
     if (!$stmt->execute()) {
@@ -121,9 +121,9 @@ function deleteRisparmio($risparmioId)
 }
 function deleteBudget($budgetID)
 {
-    global $conn, $deleteBudgetQuery;
+    global $conn, $deleteBudget ;
 
-    $stmt = $conn->prepare($deleteBudgetQuery);
+    $stmt = $conn->prepare($deleteBudget );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
@@ -144,10 +144,10 @@ function deleteBudget($budgetID)
 
 function deleteDebito($debtID)
 {
-    global $conn, $deleteDebitoQuery;
+    global $conn, $deleteDebito ;
 
 
-    $stmt = $conn->prepare($deleteDebitoQuery);
+    $stmt = $conn->prepare($deleteDebito );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
@@ -166,9 +166,9 @@ function deleteDebito($debtID)
 
 function deleteCredit($creditID)
 {
-    global $conn, $deleteCreditoQuery;
+    global $conn, $deleteCredito ;
 
-    $stmt = $conn->prepare($deleteCreditoQuery);
+    $stmt = $conn->prepare($deleteCredito );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;

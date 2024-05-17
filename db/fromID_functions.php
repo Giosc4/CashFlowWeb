@@ -8,9 +8,9 @@ require_once 'queries.php';
 
 function getSecondaryFromPrimaryCategories($primaryCategoryID)
 {
-    global $conn, $selectSecondaryFromPrimaryQuery;
+    global $conn, $selectSecondaryFromPrimary;
 
-    $stmt = $conn->prepare($selectSecondaryFromPrimaryQuery);
+    $stmt = $conn->prepare($selectSecondaryFromPrimary);
     $stmt->bind_param("i", $primaryCategoryID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -33,9 +33,9 @@ function getSecondaryFromPrimaryCategories($primaryCategoryID)
 
 function getSecondaryCategoryFromID($categoryId)
 {
-    global $conn, $selectSecondaryCategoryFromIDQuery;
+    global $conn, $selectSecondaryCategoryFromID;
 
-    $stmt = $conn->prepare($selectSecondaryCategoryFromIDQuery);
+    $stmt = $conn->prepare($selectSecondaryCategoryFromID);
     $stmt->bind_param("i", $categoryId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -52,9 +52,9 @@ function getSecondaryCategoryFromID($categoryId)
 
 function getAccountById($accountId)
 {
-    global $conn, $selectAccountByIdQuery;
+    global $conn, $selectAccountById;
 
-    $stmt = $conn->prepare($selectAccountByIdQuery);
+    $stmt = $conn->prepare($selectAccountById);
     $stmt->bind_param("i", $accountId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -72,9 +72,9 @@ function getAccountById($accountId)
 
 function getTemplateTransactionFromID($templateId)
 {
-    global $conn, $selectTemplateTransactionFromIDQuery;
+    global $conn, $selectTemplateTransactionFromID;
 
-    $stmt = $conn->prepare($selectTemplateTransactionFromIDQuery);
+    $stmt = $conn->prepare($selectTemplateTransactionFromID);
     $stmt->bind_param("i", $templateId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -92,9 +92,9 @@ function getTemplateTransactionFromID($templateId)
 
 function getTransactionFromID($id)
 {
-    global $conn, $selectTransactionFromIDQuery;
+    global $conn, $selectTransactionFromID;
 
-    $stmt = $conn->prepare($selectTransactionFromIDQuery);
+    $stmt = $conn->prepare($selectTransactionFromID);
     if (!$stmt) {
         error_log("Prepare failed: " . $conn->error);
         return false;
@@ -121,9 +121,9 @@ function getTransactionFromID($id)
 
 function getPrimaryCategoryById($categoryId)
 {
-    global $conn, $selectCategoriaPrimariaByIdQuery;
+    global $conn, $selectCategoriaPrimariaById;
 
-    $stmt = $conn->prepare($selectCategoriaPrimariaByIdQuery);
+    $stmt = $conn->prepare($selectCategoriaPrimariaById);
     $stmt->bind_param("i", $categoryId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -141,9 +141,9 @@ function getPrimaryCategoryById($categoryId)
 
 function getSavingFromID($risparmioId)
 {
-    global $conn, $selectSavingFromIDQuery;
+    global $conn, $selectSavingFromID;
 
-    $stmt = $conn->prepare($selectSavingFromIDQuery);
+    $stmt = $conn->prepare($selectSavingFromID);
     if (!$stmt) {
         error_log("MySQL prepare error: " . $conn->error);
         return false;
@@ -171,9 +171,9 @@ function getSavingFromID($risparmioId)
 function getBudgetFromID($budgetID)
 {
 
-    global $conn, $selectBudgetFromIDQuery;
+    global $conn, $selectBudgetFromID;
 
-    $stmt = $conn->prepare($selectBudgetFromIDQuery);
+    $stmt = $conn->prepare($selectBudgetFromID);
     $stmt->bind_param("i", $budgetID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -190,10 +190,10 @@ function getBudgetFromID($budgetID)
 
 function getDebtFromID($id)
 {
-    global $conn, $selectDebitFromIDQuery;
+    global $conn, $selectDebitFromID;
 
 
-    $stmt = $conn->prepare($selectDebitFromIDQuery);
+    $stmt = $conn->prepare($selectDebitFromID);
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return null;
@@ -218,9 +218,9 @@ function getDebtFromID($id)
 
 function getCreditFromID($id)
 {
-    global $conn, $selectCreditFromIDQuery;
+    global $conn, $selectCreditFromID;
 
-    $stmt = $conn->prepare($selectCreditFromIDQuery);
+    $stmt = $conn->prepare($selectCreditFromID);
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return null;

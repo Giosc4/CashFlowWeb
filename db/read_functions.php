@@ -6,9 +6,9 @@ require_once 'C:/Users/giova/xampp/htdocs/CashFlowWeb/db/queries.php';
 // questa funzione controlla se esiste un utente con la stessa email
 function userExists($email)
 {
-    global $conn, $selectUserByEmailQuery;
+    global $conn, $selectUserByEmail ;
 
-    $stmt = $conn->prepare($selectUserByEmailQuery);
+    $stmt = $conn->prepare($selectUserByEmail );
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -22,33 +22,11 @@ function userExists($email)
     }
 }
 
-
-/*
-function getCategoryById($categoryId)
-{
-    global $conn, $selectCategoryByIdQuery;
-
-    $stmt = $conn->prepare($selectCategoryByIdQuery);
-    $stmt->bind_param("i", $categoryId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $stmt->close();
-        return $row;
-    } else {
-        $stmt->close();
-        return null;
-    }
-}
-*/
-
 function getIdContoFromNome($nomeConto)
 {
-    global $conn, $selectIdContoFromNomeQuery;
+    global $conn, $selectIdContoFromNome ;
 
-    $stmt = $conn->prepare($selectIdContoFromNomeQuery);
+    $stmt = $conn->prepare($selectIdContoFromNome );
     $stmt->bind_param("s", $nomeConto);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -72,9 +50,9 @@ function getIdContoFromNome($nomeConto)
 
 function getProfiloByEmail($email)
 {
-    global $conn, $selectUserByEmailQuery;
+    global $conn, $selectUserByEmail ;
 
-    $stmt = $conn->prepare($selectUserByEmailQuery);
+    $stmt = $conn->prepare($selectUserByEmail );
     if (!$stmt) {
         error_log("Prepare failed: " . $conn->error);
         return false;
@@ -100,9 +78,9 @@ function getProfiloByEmail($email)
 
 function getIDProfiloByEmail($email)
 {
-    global $conn, $selectIDProfileByEmailQuery;
+    global $conn, $selectIDProfileByEmail ;
 
-    $stmt = $conn->prepare($selectIDProfileByEmailQuery);
+    $stmt = $conn->prepare($selectIDProfileByEmail );
     if (!$stmt) {
         error_log("MySQL prepare error: " . $conn->error);
         return false;
@@ -128,9 +106,9 @@ function getIDProfiloByEmail($email)
 
 function logInProfile($email, $password)
 {
-    global $conn, $selectIDProfileByEmailQuery;
+    global $conn, $selectIDProfileByEmail ;
 
-    $stmt = $conn->prepare($selectIDProfileByEmailQuery);
+    $stmt = $conn->prepare($selectIDProfileByEmail );
     $stmt->bind_param("s", $email);
 
     $stmt->execute();

@@ -6,9 +6,9 @@ require_once __DIR__ . '\mongo_connection.php';
 
 function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)
 {
-    global $conn, $insertTransactionQuery;
+    global $conn, $insertTransaction ;
 
-    $stmt = $conn->prepare($insertTransactionQuery);
+    $stmt = $conn->prepare($insertTransaction );
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }
@@ -28,9 +28,9 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
 
 function createConto($nome, $saldo)
 {
-    global $conn, $insertContoQuery;
+    global $conn, $insertConto ;
 
-    $stmt = $conn->prepare($insertContoQuery);
+    $stmt = $conn->prepare($insertConto );
     $stmt->bind_param("sd", $nome, $saldo);
 
     if ($stmt->execute()) {
@@ -45,9 +45,9 @@ function createConto($nome, $saldo)
 
 function createPrimaryCategory($nomeCategoria, $descrizioneCategoria)
 {
-    global $conn, $insertPrimaryCategoryQuery;
+    global $conn, $insertPrimaryCategory ;
 
-    $stmt = $conn->prepare($insertPrimaryCategoryQuery);
+    $stmt = $conn->prepare($insertPrimaryCategory );
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }
@@ -66,9 +66,9 @@ function createPrimaryCategory($nomeCategoria, $descrizioneCategoria)
 
 function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizioneCategoria)
 {
-    global $conn, $insertSecondaryCategoryQuery;
+    global $conn, $insertSecondaryCategory ;
 
-    $stmt = $conn->prepare($insertSecondaryCategoryQuery);
+    $stmt = $conn->prepare($insertSecondaryCategory );
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
     }
@@ -87,9 +87,9 @@ function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizi
 
 function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId)
 {
-    global $conn, $insertRisparmioQuery;
+    global $conn, $insertRisparmio ;
 
-    $query = $insertRisparmioQuery;
+    $query = $insertRisparmio ;
     $stmt = $conn->prepare($query);
 
     if (!$stmt) {
@@ -109,9 +109,9 @@ function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $con
 
 function createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
 {
-    global $conn, $insertTransactionTemplateQuery;
+    global $conn, $insertTransactionTemplate ;
 
-    $stmt = $conn->prepare($insertTransactionTemplateQuery);
+    $stmt = $conn->prepare($insertTransactionTemplate );
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
     }
@@ -132,9 +132,9 @@ function createTransactionTemplate($templateName, $entryType, $amount, $accountI
 
 function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstinsione, $Note, $IDConto, $IDCategoriaPrimaria)
 {
-    global $conn, $insertDebitQuery;
+    global $conn, $insertDebit ;
 
-    $stmt = $conn->prepare($insertDebitQuery);
+    $stmt = $conn->prepare($insertDebit );
 
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
@@ -153,9 +153,9 @@ function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstins
 
 function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto, $IDCategoriaPrimaria)
 {
-    global $conn, $insertCreditQuery;
+    global $conn, $insertCredit ;
 
-    $stmt = $conn->prepare($insertCreditQuery);
+    $stmt = $conn->prepare($insertCredit );
 
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
@@ -175,9 +175,9 @@ function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $no
 
 function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategory)
 {
-    global $conn, $insertBudgetQuery;
+    global $conn, $insertBudget ;
 
-    $stmt = $conn->prepare($insertBudgetQuery);
+    $stmt = $conn->prepare($insertBudget );
 
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
@@ -196,7 +196,7 @@ function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $p
 
 function createProfile($nickname, $email, $password, $confirmPassword)
 {
-    global $conn, $insertProfileQuery;
+    global $conn, $insertProfile ;
 
     if (empty($nickname) || empty($email) || empty($password) || $password !== $confirmPassword) {
         return "Dati inseriti non validi.";
@@ -204,7 +204,7 @@ function createProfile($nickname, $email, $password, $confirmPassword)
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare($insertProfileQuery);
+    $stmt = $conn->prepare($insertProfile );
     if (!$stmt) {
         return 'Errore nella preparazione della query: ' . $conn->error;
     }
@@ -227,9 +227,9 @@ function createProfile($nickname, $email, $password, $confirmPassword)
 function associaContoAProfilo($profiloID, $contoID)
 {
 
-    global $conn, $associateProfileToContoQuery;
+    global $conn, $associateProfileToConto ;
 
-    $stmt = $conn->prepare($associateProfileToContoQuery);
+    $stmt = $conn->prepare($associateProfileToConto );
     $stmt->bind_param("ii", $profiloID, $contoID);
 
     if (!$stmt->execute()) {
@@ -241,9 +241,9 @@ function associaContoAProfilo($profiloID, $contoID)
 
 function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
 {
-    global $conn, $associateProfileToCategoryQuery;
+    global $conn, $associateProfileToCategory ;
 
-    $stmt = $conn->prepare($associateProfileToCategoryQuery);
+    $stmt = $conn->prepare($associateProfileToCategory );
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }

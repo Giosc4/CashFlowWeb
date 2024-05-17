@@ -47,67 +47,49 @@ if (!$transaction) {
     <h1>Edit Transaction</h1>
     <?php if ($transaction) : ?>
         <form action="../../server/modifica/edit_transaction_server.php" method="post">
-            <!-- Hidden field to send the transaction ID -->
-            <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>"><br>
 
-            <!-- Field to edit whether the transaction is an expense -->
-            <div>
-                <label for="isExpense">è una spesa:</label>
-                <input type="checkbox" id="isExpense" name="isExpense" <?php echo ($transaction['Is_Expense'] ? 'checked' : ''); ?>><br>
-            </div>
+            <label for="isExpense">è una spesa:</label>
+            <input type="checkbox" id="isExpense" name="isExpense" <?php echo ($transaction['Is_Expense'] ? 'checked' : ''); ?>><br>
 
-            <!-- Field to edit the transaction amount -->
-            <div>
-                <label for="amount">Importo:</label>
-                <input type="number" id="amount" name="amount" value="<?php echo htmlspecialchars($transaction['Importo']); ?>" step="0.01" required>
-            </div>
 
-            <!-- Field to edit the transaction date -->
-            <div>
-                <label for="date">Transaction Date:</label>
-                <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($transaction['DataTransazione']); ?>" required>
-            </div>
-            <!-- Account Selection -->
-            <div>
-                <label for="accountId">Seleziona un Conto:</label>
-                <select id="accountId" name="accountId" required>
-                    <?php foreach ($accounts as $account) : ?>
-                        <option value="<?php echo htmlspecialchars($account['ID']); ?>" <?php if ($account['ID'] == $transaction['IDConto']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($account['NomeConto']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select><br>
-            </div>
+            <label for="amount">Importo:</label>
+            <input type="number" id="amount" name="amount" value="<?php echo htmlspecialchars($transaction['Importo']); ?>" step="0.01" required><br>
 
-            <!-- Primary Category Selection -->
-            <div>
-                <label for="primaryCategoryId">Seleziona la Categoria Primaria:</label>
-                <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
-                    <option value="" disabled <?php if (!$transaction['IDCategoriaPrimaria']) echo 'selected'; ?>>Seleziona la Categoria Primaria</option>
-                    <?php foreach ($primaryCategories as $category) : ?>
-                        <option value="<?php echo htmlspecialchars($category['ID']); ?>" <?php if ($category['ID'] == $transaction['IDCategoriaPrimaria']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($category['NomeCategoria']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select><br>
-            </div>
+            <label for="date">Transaction Date:</label>
+            <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($transaction['DataTransazione']); ?>" required><br>
 
-            <!-- Secondary Category Selection -->
-            <div>
-                <label for="secondaryCategoryId">Seleziona la Categoria Secondaria:</label>
-                <select id="secondaryCategoryId" name="secondaryCategoryId">
-                    <option value="" disabled selected>Per favore Seleziona la Categoria Secondaria</option>
-                    <!-- Secondary categories will be populated here based on the primary category selected -->
-                </select><br>
-            </div>
+            <label for="accountId">Seleziona un Conto:</label>
+            <select id="accountId" name="accountId" required>
+                <option value="" disabled selected>Seleziona un Conto</option>
+                <?php foreach ($accounts as $account) : ?>
+                    <option value="<?php echo $account['ID']; ?>"><?php echo $account['NomeConto']; ?></option>
+                <?php endforeach; ?>
+            </select><br>
 
-            <!-- Submit button to save changes -->
-            <div>
-                <button type="submit">Save Changes</button>
-            </div>
+            <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
+            <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
+                <option value="" disabled>Seleziona una Categoria Primaria</option>
+                <?php foreach ($primaryCategories as $category) : ?>
+                    <option value="<?php echo $category['ID']; ?>" <?php echo ($category['ID'] == $transaction['IDCategoriaPrimaria']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($category['NomeCategoria']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select><br>
+
+            <label for="secondaryCategoryId">Seleziona una Categoria Secondaria:</label>
+            <select id="secondaryCategoryId" name="secondaryCategoryId">
+                <option value="" disabled>Seleziona una Categoria Secondaria</option>
+                <?php foreach ($secondaryCategories as $category) : ?>
+                    <option value="<?php echo $category['ID']; ?>" data-primary-id="<?php echo $category['IDCategoriaPrimaria']; ?>" <?php echo ($category['ID'] == $transaction['IDCategoriaSecondaria']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($category['NomeCategoria']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select><br>
+            
+            <button type="submit">Save Changes</button><br>
         </form>
 
-        <!-- Form to delete the transaction -->
         <form action="../../server/eliminazione/delete_transaction.php" method="post">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($transaction['ID']); ?>">
             <button type="submit" style="background-color: red; color: white;">Delete Transaction</button>
@@ -122,7 +104,7 @@ if (!$transaction) {
             console.log("Primary Category ID: ", primaryCategoryId); // Debugging line
 
             $.ajax({
-                url: 'Server/get_secondary_categories.php', // Relative path corrected
+                url: '../../server/get_secondary_categories.php', // Correct path
                 type: 'GET',
                 data: {
                     primaryCategoryId: primaryCategoryId
@@ -131,13 +113,18 @@ if (!$transaction) {
                 success: function(categories) {
                     console.log("Received Categories:", categories); // Debugging line
                     var $secondarySelect = $('#secondaryCategoryId');
+                    var selectedSecondaryCategoryId = "<?php echo $transaction['IDCategoriaSecondaria']; ?>";
                     $secondarySelect.empty(); // Remove old options
                     $secondarySelect.append('<option disabled selected>Per favore Seleziona la Categoria Secondaria</option>');
                     categories.forEach(function(category) {
-                        $secondarySelect.append($('<option>', {
+                        var $option = $('<option>', {
                             value: category.ID,
                             text: category.NomeCategoria
-                        }));
+                        });
+                        if (category.ID == selectedSecondaryCategoryId) {
+                            $option.attr('selected', 'selected');
+                        }
+                        $secondarySelect.append($option);
                     });
                 },
                 error: function(xhr, status, error) {
@@ -145,6 +132,11 @@ if (!$transaction) {
                 }
             });
         }
+
+        // Call the function once to initialize the secondary categories based on the current primary category
+        $(document).ready(function() {
+            updateSecondaryCategories();
+        });
     </script>
 </body>
 

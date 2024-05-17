@@ -2,9 +2,9 @@
 
 function updateTransaction($transactionData)
 {
-    global $conn, $updateTransactionQuery;
+    global $conn, $updateTransaction ;
 
-    $stmt = $conn->prepare($updateTransactionQuery);
+    $stmt = $conn->prepare($updateTransaction );
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
         return false;
@@ -33,9 +33,9 @@ function updateTransaction($transactionData)
 
 function updatePrimaryCategory($categoryId, $categoryName, $categoryDescription)
 {
-    global $conn, $updatePrimaryCategoryQuery;
+    global $conn, $updatePrimaryCategory ;
 
-    $stmt = $conn->prepare($updatePrimaryCategoryQuery);
+    $stmt = $conn->prepare($updatePrimaryCategory );
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
     }
@@ -53,9 +53,9 @@ function updatePrimaryCategory($categoryId, $categoryName, $categoryDescription)
 
 function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId, $categoryDescription)
 {
-    global $conn, $updateSecondaryCategoryQuery;
+    global $conn, $updateSecondaryCategory ;
 
-    $stmt = $conn->prepare($updateSecondaryCategoryQuery);
+    $stmt = $conn->prepare($updateSecondaryCategory );
     if (!$stmt) {
         echo "Error preparing statement: " . $conn->error;
         return false;
@@ -78,9 +78,9 @@ function updateSecondaryCategory($categoryId, $categoryName, $primaryCategoryId,
 
 function updateAccount($accountId, $accountName, $accountBalance)
 {
-    global $conn, $updateContoQuery;
+    global $conn, $updateConto ;
 
-    $stmt = $conn->prepare($updateContoQuery);
+    $stmt = $conn->prepare($updateConto );
     if (!$stmt) {
         die('Errore nella preparazione della query: ' . $conn->error);
     }
@@ -98,9 +98,9 @@ function updateAccount($accountId, $accountName, $accountBalance)
 
 function updateTemplateTransaction($templateId, $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
 {
-    global $conn, $updateTemplateTransactionQuery;
+    global $conn, $updateTemplateTransaction ;
 
-    $stmt = $conn->prepare($updateTemplateTransactionQuery);
+    $stmt = $conn->prepare($updateTemplateTransaction );
     $stmt->bind_param("sidiiisi", $templateName, $isExpense, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description, $templateId);
 
     if (!$stmt->execute()) {
@@ -115,9 +115,9 @@ function updateTemplateTransaction($templateId, $templateName, $isExpense, $amou
 
 function updateRisparmio($risparmioId, $amount, $risparmioDateInizio, $risparmioDateFine, $contoId)
 {
-    global $conn, $updateRisparmioQuery;
+    global $conn, $updateRisparmio ;
 
-    $stmt = $conn->prepare($updateRisparmioQuery);
+    $stmt = $conn->prepare($updateRisparmio );
     $stmt->bind_param("dssii", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $risparmioId);
 
     if (!$stmt->execute()) {
@@ -132,9 +132,9 @@ function updateRisparmio($risparmioId, $amount, $risparmioDateInizio, $risparmio
 
 function updateBudget($budgetData)
 {
-    global $conn, $updateBudgetQuery;
+    global $conn, $updateBudget ;
 
-    $stmt = $conn->prepare($updateBudgetQuery);
+    $stmt = $conn->prepare($updateBudget );
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
         return false;
@@ -163,9 +163,9 @@ function updateBudget($budgetData)
 
 function updateDebito($debtData)
 {
-    global $conn, $updateDebitoQuery;
+    global $conn, $updateDebito ;
 
-    $stmt = $conn->prepare($updateDebitoQuery);
+    $stmt = $conn->prepare($updateDebito );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
@@ -194,9 +194,9 @@ function updateDebito($debtData)
 
 function updateCredit($creditData)
 {
-    global $conn, $updateCreditoQuery;
+    global $conn, $updateCredito ;
 
-    $stmt = $conn->prepare($updateCreditoQuery);
+    $stmt = $conn->prepare($updateCredito );
     if (!$stmt) {
         echo 'Error in prepare statement: ' . $conn->error;
         return false;
