@@ -1,6 +1,7 @@
 <?php
 require_once 'db_connection.php';
 require_once 'queries.php';
+require_once __DIR__ . '/mongo/mongo_connection.php';
 
 
 function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)
@@ -21,6 +22,7 @@ function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, 
             die('Error in execute statement: ' . $stmt->error);
         }
     }
+    logEvent('saveTransaction', ['success' => true, 'details' => compact('isExpenseFlag', 'amount', 'accountId', 'transactionDate', 'primaryCategoryId', 'secondaryCategoryId')]);
     return ['success' => true];
 }
 
@@ -32,7 +34,9 @@ function createConto($nome, $saldo)
     $stmt->bind_param("sd", $nome, $saldo);
 
     if ($stmt->execute()) {
-        return $conn->insert_id;
+        $insertID = $stmt->insert_id;
+        logEvent('createConto', ['success' => true, 'insertId' => $insertID, 'details' => compact('nome', 'saldo')]);
+        return $insertID;
     } else {
         return false;
     }
@@ -56,6 +60,7 @@ function createPrimaryCategory($nomeCategoria, $descrizioneCategoria)
     $newCategoryId = $stmt->insert_id;
     $stmt->close();
 
+    logEvent('createPrimaryCategory', ['success' => true, 'newCategoryId' => $newCategoryId, 'details' => compact('nomeCategoria', 'descrizioneCategoria')]);
     return $newCategoryId;
 }
 
@@ -75,6 +80,8 @@ function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizi
     }
 
     $stmt->close();
+    logEvent('createSecondaryCategory', ['success' => true, 'details' => compact('idCategoriaPrimaria', 'nomeCategoria', 'descrizioneCategoria')]);
+    return true;
 }
 
 
@@ -96,6 +103,8 @@ function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $con
     }
 
     $stmt->close();
+    logEvent('createRisparmio', ['success' => true, 'details' => compact('amount', 'risparmioDateInizio', 'risparmioDateFine', 'contoId', 'primaryCategoryId')]);
+    return true;
 }
 
 function createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
@@ -117,6 +126,7 @@ function createTransactionTemplate($templateName, $entryType, $amount, $accountI
 
     $stmt->close();
 
+    logEvent('createTransactionTemplate', ['success' => true, 'lastId' => $lastId, 'details' => compact('templateName', 'entryType', 'amount', 'accountId', 'primaryCategoryId', 'secondaryCategoryId', 'description')]);
     return $lastId;
 }
 
@@ -137,6 +147,8 @@ function createDebit($ImportoDebito, $NomeImporto, $DataConcessione, $DataEstins
     }
 
     $stmt->close();
+    logEvent('createDebit', ['success' => true, 'details' => compact('ImportoDebito', 'NomeImporto', 'DataConcessione', 'DataEstinsione', 'Note', 'IDConto', 'IDCategoriaPrimaria')]);
+    return true;
 }
 
 function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $note, $idConto, $IDCategoriaPrimaria)
@@ -157,6 +169,8 @@ function createCredit($importoCredito, $nomeImporto, $dataInizio, $dataFine, $no
     }
 
     $stmt->close();
+    logEvent('createCredit', ['success' => true, 'details' => compact('importoCredito', 'nomeImporto', 'dataInizio', 'dataFine', 'note', 'idConto', 'IDCategoriaPrimaria')]);
+    return true;
 }
 
 function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $primaryCategory)
@@ -176,6 +190,8 @@ function createBudget($budgetName, $amount, $budgetStartDate, $budgetEndDate, $p
     }
 
     $stmt->close();
+    logEvent('createBudget', ['success' => true, 'details' => compact('budgetName', 'amount', 'budgetStartDate', 'budgetEndDate', 'primaryCategory')]);
+    return true;
 }
 
 function createProfile($nickname, $email, $password, $confirmPassword)
@@ -198,6 +214,8 @@ function createProfile($nickname, $email, $password, $confirmPassword)
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
+        logEvent('createProfile', ['success' => true, 'details' => compact('nickname', 'email', 'hashedPassword')]);
+
         return "Profilo creato con successo.";
     } else {
         $stmt->close();
@@ -218,6 +236,7 @@ function associaContoAProfilo($profiloID, $contoID)
         die('Errore durante l\'associazione profilo-conto: ' . $stmt->error);
     }
     $stmt->close();
+    return true;
 }
 
 function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
@@ -236,6 +255,7 @@ function associateProfileToCategory($IDProfilo, $IDCategoriaPrimaria)
     }
 
     $stmt->close();
+    return true;
 }
 
 
@@ -258,6 +278,7 @@ function createTransactionFromTemplate($templateId)
 
     if ($stmt->execute()) {
         echo "La transazione è stata creata con successo.";
+        logEvent('createTransactionFromTemplate', ['success' => true, 'templateId' => $templateId]);
         return true;
     } else {
         echo "Errore nell'esecuzione: " . $stmt->error;

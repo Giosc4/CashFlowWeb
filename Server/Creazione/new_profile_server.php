@@ -51,6 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 } else {
     // Reindirizza alla pagina del form se il metodo non è POST
-    header("Location: ../../error.php");
+    header("Location: ../../index.php");
     exit();
 }
