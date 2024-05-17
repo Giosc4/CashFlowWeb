@@ -20,7 +20,7 @@ DECLARE Days INT;
 
 DECLARE DailyAmount DECIMAL(10, 2);
 
-DECLARE PrimaryCategoryID INT;
+a DECLARE PrimaryCategoryID INT;
 
 -- Seleziona i dettagli del risparmio
 SELECT
@@ -122,6 +122,21 @@ CALL AllocateSavings(aSavingsID);
 END LOOP;
 
 CLOSE cur;
+
+END $ $ DROP PROCEDURE IF EXISTS `AssociateProfileToCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AssociateProfileToCategory` (
+  IN `_IDProfilo` INT,
+  IN `_IDCategoriaPrimaria` INT
+) BEGIN
+INSERT INTO
+  `profili_categoriaprimaria` (`IDProfilo`, `IDCategoriaPrimaria`)
+VALUES
+  (_IDProfilo, _IDCategoriaPrimaria);
+
+END $ $ DROP PROCEDURE IF EXISTS `AssociateProfileToConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AssociateProfileToConto` (IN `_IDProfilo` INT, IN `_IDConto` INT) BEGIN
+INSERT INTO
+  `assconti` (`IDProfilo`, `IDConto`)
+VALUES
+  (_IDProfilo, _IDConto);
 
 END $ $ DROP PROCEDURE IF EXISTS `CreateTransactionFromTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
 
@@ -268,6 +283,743 @@ DELETE FROM
   debit
 WHERE
   ID = debitID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteBudget` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  budgetmax
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteConto` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  conto
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteCredito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteCredito` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  credit
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteDebito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteDebito` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  debit
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeletePrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeletePrimaryCategory` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  categoriaprimaria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteRisparmio` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteRisparmio` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  risparmi
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteSecondaryCategory` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  categoriasecondaria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteTemplateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTemplateTransaction` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  template_transazioni
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `DeleteTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTransaction` (IN `p_ID` INT) BEGIN
+DELETE FROM
+  transazione
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `GenerateFinancialReport` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GenerateFinancialReport` (
+  IN `startDate` DATE,
+  IN `endDate` DATE,
+  IN `transactionType` TINYINT,
+  IN `accountId` INT,
+  IN `primaryCategoryId` INT,
+  IN `secondaryCategoryId` INT
+) BEGIN
+SELECT
+  t.ID,
+  t.Is_Expense,
+  t.Importo,
+  t.IDConto,
+  t.DataTransazione,
+  t.IDCategoriaPrimaria,
+  t.IDCategoriaSecondaria
+FROM
+  transazione t
+WHERE
+  (
+    startDate IS NULL
+    OR t.DataTransazione >= startDate
+  )
+  AND (
+    endDate IS NULL
+    OR t.DataTransazione <= endDate
+  )
+  AND (
+    transactionType = -1
+    OR t.Is_Expense = transactionType
+  )
+  AND (
+    accountId IS NULL
+    OR t.IDConto = accountId
+  )
+  AND (
+    primaryCategoryId IS NULL
+    OR t.IDCategoriaPrimaria = primaryCategoryId
+  )
+  AND (
+    secondaryCategoryId IS NULL
+    OR t.IDCategoriaSecondaria = secondaryCategoryId
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllBudget` () BEGIN
+SELECT
+  *
+FROM
+  `budgetmax`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllCategoriePrimarie` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategoriePrimarie` () BEGIN
+SELECT
+  *
+FROM
+  `categoriaprimaria`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllCategorieSecondarie` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategorieSecondarie` () BEGIN
+SELECT
+  *
+FROM
+  `categoriasecondaria`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllConti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllConti` () BEGIN
+SELECT
+  *
+FROM
+  `conto`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllCrediti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCrediti` () BEGIN
+SELECT
+  *
+FROM
+  `credit`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllDebiti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllDebiti` () BEGIN
+SELECT
+  *
+FROM
+  `debit`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllProfili` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllProfili` () BEGIN
+SELECT
+  *
+FROM
+  `Profili`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllRisparmi` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllRisparmi` () BEGIN
+SELECT
+  *
+FROM
+  `risparmi`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllTransazioni` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioni` () BEGIN
+SELECT
+  *
+FROM
+  `transazione`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetAllTransazioniTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioniTemplate` () BEGIN
+SELECT
+  *
+FROM
+  `template_transazioni`;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetBudgetByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetBudgetByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  budgetmax.*
+FROM
+  budgetmax
+  JOIN categoriaprimaria ON budgetmax.IDPrimaryCategory = categoriaprimaria.ID
+  JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria
+  JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetCategoriaPrimariaByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaPrimariaByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  categoriaprimaria.*
+FROM
+  categoriaprimaria
+  JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria
+  JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetCategoriaSecondariaByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaSecondariaByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  categoriasecondaria.*
+FROM
+  categoriasecondaria
+  JOIN categoriaprimaria ON categoriasecondaria.IDCategoriaPrimaria = categoriaprimaria.ID
+  JOIN profili_categoriaprimaria ON categoriaprimaria.ID = profili_categoriaprimaria.IDCategoriaPrimaria
+  JOIN profili ON profili_categoriaprimaria.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetContoByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetContoByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  conto.*
+FROM
+  conto
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetCreditiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCreditiByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  credit.*
+FROM
+  credit
+  JOIN conto ON credit.IDConto = conto.ID
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetDebitiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetDebitiByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  debit.*
+FROM
+  debit
+  JOIN conto ON debit.IDConto = conto.ID
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetRisparmiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetRisparmiByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  risparmi.*
+FROM
+  risparmi
+  JOIN conto ON risparmi.IDConto = conto.ID
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetTransazioniByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  transazione.*
+FROM
+  transazione
+  JOIN conto ON transazione.IDConto = conto.ID
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `GetTransazioniTemplateByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniTemplateByEmail` (IN `email` VARCHAR(255)) BEGIN
+SELECT
+  template_transazioni.*
+FROM
+  template_transazioni
+  JOIN conto ON template_transazioni.IDConto = conto.ID
+  JOIN assconti ON conto.ID = assconti.IDConto
+  JOIN profili ON assconti.IDProfilo = profili.ID
+WHERE
+  profili.Email = email;
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertBudget` (
+  IN `_NomeBudget` VARCHAR(255),
+  IN `_ImportoMax` DECIMAL(10, 2),
+  IN `_DataInizio` DATE,
+  IN `_DataFine` DATE,
+  IN `_IDPrimaryCategory` INT
+) BEGIN
+INSERT INTO
+  budgetmax (
+    NomeBudget,
+    ImportoMax,
+    DataInizio,
+    DataFine,
+    IDPrimaryCategory
+  )
+VALUES
+  (
+    _NomeBudget,
+    _ImportoMax,
+    _DataInizio,
+    _DataFine,
+    _IDPrimaryCategory
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertConto` (
+  IN `_NomeConto` VARCHAR(255),
+  IN `_Saldo` DECIMAL(10, 2)
+) BEGIN
+INSERT INTO
+  `conto` (`NomeConto`, `Saldo`)
+VALUES
+  (_NomeConto, _Saldo);
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertCredit` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertCredit` (
+  IN `_ImportoCredito` DECIMAL(10, 2),
+  IN `_NomeImporto` VARCHAR(255),
+  IN `_DataConcessione` DATE,
+  IN `_DataEstinsione` DATE,
+  IN `_Note` TEXT,
+  IN `_IDConto` INT,
+  IN `_IDCategoriaPrimaria` INT
+) BEGIN
+INSERT INTO
+  credit (
+    ImportoCredito,
+    NomeImporto,
+    DataConcessione,
+    DataEstinsione,
+    Note,
+    IDConto,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    _ImportoCredito,
+    _NomeImporto,
+    _DataConcessione,
+    _DataEstinsione,
+    _Note,
+    _IDConto,
+    _IDCategoriaPrimaria
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertDebt` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertDebt` (
+  IN `_ImportoDebito` DECIMAL(10, 2),
+  IN `_NomeImporto` VARCHAR(255),
+  IN `_DataConcessione` DATE,
+  IN `_DataEstinsione` DATE,
+  IN `_Note` TEXT,
+  IN `_IDConto` INT,
+  IN `_IDCategoriaPrimaria` INT
+) BEGIN
+INSERT INTO
+  debit (
+    ImportoDebito,
+    NomeImporto,
+    DataConcessione,
+    DataEstinsione,
+    Note,
+    IDConto,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    _ImportoDebito,
+    _NomeImporto,
+    _DataConcessione,
+    _DataEstinsione,
+    _Note,
+    _IDConto,
+    _IDCategoriaPrimaria
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertPrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertPrimaryCategory` (
+  IN `_NomeCategoria` VARCHAR(255),
+  IN `_DescrizioneCategoria` TEXT
+) BEGIN
+INSERT INTO
+  `categoriaprimaria` (NomeCategoria, DescrizioneCategoria)
+VALUES
+  (_NomeCategoria, _DescrizioneCategoria);
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertProfile` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertProfile` (
+  IN `_NomeProfilo` VARCHAR(255),
+  IN `_Email` VARCHAR(255),
+  IN `_Password` VARCHAR(255)
+) BEGIN
+INSERT INTO
+  Profili (NomeProfilo, Email, Password)
+VALUES
+  (_NomeProfilo, _Email, _Password);
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertSavings` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSavings` (
+  IN `_ImportoRisparmiato` DECIMAL(10, 2),
+  IN `_DataInizio` DATE,
+  IN `_DataFine` DATE,
+  IN `_IDConto` INT,
+  IN `_IDCategoriaPrimaria` INT
+) BEGIN
+INSERT INTO
+  risparmi (
+    ImportoRisparmiato,
+    DataInizio,
+    DataFine,
+    IDConto,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    _ImportoRisparmiato,
+    _DataInizio,
+    _DataFine,
+    _IDConto,
+    _IDCategoriaPrimaria
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSecondaryCategory` (
+  IN `_IDCategoriaPrimaria` INT,
+  IN `_NomeCategoria` VARCHAR(255),
+  IN `_DescrizioneCategoria` TEXT
+) BEGIN
+INSERT INTO
+  `categoriasecondaria` (
+    IDCategoriaPrimaria,
+    NomeCategoria,
+    DescrizioneCategoria
+  )
+VALUES
+  (
+    _IDCategoriaPrimaria,
+    _NomeCategoria,
+    _DescrizioneCategoria
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransaction` (
+  IN `_Is_Expense` BOOLEAN,
+  IN `_Importo` DECIMAL(10, 2),
+  IN `_IDConto` INT,
+  IN `_DataTransazione` DATE,
+  IN `_IDCategoriaPrimaria` INT,
+  IN `_IDCategoriaSecondaria` INT
+) BEGIN
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria,
+    IDCategoriaSecondaria
+  )
+VALUES
+  (
+    _Is_Expense,
+    _Importo,
+    _IDConto,
+    _DataTransazione,
+    _IDCategoriaPrimaria,
+    _IDCategoriaSecondaria
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `InsertTransactionTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransactionTemplate` (
+  IN `_NomeTemplate` VARCHAR(255),
+  IN `_Is_Expense` BOOLEAN,
+  IN `_Importo` DECIMAL(10, 2),
+  IN `_IDConto` INT,
+  IN `_IDCategoriaPrimaria` INT,
+  IN `_IDCategoriaSecondaria` INT,
+  IN `_Descrizione` TEXT
+) BEGIN
+INSERT INTO
+  template_transazioni (
+    NomeTemplate,
+    Is_Expense,
+    Importo,
+    IDConto,
+    IDCategoriaPrimaria,
+    IDCategoriaSecondaria,
+    Descrizione
+  )
+VALUES
+  (
+    _NomeTemplate,
+    _Is_Expense,
+    _Importo,
+    _IDConto,
+    _IDCategoriaPrimaria,
+    _IDCategoriaSecondaria,
+    _Descrizione
+  );
+
+END $ $ DROP PROCEDURE IF EXISTS `selectAccountById` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectAccountById` (IN `accountID` INT) BEGIN
+SELECT
+  *
+FROM
+  conto
+WHERE
+  ID = accountID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectBudgetFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectBudgetFromID` (IN `budgetID` INT) BEGIN
+SELECT
+  *
+FROM
+  budgetmax
+WHERE
+  ID = budgetID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectCategoriaPrimariaById` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCategoriaPrimariaById` (IN `primaryID` INT) BEGIN
+SELECT
+  *
+FROM
+  categoriaprimaria
+WHERE
+  ID = primaryID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectCreditFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCreditFromID` (IN `creditID` INT) BEGIN
+SELECT
+  *
+FROM
+  credit
+WHERE
+  ID = creditID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectDebitFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectDebitFromID` (IN `debitID` INT) BEGIN
+SELECT
+  *
+FROM
+  debit
+WHERE
+  ID = debitID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectIdContoFromNome` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIdContoFromNome` (IN `accountName` VARCHAR(255)) BEGIN
+SELECT
+  ID
+FROM
+  conto
+WHERE
+  NomeConto = accountName;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectIDProfileByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIDProfileByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
+SELECT
+  ID
+FROM
+  Profili
+WHERE
+  Email = userEmail;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectSavingFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSavingFromID` (IN `savingID` INT) BEGIN
+SELECT
+  *
+FROM
+  risparmi
+WHERE
+  ID = savingID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectSecondaryCategoryFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryCategoryFromID` (IN `secondaryID` INT) BEGIN
+SELECT
+  *
+FROM
+  categoriasecondaria
+WHERE
+  ID = secondaryID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectSecondaryFromPrimary` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryFromPrimary` (IN `primaryID` INT) BEGIN
+SELECT
+  *
+FROM
+  categoriasecondaria
+WHERE
+  IDCategoriaPrimaria = primaryID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectTemplateTransactionFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTemplateTransactionFromID` (IN `templateID` INT) BEGIN
+SELECT
+  *
+FROM
+  template_transazioni
+WHERE
+  ID = templateID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectTransactionFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTransactionFromID` (IN `transactionID` INT) BEGIN
+SELECT
+  *
+FROM
+  transazione
+WHERE
+  ID = transactionID;
+
+END $ $ DROP PROCEDURE IF EXISTS `selectUserByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectUserByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
+SELECT
+  *
+FROM
+  Profili
+WHERE
+  Email = userEmail;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateBudget` (
+  IN `p_NomeBudget` VARCHAR(255),
+  IN `p_ImportoMax` DECIMAL(10, 2),
+  IN `p_DataInizio` DATE,
+  IN `p_DataFine` DATE,
+  IN `p_IDPrimaryCategory` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  budgetmax
+SET
+  NomeBudget = p_NomeBudget,
+  ImportoMax = p_ImportoMax,
+  DataInizio = p_DataInizio,
+  DataFine = p_DataFine,
+  IDPrimaryCategory = p_IDPrimaryCategory
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateConto` (
+  IN `p_NomeConto` VARCHAR(255),
+  IN `p_Saldo` DECIMAL(10, 2),
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  conto
+SET
+  NomeConto = p_NomeConto,
+  Saldo = p_Saldo
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateCredito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateCredito` (
+  IN `p_ImportoCredito` DECIMAL(10, 2),
+  IN `p_NomeImporto` VARCHAR(255),
+  IN `p_DataConcessione` DATE,
+  IN `p_DataEstinsione` DATE,
+  IN `p_Note` TEXT,
+  IN `p_IDConto` INT,
+  IN `p_IDCategoriaPrimaria` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  credit
+SET
+  ImportoCredito = p_ImportoCredito,
+  NomeImporto = p_NomeImporto,
+  DataConcessione = p_DataConcessione,
+  DataEstinsione = p_DataEstinsione,
+  Note = p_Note,
+  IDConto = p_IDConto,
+  IDCategoriaPrimaria = p_IDCategoriaPrimaria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateDebito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateDebito` (
+  IN `p_ImportoDebito` DECIMAL(10, 2),
+  IN `p_NomeImporto` VARCHAR(255),
+  IN `p_DataConcessione` DATE,
+  IN `p_DataEstinsione` DATE,
+  IN `p_Note` TEXT,
+  IN `p_IDConto` INT,
+  IN `p_IDCategoriaPrimaria` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  debit
+SET
+  ImportoDebito = p_ImportoDebito,
+  NomeImporto = p_NomeImporto,
+  DataConcessione = p_DataConcessione,
+  DataEstinsione = p_DataEstinsione,
+  Note = p_Note,
+  IDConto = p_IDConto,
+  IDCategoriaPrimaria = p_IDCategoriaPrimaria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdatePrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdatePrimaryCategory` (
+  IN `p_NomeCategoria` VARCHAR(255),
+  IN `p_DescrizioneCategoria` TEXT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  categoriaprimaria
+SET
+  NomeCategoria = p_NomeCategoria,
+  DescrizioneCategoria = p_DescrizioneCategoria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateRisparmio` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateRisparmio` (
+  IN `p_ImportoRisparmiato` DECIMAL(10, 2),
+  IN `p_DataInizio` DATE,
+  IN `p_DataFine` DATE,
+  IN `p_IDConto` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  risparmi
+SET
+  ImportoRisparmiato = p_ImportoRisparmiato,
+  DataInizio = p_DataInizio,
+  DataFine = p_DataFine,
+  IDConto = p_IDConto
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateSecondaryCategory` (
+  IN `p_NomeCategoria` VARCHAR(255),
+  IN `p_DescrizioneCategoria` TEXT,
+  IN `p_IDCategoriaPrimaria` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  categoriasecondaria
+SET
+  NomeCategoria = p_NomeCategoria,
+  DescrizioneCategoria = p_DescrizioneCategoria,
+  IDCategoriaPrimaria = p_IDCategoriaPrimaria
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateTemplateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTemplateTransaction` (
+  IN `p_NomeTemplate` VARCHAR(255),
+  IN `p_Is_Expense` BOOLEAN,
+  IN `p_Importo` DECIMAL(10, 2),
+  IN `p_IDConto` INT,
+  IN `p_IDCategoriaPrimaria` INT,
+  IN `p_IDCategoriaSecondaria` INT,
+  IN `p_Descrizione` TEXT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  template_transazioni
+SET
+  NomeTemplate = p_NomeTemplate,
+  Is_Expense = p_Is_Expense,
+  Importo = p_Importo,
+  IDConto = p_IDConto,
+  IDCategoriaPrimaria = p_IDCategoriaPrimaria,
+  IDCategoriaSecondaria = p_IDCategoriaSecondaria,
+  Descrizione = p_Descrizione
+WHERE
+  ID = p_ID;
+
+END $ $ DROP PROCEDURE IF EXISTS `UpdateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTransaction` (
+  IN `p_Is_Expense` BOOLEAN,
+  IN `p_Importo` DECIMAL(10, 2),
+  IN `p_IDConto` INT,
+  IN `p_DataTransazione` DATE,
+  IN `p_IDCategoriaPrimaria` INT,
+  IN `p_IDCategoriaSecondaria` INT,
+  IN `p_ID` INT
+) BEGIN
+UPDATE
+  transazione
+SET
+  Is_Expense = p_Is_Expense,
+  Importo = p_Importo,
+  IDConto = p_IDConto,
+  DataTransazione = p_DataTransazione,
+  IDCategoriaPrimaria = p_IDCategoriaPrimaria,
+  IDCategoriaSecondaria = p_IDCategoriaSecondaria
+WHERE
+  ID = p_ID;
 
 END $ $ DELIMITER;
 
@@ -831,7 +1583,7 @@ SET
 ADD
   CONSTRAINT `transazione_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-15 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
+DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-15 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 16:46:17' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
 
 DECLARE debtCreditID INT;
 
