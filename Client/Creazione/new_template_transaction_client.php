@@ -46,7 +46,7 @@ if (!isset($_SESSION['email'])) {
         </select><br>
 
         <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
-        <select id="primaryCategoryId" name="primaryCategoryId" required>
+        <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
             <option value="" disabled selected>Seleziona una Categoria Primaria</option>
             <?php foreach ($primaryCategories as $category) : ?>
                 <option value="<?php echo $category['ID']; ?>"><?php echo $category['NomeCategoria']; ?></option>
@@ -66,7 +66,34 @@ if (!isset($_SESSION['email'])) {
 
         <input type="submit" value="Crea Transazione">
     </form>
+    <script>
+        function updateSecondaryCategories() {
+            var primaryCategoryId = $('#primaryCategoryId').val();
 
+            $.ajax({
+                url: '../server/get_secondary_categories.php',
+                type: 'GET',
+                data: {
+                    primaryCategoryId: primaryCategoryId
+                },
+                dataType: 'json',
+                success: function(categories) {
+                    var $secondarySelect = $('#secondaryCategoryId');
+                    $secondarySelect.empty();
+                    $secondarySelect.append('<option disabled selected>Per favore Seleziona la Categoria Secondaria</option>');
+                    categories.forEach(function(category) {
+                        $secondarySelect.append($('<option>', {
+                            value: category.ID,
+                            text: category.NomeCategoria
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error:", xhr.responseText);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

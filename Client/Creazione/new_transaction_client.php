@@ -31,6 +31,7 @@ if (!isset($_SESSION['email'])) {
         global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
         $accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
+        $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecondariaFromEmail);
         ?>
 
         <label for="accountId">Seleziona un Conto:</label>
@@ -65,7 +66,7 @@ if (!isset($_SESSION['email'])) {
             var primaryCategoryId = $('#primaryCategoryId').val();
 
             $.ajax({
-                url: '../server/get_secondary_categories.php',
+                url: '../../server/get_secondary_categories.php',
                 type: 'GET',
                 data: {
                     primaryCategoryId: primaryCategoryId

@@ -1,7 +1,7 @@
 <?php
 require_once 'db_connection.php';
 require_once 'queries.php';
-require_once __DIR__ . '/mongo/mongo_connection.php';
+require_once __DIR__ . '\mongo_connection.php';
 
 
 function saveTransaction($isExpenseFlag, $amount, $accountId, $transactionDate, $primaryCategoryId, $secondaryCategoryId)

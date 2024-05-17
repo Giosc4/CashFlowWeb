@@ -1,5 +1,5 @@
 <?php
-require_once '/CashFlowWeb/db/read_functions.php';
+require_once '../db/fromID_functions.php';
 
 if (isset($_GET['primaryCategoryId'])) {
     $primaryCategoryId = intval($_GET['primaryCategoryId']);

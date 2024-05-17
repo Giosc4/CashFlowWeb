@@ -1,6 +1,8 @@
 <?php
 
 
+require_once 'db_connection.php';
+require_once 'queries.php';
 
 
 
@@ -25,9 +27,8 @@ function getSecondaryFromPrimaryCategories($primaryCategoryID)
             ];
         }
     }
-
-    return $secondaryCategories;
     $stmt->close();
+    return $secondaryCategories;
 }
 
 function getSecondaryCategoryFromID($categoryId)

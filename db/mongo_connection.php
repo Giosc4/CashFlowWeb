@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php'; // Include il file autoload di Composer
+require_once __DIR__ . '/../vendor/autoload.php'; // Include il file autoload di Composer
 
 use MongoDB\Client;
 use MongoDB\BSON\UTCDateTime;
