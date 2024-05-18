@@ -20,7 +20,7 @@ DECLARE Days INT;
 
 DECLARE DailyAmount DECIMAL(10, 2);
 
-a DECLARE PrimaryCategoryID INT;
+DECLARE PrimaryCategoryID INT;
 
 -- Seleziona i dettagli del risparmio
 SELECT
@@ -122,21 +122,6 @@ CALL AllocateSavings(aSavingsID);
 END LOOP;
 
 CLOSE cur;
-
-END $ $ DROP PROCEDURE IF EXISTS `AssociateProfileToCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AssociateProfileToCategory` (
-  IN `_IDProfilo` INT,
-  IN `_IDCategoriaPrimaria` INT
-) BEGIN
-INSERT INTO
-  `profili_categoriaprimaria` (`IDProfilo`, `IDCategoriaPrimaria`)
-VALUES
-  (_IDProfilo, _IDCategoriaPrimaria);
-
-END $ $ DROP PROCEDURE IF EXISTS `AssociateProfileToConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AssociateProfileToConto` (IN `_IDProfilo` INT, IN `_IDConto` INT) BEGIN
-INSERT INTO
-  `assconti` (`IDProfilo`, `IDConto`)
-VALUES
-  (_IDProfilo, _IDConto);
 
 END $ $ DROP PROCEDURE IF EXISTS `CreateTransactionFromTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
 
@@ -259,7 +244,6 @@ FROM
 WHERE
   ID = debitID;
 
--- Crea una nuova transazione per la terminazione del debito
 INSERT INTO
   transazione (
     Is_Expense,
@@ -278,7 +262,6 @@ VALUES
     primaryCategoryID
   );
 
--- Elimina il debito dopo aver creato la transazione
 DELETE FROM
   debit
 WHERE
@@ -565,12 +548,29 @@ VALUES
 
 END $ $ DROP PROCEDURE IF EXISTS `InsertConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertConto` (
   IN `_NomeConto` VARCHAR(255),
-  IN `_Saldo` DECIMAL(10, 2)
-) BEGIN
+  IN `_Saldo` DECIMAL(10, 2),
+  IN `_IDProfilo` INT
+) BEGIN DECLARE new_conto_id INT;
+
+-- Insert the new account
 INSERT INTO
   `conto` (`NomeConto`, `Saldo`)
 VALUES
   (_NomeConto, _Saldo);
+
+-- Get the last inserted account ID
+SET
+  new_conto_id = LAST_INSERT_ID();
+
+-- Associate the account with the profile
+INSERT INTO
+  `assconti` (`IDProfilo`, `IDConto`)
+VALUES
+  (_IDProfilo, new_conto_id);
+
+-- Return the new account ID
+SELECT
+  new_conto_id;
 
 END $ $ DROP PROCEDURE IF EXISTS `InsertCredit` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertCredit` (
   IN `_ImportoCredito` DECIMAL(10, 2),
@@ -632,14 +632,31 @@ VALUES
     _IDCategoriaPrimaria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertPrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertPrimaryCategory` (
+END $ $ DROP PROCEDURE IF EXISTS `insertPrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `insertPrimaryCategory` (
   IN `_NomeCategoria` VARCHAR(255),
-  IN `_DescrizioneCategoria` TEXT
-) BEGIN
+  IN `_DescrizioneCategoria` TEXT,
+  IN `_IDProfilo` INT
+) BEGIN DECLARE new_category_id INT;
+
+-- Insert the new category
 INSERT INTO
-  `categoriaprimaria` (NomeCategoria, DescrizioneCategoria)
+  `categoriaprimaria` (`NomeCategoria`, `DescrizioneCategoria`)
 VALUES
   (_NomeCategoria, _DescrizioneCategoria);
+
+-- Get the last inserted category ID
+SET
+  new_category_id = LAST_INSERT_ID();
+
+-- Associate the category with the profile
+INSERT INTO
+  `profili_categoriaprimaria` (`IDProfilo`, `IDCategoriaPrimaria`)
+VALUES
+  (_IDProfilo, new_category_id);
+
+-- Return the new category ID
+SELECT
+  new_category_id;
 
 END $ $ DROP PROCEDURE IF EXISTS `InsertProfile` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertProfile` (
   IN `_NomeProfilo` VARCHAR(255),
@@ -1106,28 +1123,14 @@ CREATE TABLE `credit` (
   `IDCategoriaPrimaria` int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TRIGGER IF EXISTS `create_transaction_on_credit_insert`;
+DROP TRIGGER IF EXISTS `check_credit_expiry`;
 
-DELIMITER $ $ CREATE TRIGGER `create_transaction_on_credit_insert`
+DELIMITER $ $ CREATE TRIGGER `check_credit_expiry`
 AFTER
-INSERT
-  ON `credit` FOR EACH ROW BEGIN
-INSERT INTO
-  transazione (
-    Is_Expense,
-    Importo,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria
-  )
-VALUES
-  (
-    1,
-    NEW.ImportoCredito,
-    NEW.IDConto,
-    NEW.DataConcessione,
-    NEW.IDCategoriaPrimaria
-  );
+UPDATE
+  ON `credit` FOR EACH ROW BEGIN IF NEW.DataEstinsione = CURDATE() THEN CALL create_transaction_on_credit_termination(NEW.ID);
+
+END IF;
 
 END $ $ DELIMITER;
 
@@ -1144,28 +1147,14 @@ CREATE TABLE `debit` (
   `IDCategoriaPrimaria` int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TRIGGER IF EXISTS `create_transaction_on_debit_insert`;
+DROP TRIGGER IF EXISTS `check_debit_expiry`;
 
-DELIMITER $ $ CREATE TRIGGER `create_transaction_on_debit_insert`
+DELIMITER $ $ CREATE TRIGGER `check_debit_expiry`
 AFTER
-INSERT
-  ON `debit` FOR EACH ROW BEGIN
-INSERT INTO
-  transazione (
-    Is_Expense,
-    Importo,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria
-  )
-VALUES
-  (
-    0,
-    NEW.ImportoDebito,
-    NEW.IDConto,
-    NEW.DataConcessione,
-    NEW.IDCategoriaPrimaria
-  );
+UPDATE
+  ON `debit` FOR EACH ROW BEGIN IF NEW.DataEstinsione = CURDATE() THEN CALL create_transaction_on_debit_termination(NEW.ID);
+
+END IF;
 
 END $ $ DELIMITER;
 

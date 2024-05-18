@@ -25,4 +25,7 @@ function logEvent($action, $details) {
     // Inserisce il documento nella collezione
     $logCollection->insertOne($logEntry);
 }
+
+
+
 ?>

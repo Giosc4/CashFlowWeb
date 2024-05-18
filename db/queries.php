@@ -1,7 +1,7 @@
 <?php
 $insertTransaction  = "CALL InsertTransaction(?, ?, ?, ?, ?, ?)";
-$insertConto  = "CALL InsertConto(?, ?)";
-$insertPrimaryCategory  = "CALL  InsertPrimaryCategory(?, ?)";
+$insertConto  = "CALL InsertConto(?, ?, ?)";
+$insertPrimaryCategory  = "CALL  InsertPrimaryCategory(?, ?,?)";
 $insertSecondaryCategory  = "CALL InsertSecondaryCategory(?, ?, ?)";
 $insertRisparmio  =  "CALL InsertSavings(?, ?, ?, ?, ?)";
 $insertDebit  = "CALL InsertDebt(?, ?, ?, ?, ?, ?, ?)";
@@ -9,8 +9,6 @@ $insertCredit  = "CALL InsertCredit(?, ?, ?, ?, ?, ?, ?)";
 $insertBudget  = "CALL InsertBudget(?, ?, ?, ?, ?)";
 $insertTransactionTemplate  = "CALL InsertTransactionTemplate(?, ?, ?, ?, ?, ?, ?)";
 $insertProfile  = "CALL InsertProfile(?, ?, ?)";
-$associateProfileToConto  = "CALL AssociateProfileToConto(?, ?)";
-$associateProfileToCategory  = "CALL AssociateProfileToCategory(?, ?)";
 
 $selectAllTransactions  = "CALL GetAllTransazioni()";
 $selectAllConti  = "CALL GetAllConti()`";

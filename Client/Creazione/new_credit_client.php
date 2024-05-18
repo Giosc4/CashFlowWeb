@@ -29,7 +29,7 @@ if (!isset($_SESSION['email'])) {
         <label for="creditConcessioneDate">Data Concessione Credito:</label>
         <input type="date" id="creditConcessioneDate" name="creditConcessioneDate" value="<?php echo date("Y-m-d"); ?>" required><br>
         <label for="creditEstinsioneDate">Data Estinsione Credito:</label>
-        <input type="date" id="creditEstinsioneDate" name="creditEstinsioneDate" value="<?php echo date("Y-m-d"); ?>" required><br>
+        <input type="date" id="creditEstinsioneDate" name="creditEstinsioneDate" value="<?php echo date("Y-m-d"); ?>" ><br>
 
         <label for="contoId">Seleziona un Conto:</label>
         <?php

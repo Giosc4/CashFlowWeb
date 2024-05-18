@@ -21,21 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["categoryName"]) && isset($_POST["categoryDescription"])) {
         $categoryName = $_POST['categoryName'];
         $categoryDescription = $_POST['categoryDescription'];
+        $profiloID = getIDProfiloByEmail($_SESSION['email']);
 
-        $IDCategory = createPrimaryCategory($categoryName, $categoryDescription);
+        $IDCategory = createPrimaryCategory($categoryName, $categoryDescription, $profiloID);
         if ($IDCategory !== false) {
-            $profiloID = getIDProfiloByEmail($_SESSION['email']);
-
-            // Ensure profilID is not false before proceeding
-            if ($profiloID !== false && $profiloID !== null) {
-                associateProfileToCategory($profiloID, $IDCategory);
-                header("Location: ../../client/index.php");
-                exit();
-            } else {
-                $_SESSION['error'] = "Failed to retrieve profile ID for email: " . $_SESSION['email'];
-                header("Location: ../../client/log_in_profile_client.php");
-                exit();
-            }
+            header("Location: ../../client/index.php");
+            exit();
         } else {
             $_SESSION['error'] = "Failed to create primary category: $categoryName";
             header("Location: ../../client/log_in_profile_client.php");

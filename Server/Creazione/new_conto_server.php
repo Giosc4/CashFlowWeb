@@ -21,17 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nome = $_POST["nome"];
         $saldo = $_POST["saldo"] ?? 0;
 
-        // Crea il conto
-        $contoID = createConto($nome, $saldo);
-
-        // Associa il conto al profilo
-        if ($contoID !== false) {
-            // Ottieni l'ID del profilo dall'ID dell'utente loggato
-            $profiloID = getIDProfiloByEmail($_SESSION['email']);
-
-            // Associa il conto al profilo
-            associaContoAProfilo($profiloID, $contoID);
-        }
+        $profiloID = getIDProfiloByEmail($_SESSION['email']);
+        $contoID = createConto($nome, $saldo, $profiloID);
 
         header("Location: ../../client/index.php");
         exit();
