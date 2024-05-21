@@ -14,7 +14,6 @@ require_once '../../db/queries.php';
 require_once '../../db/read_functions.php';
 require_once '../../db/write_functions.php';
 
-
 // Get budget ID from query parameters
 $id = $_GET['id'] ?? null;
 
@@ -32,13 +31,85 @@ if (!$budget) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Budget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+               
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .delete-button {
+            background-color: red;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+    </style>
 </head>
+
 <body>
+    <?php include '../navbar.php'; ?> <br><br>
+
     <h1>Edit Budget</h1>
     <?php if ($budget) : ?>
         <form action="../../server/modifica/edit_budget_server.php" method="post">
@@ -89,11 +160,12 @@ if (!$budget) {
         </form>
         <form action="../../server/eliminazione/delete_budget.php" method="post">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($budget['ID']); ?>">
-            <button type="submit" style="background-color: red; color: white;">Elimina Budget</button>
+            <button type="submit" class="delete-button">Elimina Budget</button>
         </form>
-
     <?php else : ?>
         <p>Budget not found.</p>
-    <?php endif; ?>
+    <?php endif; ?>    <br> <br> <?php require('../footer.php') ?>
+
 </body>
+
 </html>

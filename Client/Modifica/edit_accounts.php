@@ -36,9 +36,81 @@ if (!$account) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifica Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+               
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"],
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+        }
+
+        button:hover,
+        input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
+<?php include '../navbar.php'; ?> <br><br>
     <h1>Modifica Account</h1>
     <?php if ($account) : ?>
         <form action="../../Server/modifica/edit_account_server.php" method="POST">
@@ -62,13 +134,13 @@ if (!$account) {
         </form>
         <form action="../../server/eliminazione/delete_account.php" method="post">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($accountId); ?>">
-            <button type="submit" style="background-color: red; color: white;">Cancella Conto</button>
+            <button type="submit">Cancella Conto</button>
         </form>
 
-
     <?php else : ?>
-        <p>Account non trovato.</p>
-    <?php endif; ?>
+        <p class="error">Account non trovato.</p>
+    <?php endif; ?>    <br> <br> <?php require('../footer.php') ?>
+
 </body>
 
 </html>

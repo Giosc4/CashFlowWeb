@@ -8,16 +8,80 @@ if (!isset($_SESSION['email'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creazione Transazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+               
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
+    <?php require('../navbar.php') ?> <br> <br>
     <h1>Creazione Transazione</h1>
     <form action="../../server/creazione/new_transaction_server.php" method="post">
         <label for="isExpense">è una spesa:</label>
@@ -28,15 +92,14 @@ if (!isset($_SESSION['email'])) {
 
         <?php
         require_once '../../db/read_functions.php';
-        global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail;
+        global $selectContoFromEmail, $selectCategoriaPrimariaFromEmail, $selectCategoriaSecondariaFromEmail;
         $accounts = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         $primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
-        $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecondariaFromEmail);
         ?>
 
         <label for="accountId">Seleziona un Conto:</label>
         <select id="accountId" name="accountId" required>
-            <option value="" disabled selected>Per favore select the Account</option>
+            <option value="" disabled selected>Per favore seleziona un Conto</option>
             <?php foreach ($accounts as $account) : ?>
                 <option value="<?php echo $account['ID']; ?>"><?php echo $account['NomeConto']; ?></option>
             <?php endforeach; ?>
@@ -52,10 +115,10 @@ if (!isset($_SESSION['email'])) {
 
         <label for="secondaryCategoryId">Seleziona la Categoria Secondaria:</label>
         <select id="secondaryCategoryId" name="secondaryCategoryId">
-            <option value="" disabled selected>Per favore Seleziona la Categoria Secondaria</option>
+            <option value="" disabled selected>Per favore seleziona la Categoria Secondaria</option>
         </select><br>
 
-        <label for="transactionDate">Transaction Date:</label>
+        <label for="transactionDate">Data della Transazione:</label>
         <input type="date" id="transactionDate" name="transactionDate" value="<?php echo date("Y-m-d"); ?>" required><br>
 
         <input type="submit" value="Crea Transazione">
@@ -75,7 +138,7 @@ if (!isset($_SESSION['email'])) {
                 success: function(categories) {
                     var $secondarySelect = $('#secondaryCategoryId');
                     $secondarySelect.empty();
-                    $secondarySelect.append('<option disabled selected>Per favore Seleziona la Categoria Secondaria</option>');
+                    $secondarySelect.append('<option disabled selected>Per favore seleziona la Categoria Secondaria</option>');
                     categories.forEach(function(category) {
                         $secondarySelect.append($('<option>', {
                             value: category.ID,
@@ -88,7 +151,8 @@ if (!isset($_SESSION['email'])) {
                 }
             });
         }
-    </script>
+    </script>    <br> <br> <?php require('../footer.php') ?>
+
 </body>
 
 </html>

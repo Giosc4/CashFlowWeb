@@ -46,6 +46,8 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
 </head>
 
 <body>
+    <?php include '../navbar.php'; ?> <br><br>
+
     <h1>Modifica Template Transazione</h1>
     <form action="../../server/modifica/edit_template_transaction_server.php" method="post">
         <input type="hidden" name="templateId" value="<?php echo htmlspecialchars($templateId); ?>">
@@ -139,7 +141,8 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
         $(document).ready(function() {
             updateSecondaryCategories();
         });
-    </script>
+    </script>    <br> <br> <?php require('../footer.php') ?>
+
 </body>
 
 </html>

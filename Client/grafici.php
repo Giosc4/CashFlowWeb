@@ -188,6 +188,8 @@ foreach ($secondaryCategories as $category) {
             }
         });
     </script>
+        <br> <br> <?php require('footer.php') ?>
+
 </body>
 
 </html>

@@ -62,7 +62,7 @@
             <a href="/CashFlowWeb/Client/index.php">Home</a>
             <a href="/CashFlowWeb/Client/grafici.php">Grafici</a>
             <a href="/CashFlowWeb/Client/exportData.php">Genera Report CSV</a>
-            <a href="/CashFlowWeb/Client/logout.php">Logout</a>
+            <a href="/CashFlowWeb/Server/logout.php">Logout</a>
         </div>
         <div>
             <h3 style="color: white;">Creazione</h3>

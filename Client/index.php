@@ -53,6 +53,8 @@ if (!isset($_SESSION['email'])) {
         displayAllTables();
         ?>
     </div>
+    <br> <br> <?php require('footer.php') ?>
+
 </body>
 
 </html>
