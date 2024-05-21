@@ -27,10 +27,18 @@ if (!isset($_SESSION['email'])) {
             font-weight: bold;
             margin-bottom: 20px;
         }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+        }
     </style>
 </head>
 
 <body>
+    <?php require('navbar.php') ?>
+
     <h1>Home Page</h1>
     <?php
     if (isset($_SESSION['error'])) {
@@ -38,28 +46,13 @@ if (!isset($_SESSION['email'])) {
         unset($_SESSION['error']);
     }
     ?>
-    <div>
-        <h3>Creazione</h3>
-        <ol>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_transaction_client.php">Creazione Transazione</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_conto_client.php">Creazione Conto</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_categoria_primaria_client.php">Creazione Categoria Primaria</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_categoria_secondaria_client.php">Creazione Categoria Secondaria</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_template_transaction_client.php"> Creazione Template Transazione</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_risparmio_client.php">Creazione di un Risparmio</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_debit_client.php">Creazione di un Debito</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_credit_client.php">Creazione di un Credito</a></li>
-            <li><a href="/CashFlowWeb/Client/Creazione/new_budget_client.php">Creazione di un Budget</a></li>
-        </ol>
+
+    <div class="container">
+        <h2>Contenuto delle tabelle</h2>
+        <?php
+        displayAllTables();
+        ?>
     </div>
-
-    <a href="/CashFlowWeb/server/logout.php">Logout</a><br><br>
-    <a href="/CashFlowWeb/Client/exportData.php">Genera Report CSV</a>
-
-    <h2>Contenuto delle tabelle</h2>
-    <?php
-    displayAllTables();
-    ?>
 </body>
 
 </html>

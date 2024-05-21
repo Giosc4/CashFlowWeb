@@ -41,7 +41,7 @@ function displayTableTemplate($data, $tableName)
     echo "<h3>$tableName</h3>";
 
     if (!empty($data)) {
-        echo "<table border='1'>";
+        echo "<table border='1'>"; 
         echo "<tr>";
 
         // Stampa gli header della tabella
