@@ -22,6 +22,13 @@ if (!isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
         .error-message {
             color: red;
             font-weight: bold;
@@ -32,6 +39,58 @@ if (!isset($_SESSION['email'])) {
             width: 90%;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background-color: red;
+            color: white;
+        }
+
+        .btn-create {
+            background-color: green;
+            color: white;
         }
     </style>
 </head>

@@ -42,65 +42,158 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifica Template Transazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        input[type="submit"],
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background-color: red;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:hover {
+            background-color: darkred;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
     <?php include '../navbar.php'; ?> <br><br>
 
-    <h1>Modifica Template Transazione</h1>
-    <form action="../../server/modifica/edit_template_transaction_server.php" method="post">
-        <input type="hidden" name="templateId" value="<?php echo htmlspecialchars($templateId); ?>">
+    <div class="container">
+        <h1>Modifica Template Transazione</h1>
+        <form action="../../server/modifica/edit_template_transaction_server.php" method="post">
+            <input type="hidden" name="templateId" value="<?php echo htmlspecialchars($templateId); ?>">
 
-        <label for="templateName">Nome del Template:</label>
-        <input type="text" id="templateName" name="templateName" value="<?php echo htmlspecialchars($templateData['NomeTemplate']); ?>" required><br>
+            <div class="form-group">
+                <label for="templateName">Nome del Template:</label>
+                <input type="text" id="templateName" name="templateName" value="<?php echo htmlspecialchars($templateData['NomeTemplate']); ?>" required>
+            </div>
 
-        <label for="isExpense">è una spesa:</label>
-        <input type="checkbox" id="isExpense" name="isExpense" <?php if ($templateData['Is_Expense']) echo 'checked'; ?>><br>
+            <div class="form-group">
+                <label for="isExpense">è una spesa:</label>
+                <input type="checkbox" id="isExpense" name="isExpense" <?php if ($templateData['Is_Expense']) echo 'checked'; ?>>
+            </div>
 
-        <label for="amount">Importo:</label>
-        <input type="number" id="amount" name="amount" value="<?php echo htmlspecialchars($templateData['Importo']); ?>" step="0.01" required><br>
+            <div class="form-group">
+                <label for="amount">Importo:</label>
+                <input type="number" id="amount" name="amount" value="<?php echo htmlspecialchars($templateData['Importo']); ?>" step="0.01" required>
+            </div>
 
-        <label for="accountId">Seleziona un Conto:</label>
-        <select id="accountId" name="accountId" required>
-            <option value="" disabled>Seleziona un Conto</option>
-            <?php foreach ($accounts as $account) : ?>
-                <option value="<?php echo $account['ID']; ?>" <?php echo ($account['ID'] == $templateData['IDConto']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($account['NomeConto']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br>
+            <div class="form-group">
+                <label for="accountId">Seleziona un Conto:</label>
+                <select id="accountId" name="accountId" required>
+                    <option value="" disabled>Seleziona un Conto</option>
+                    <?php foreach ($accounts as $account) : ?>
+                        <option value="<?php echo $account['ID']; ?>" <?php echo ($account['ID'] == $templateData['IDConto']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($account['NomeConto']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
-        <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
-            <option value="" disabled>Seleziona una Categoria Primaria</option>
-            <?php foreach ($primaryCategories as $category) : ?>
-                <option value="<?php echo $category['ID']; ?>" <?php echo ($category['ID'] == $templateData['IDCategoriaPrimaria']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($category['NomeCategoria']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br>
+            <div class="form-group">
+                <label for="primaryCategoryId">Seleziona una Categoria Primaria:</label>
+                <select id="primaryCategoryId" name="primaryCategoryId" required onchange="updateSecondaryCategories();">
+                    <option value="" disabled>Seleziona una Categoria Primaria</option>
+                    <?php foreach ($primaryCategories as $category) : ?>
+                        <option value="<?php echo $category['ID']; ?>" <?php echo ($category['ID'] == $templateData['IDCategoriaPrimaria']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($category['NomeCategoria']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <label for="secondaryCategoryId">Seleziona una Categoria Secondaria:</label>
-        <select id="secondaryCategoryId" name="secondaryCategoryId">
-            <option value="" disabled>Seleziona una Categoria Secondaria</option>
-            <?php foreach ($secondaryCategories as $category) : ?>
-                <option value="<?php echo $category['ID']; ?>" data-primary-id="<?php echo $category['IDCategoriaPrimaria']; ?>" <?php echo ($category['ID'] == $templateData['IDCategoriaSecondaria']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($category['NomeCategoria']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br>
+            <div class="form-group">
+                <label for="secondaryCategoryId">Seleziona una Categoria Secondaria:</label>
+                <select id="secondaryCategoryId" name="secondaryCategoryId">
+                    <option value="" disabled>Seleziona una Categoria Secondaria</option>
+                    <?php foreach ($secondaryCategories as $category) : ?>
+                        <option value="<?php echo $category['ID']; ?>" data-primary-id="<?php echo $category['IDCategoriaPrimaria']; ?>" <?php echo ($category['ID'] == $templateData['IDCategoriaSecondaria']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($category['NomeCategoria']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <label for="description">Descrizione:</label>
-        <textarea id="description" name="description"><?php echo htmlspecialchars($templateData['Descrizione']); ?></textarea><br>
+            <div class="form-group">
+                <label for="description">Descrizione:</label>
+                <textarea id="description" name="description"><?php echo htmlspecialchars($templateData['Descrizione']); ?></textarea>
+            </div>
 
-        <input type="submit" value="Aggiorna Transazione">
-    </form>
+            <input type="submit" value="Aggiorna Transazione">
+        </form>
 
-    <form action="../../server/eliminazione/delete_template_transactions.php" method="post">
-        <input type="hidden" name="id" value="<?php echo htmlspecialchars($templateData['ID']); ?>">
-        <button type="submit" style="background-color: red; color: white;">Elimina Template Transazione</button>
-    </form>
+        <form action="../../server/eliminazione/delete_template_transactions.php" method="post">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($templateData['ID']); ?>">
+            <button type="submit">Elimina Template Transazione</button>
+        </form>
+    </div>
+
 
     <script>
         function updateSecondaryCategories() {
@@ -141,7 +234,7 @@ $secondaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaSecon
         $(document).ready(function() {
             updateSecondaryCategories();
         });
-    </script>    <br> <br> <?php require('../footer.php') ?>
+    </script> <br> <br> <?php require('../footer.php') ?>
 
 </body>
 

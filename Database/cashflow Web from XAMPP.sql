@@ -4,11 +4,11 @@ SET
 SET
   time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS `cashflowweb` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS cashflowweb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE `cashflowweb`;
+USE cashflowweb;
 
-DELIMITER $ $ DROP PROCEDURE IF EXISTS `AllocateSavings` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavings` (IN `SavingsID` INT) BEGIN DECLARE StartDate DATE;
+DELIMITER $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavings` (IN `SavingsID` INT) BEGIN DECLARE StartDate DATE;
 
 DECLARE EndDate DATE;
 
@@ -91,7 +91,7 @@ END IF;
 
 END IF;
 
-END $ $ DROP PROCEDURE IF EXISTS `AllocateSavingsDaily` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavingsDaily` () BEGIN DECLARE done INT DEFAULT FALSE;
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `AllocateSavingsDaily` () BEGIN DECLARE done INT DEFAULT FALSE;
 
 DECLARE aSavingsID INT;
 
@@ -123,7 +123,7 @@ END LOOP;
 
 CLOSE cur;
 
-END $ $ DROP PROCEDURE IF EXISTS `CreateTransactionFromTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `CreateTransactionFromTemplate` (IN `TemplateID` INT) BEGIN DECLARE ExpenseType TINYINT;
 
 DECLARE Amount DECIMAL(10, 2);
 
@@ -173,7 +173,7 @@ VALUES
     SecondaryCategoryID
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `create_transaction_on_credit_termination` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_credit_termination` (IN `creditID` INT) BEGIN DECLARE currentDate DATE;
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_credit_termination` (IN `creditID` INT) BEGIN DECLARE currentDate DATE;
 
 DECLARE creditAmount DECIMAL(10, 2);
 
@@ -221,7 +221,7 @@ DELETE FROM
 WHERE
   ID = creditID;
 
-END $ $ DROP PROCEDURE IF EXISTS `create_transaction_on_debit_termination` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_debit_termination` (IN `debitID` INT) BEGIN DECLARE currentDate DATE;
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `create_transaction_on_debit_termination` (IN `debitID` INT) BEGIN DECLARE currentDate DATE;
 
 DECLARE debitAmount DECIMAL(10, 2);
 
@@ -267,61 +267,61 @@ DELETE FROM
 WHERE
   ID = debitID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteBudget` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteBudget` (IN `p_ID` INT) BEGIN
 DELETE FROM
   budgetmax
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteConto` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteConto` (IN `p_ID` INT) BEGIN
 DELETE FROM
   conto
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteCredito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteCredito` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteCredito` (IN `p_ID` INT) BEGIN
 DELETE FROM
   credit
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteDebito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteDebito` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteDebito` (IN `p_ID` INT) BEGIN
 DELETE FROM
   debit
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeletePrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeletePrimaryCategory` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeletePrimaryCategory` (IN `p_ID` INT) BEGIN
 DELETE FROM
   categoriaprimaria
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteRisparmio` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteRisparmio` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteRisparmio` (IN `p_ID` INT) BEGIN
 DELETE FROM
   risparmi
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteSecondaryCategory` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteSecondaryCategory` (IN `p_ID` INT) BEGIN
 DELETE FROM
   categoriasecondaria
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteTemplateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTemplateTransaction` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTemplateTransaction` (IN `p_ID` INT) BEGIN
 DELETE FROM
   template_transazioni
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `DeleteTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTransaction` (IN `p_ID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `DeleteTransaction` (IN `p_ID` INT) BEGIN
 DELETE FROM
   transazione
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `GenerateFinancialReport` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GenerateFinancialReport` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GenerateFinancialReport` (
   IN `startDate` DATE,
   IN `endDate` DATE,
   IN `transactionType` TINYINT,
@@ -365,67 +365,67 @@ WHERE
     OR t.IDCategoriaSecondaria = secondaryCategoryId
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllBudget` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllBudget` () BEGIN
 SELECT
   *
 FROM
   `budgetmax`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllCategoriePrimarie` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategoriePrimarie` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategoriePrimarie` () BEGIN
 SELECT
   *
 FROM
   `categoriaprimaria`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllCategorieSecondarie` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategorieSecondarie` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCategorieSecondarie` () BEGIN
 SELECT
   *
 FROM
   `categoriasecondaria`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllConti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllConti` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllConti` () BEGIN
 SELECT
   *
 FROM
   `conto`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllCrediti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCrediti` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllCrediti` () BEGIN
 SELECT
   *
 FROM
   `credit`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllDebiti` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllDebiti` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllDebiti` () BEGIN
 SELECT
   *
 FROM
   `debit`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllProfili` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllProfili` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllProfili` () BEGIN
 SELECT
   *
 FROM
   `Profili`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllRisparmi` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllRisparmi` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllRisparmi` () BEGIN
 SELECT
   *
 FROM
   `risparmi`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllTransazioni` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioni` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioni` () BEGIN
 SELECT
   *
 FROM
   `transazione`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetAllTransazioniTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioniTemplate` () BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetAllTransazioniTemplate` () BEGIN
 SELECT
   *
 FROM
   `template_transazioni`;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetBudgetByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetBudgetByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetBudgetByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   budgetmax.*
 FROM
@@ -436,7 +436,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetCategoriaPrimariaByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaPrimariaByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaPrimariaByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   categoriaprimaria.*
 FROM
@@ -446,7 +446,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetCategoriaSecondariaByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaSecondariaByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCategoriaSecondariaByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   categoriasecondaria.*
 FROM
@@ -457,7 +457,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetContoByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetContoByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetContoByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   conto.*
 FROM
@@ -467,7 +467,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetCreditiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCreditiByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetCreditiByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   credit.*
 FROM
@@ -478,7 +478,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetDebitiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetDebitiByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetDebitiByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   debit.*
 FROM
@@ -489,7 +489,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetRisparmiByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetRisparmiByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetRisparmiByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   risparmi.*
 FROM
@@ -500,7 +500,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetTransazioniByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   transazione.*
 FROM
@@ -511,7 +511,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `GetTransazioniTemplateByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniTemplateByEmail` (IN `email` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `GetTransazioniTemplateByEmail` (IN `email` VARCHAR(255)) BEGIN
 SELECT
   template_transazioni.*
 FROM
@@ -522,7 +522,7 @@ FROM
 WHERE
   profili.Email = email;
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertBudget` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertBudget` (
   IN `_NomeBudget` VARCHAR(255),
   IN `_ImportoMax` DECIMAL(10, 2),
   IN `_DataInizio` DATE,
@@ -546,33 +546,29 @@ VALUES
     _IDPrimaryCategory
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertConto` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertConto` (
   IN `_NomeConto` VARCHAR(255),
   IN `_Saldo` DECIMAL(10, 2),
   IN `_IDProfilo` INT
 ) BEGIN DECLARE new_conto_id INT;
 
--- Insert the new account
 INSERT INTO
   `conto` (`NomeConto`, `Saldo`)
 VALUES
   (_NomeConto, _Saldo);
 
--- Get the last inserted account ID
 SET
   new_conto_id = LAST_INSERT_ID();
 
--- Associate the account with the profile
 INSERT INTO
   `assconti` (`IDProfilo`, `IDConto`)
 VALUES
   (_IDProfilo, new_conto_id);
 
--- Return the new account ID
 SELECT
   new_conto_id;
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertCredit` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertCredit` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertCredit` (
   IN `_ImportoCredito` DECIMAL(10, 2),
   IN `_NomeImporto` VARCHAR(255),
   IN `_DataConcessione` DATE,
@@ -602,7 +598,7 @@ VALUES
     _IDCategoriaPrimaria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertDebt` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertDebt` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertDebt` (
   IN `_ImportoDebito` DECIMAL(10, 2),
   IN `_NomeImporto` VARCHAR(255),
   IN `_DataConcessione` DATE,
@@ -632,33 +628,29 @@ VALUES
     _IDCategoriaPrimaria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `insertPrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `insertPrimaryCategory` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `insertPrimaryCategory` (
   IN `_NomeCategoria` VARCHAR(255),
   IN `_DescrizioneCategoria` TEXT,
   IN `_IDProfilo` INT
 ) BEGIN DECLARE new_category_id INT;
 
--- Insert the new category
 INSERT INTO
   `categoriaprimaria` (`NomeCategoria`, `DescrizioneCategoria`)
 VALUES
   (_NomeCategoria, _DescrizioneCategoria);
 
--- Get the last inserted category ID
 SET
   new_category_id = LAST_INSERT_ID();
 
--- Associate the category with the profile
 INSERT INTO
   `profili_categoriaprimaria` (`IDProfilo`, `IDCategoriaPrimaria`)
 VALUES
   (_IDProfilo, new_category_id);
 
--- Return the new category ID
 SELECT
   new_category_id;
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertProfile` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertProfile` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertProfile` (
   IN `_NomeProfilo` VARCHAR(255),
   IN `_Email` VARCHAR(255),
   IN `_Password` VARCHAR(255)
@@ -668,7 +660,7 @@ INSERT INTO
 VALUES
   (_NomeProfilo, _Email, _Password);
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertSavings` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSavings` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSavings` (
   IN `_ImportoRisparmiato` DECIMAL(10, 2),
   IN `_DataInizio` DATE,
   IN `_DataFine` DATE,
@@ -692,7 +684,7 @@ VALUES
     _IDCategoriaPrimaria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSecondaryCategory` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertSecondaryCategory` (
   IN `_IDCategoriaPrimaria` INT,
   IN `_NomeCategoria` VARCHAR(255),
   IN `_DescrizioneCategoria` TEXT
@@ -710,7 +702,7 @@ VALUES
     _DescrizioneCategoria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransaction` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransaction` (
   IN `_Is_Expense` BOOLEAN,
   IN `_Importo` DECIMAL(10, 2),
   IN `_IDConto` INT,
@@ -737,7 +729,7 @@ VALUES
     _IDCategoriaSecondaria
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `InsertTransactionTemplate` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransactionTemplate` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `InsertTransactionTemplate` (
   IN `_NomeTemplate` VARCHAR(255),
   IN `_Is_Expense` BOOLEAN,
   IN `_Importo` DECIMAL(10, 2),
@@ -767,7 +759,7 @@ VALUES
     _Descrizione
   );
 
-END $ $ DROP PROCEDURE IF EXISTS `selectAccountById` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectAccountById` (IN `accountID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectAccountById` (IN `accountID` INT) BEGIN
 SELECT
   *
 FROM
@@ -775,7 +767,7 @@ FROM
 WHERE
   ID = accountID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectBudgetFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectBudgetFromID` (IN `budgetID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectBudgetFromID` (IN `budgetID` INT) BEGIN
 SELECT
   *
 FROM
@@ -783,7 +775,7 @@ FROM
 WHERE
   ID = budgetID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectCategoriaPrimariaById` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCategoriaPrimariaById` (IN `primaryID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCategoriaPrimariaById` (IN `primaryID` INT) BEGIN
 SELECT
   *
 FROM
@@ -791,7 +783,7 @@ FROM
 WHERE
   ID = primaryID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectCreditFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCreditFromID` (IN `creditID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectCreditFromID` (IN `creditID` INT) BEGIN
 SELECT
   *
 FROM
@@ -799,7 +791,7 @@ FROM
 WHERE
   ID = creditID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectDebitFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectDebitFromID` (IN `debitID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectDebitFromID` (IN `debitID` INT) BEGIN
 SELECT
   *
 FROM
@@ -807,7 +799,7 @@ FROM
 WHERE
   ID = debitID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectIdContoFromNome` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIdContoFromNome` (IN `accountName` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIdContoFromNome` (IN `accountName` VARCHAR(255)) BEGIN
 SELECT
   ID
 FROM
@@ -815,7 +807,7 @@ FROM
 WHERE
   NomeConto = accountName;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectIDProfileByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIDProfileByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectIDProfileByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
 SELECT
   ID
 FROM
@@ -823,7 +815,7 @@ FROM
 WHERE
   Email = userEmail;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectSavingFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSavingFromID` (IN `savingID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSavingFromID` (IN `savingID` INT) BEGIN
 SELECT
   *
 FROM
@@ -831,7 +823,7 @@ FROM
 WHERE
   ID = savingID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectSecondaryCategoryFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryCategoryFromID` (IN `secondaryID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryCategoryFromID` (IN `secondaryID` INT) BEGIN
 SELECT
   *
 FROM
@@ -839,7 +831,7 @@ FROM
 WHERE
   ID = secondaryID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectSecondaryFromPrimary` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryFromPrimary` (IN `primaryID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectSecondaryFromPrimary` (IN `primaryID` INT) BEGIN
 SELECT
   *
 FROM
@@ -847,7 +839,7 @@ FROM
 WHERE
   IDCategoriaPrimaria = primaryID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectTemplateTransactionFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTemplateTransactionFromID` (IN `templateID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTemplateTransactionFromID` (IN `templateID` INT) BEGIN
 SELECT
   *
 FROM
@@ -855,7 +847,7 @@ FROM
 WHERE
   ID = templateID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectTransactionFromID` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTransactionFromID` (IN `transactionID` INT) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectTransactionFromID` (IN `transactionID` INT) BEGIN
 SELECT
   *
 FROM
@@ -863,7 +855,7 @@ FROM
 WHERE
   ID = transactionID;
 
-END $ $ DROP PROCEDURE IF EXISTS `selectUserByEmail` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectUserByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `selectUserByEmail` (IN `userEmail` VARCHAR(255)) BEGIN
 SELECT
   *
 FROM
@@ -871,7 +863,7 @@ FROM
 WHERE
   Email = userEmail;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateBudget` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateBudget` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateBudget` (
   IN `p_NomeBudget` VARCHAR(255),
   IN `p_ImportoMax` DECIMAL(10, 2),
   IN `p_DataInizio` DATE,
@@ -890,7 +882,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateConto` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateConto` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateConto` (
   IN `p_NomeConto` VARCHAR(255),
   IN `p_Saldo` DECIMAL(10, 2),
   IN `p_ID` INT
@@ -903,7 +895,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateCredito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateCredito` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateCredito` (
   IN `p_ImportoCredito` DECIMAL(10, 2),
   IN `p_NomeImporto` VARCHAR(255),
   IN `p_DataConcessione` DATE,
@@ -926,7 +918,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateDebito` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateDebito` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateDebito` (
   IN `p_ImportoDebito` DECIMAL(10, 2),
   IN `p_NomeImporto` VARCHAR(255),
   IN `p_DataConcessione` DATE,
@@ -949,7 +941,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdatePrimaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdatePrimaryCategory` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdatePrimaryCategory` (
   IN `p_NomeCategoria` VARCHAR(255),
   IN `p_DescrizioneCategoria` TEXT,
   IN `p_ID` INT
@@ -962,7 +954,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateRisparmio` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateRisparmio` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateRisparmio` (
   IN `p_ImportoRisparmiato` DECIMAL(10, 2),
   IN `p_DataInizio` DATE,
   IN `p_DataFine` DATE,
@@ -979,7 +971,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateSecondaryCategory` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateSecondaryCategory` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateSecondaryCategory` (
   IN `p_NomeCategoria` VARCHAR(255),
   IN `p_DescrizioneCategoria` TEXT,
   IN `p_IDCategoriaPrimaria` INT,
@@ -994,7 +986,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateTemplateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTemplateTransaction` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTemplateTransaction` (
   IN `p_NomeTemplate` VARCHAR(255),
   IN `p_Is_Expense` BOOLEAN,
   IN `p_Importo` DECIMAL(10, 2),
@@ -1017,7 +1009,7 @@ SET
 WHERE
   ID = p_ID;
 
-END $ $ DROP PROCEDURE IF EXISTS `UpdateTransaction` $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTransaction` (
+END $ $ CREATE DEFINER = `root` @`localhost` PROCEDURE `UpdateTransaction` (
   IN `p_Is_Expense` BOOLEAN,
   IN `p_Importo` DECIMAL(10, 2),
   IN `p_IDConto` INT,
@@ -1040,25 +1032,19 @@ WHERE
 
 END $ $ DELIMITER;
 
-DROP TABLE IF EXISTS `assconti`;
-
-CREATE TABLE `assconti` (
-  `IDProfilo` int(11) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL
+CREATE TABLE assconti (
+  IDProfilo int(11) DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `budgetmax`;
-
-CREATE TABLE `budgetmax` (
-  `ID` int(11) NOT NULL,
-  `NomeBudget` varchar(255) DEFAULT NULL,
-  `ImportoMax` decimal(10, 2) DEFAULT NULL,
-  `DataInizio` date DEFAULT NULL,
-  `DataFine` date DEFAULT NULL,
-  `IDPrimaryCategory` int(11) DEFAULT NULL
+CREATE TABLE budgetmax (
+  ID int(11) NOT NULL,
+  NomeBudget varchar(255) DEFAULT NULL,
+  ImportoMax decimal(10, 2) DEFAULT NULL,
+  DataInizio date DEFAULT NULL,
+  DataFine date DEFAULT NULL,
+  IDPrimaryCategory int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-DROP TRIGGER IF EXISTS `before_budget_insert_check`;
 
 DELIMITER $ $ CREATE TRIGGER `before_budget_insert_check` BEFORE
 INSERT
@@ -1085,45 +1071,35 @@ END IF;
 
 END $ $ DELIMITER;
 
-DROP TABLE IF EXISTS `categoriaprimaria`;
-
-CREATE TABLE `categoriaprimaria` (
-  `ID` int(11) NOT NULL,
-  `NomeCategoria` varchar(255) DEFAULT NULL,
-  `DescrizioneCategoria` varchar(255) DEFAULT NULL
+CREATE TABLE categoriaprimaria (
+  ID int(11) NOT NULL,
+  NomeCategoria varchar(255) DEFAULT NULL,
+  DescrizioneCategoria varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `categoriasecondaria`;
-
-CREATE TABLE `categoriasecondaria` (
-  `ID` int(11) NOT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL,
-  `NomeCategoria` varchar(255) DEFAULT NULL,
-  `DescrizioneCategoria` varchar(255) DEFAULT NULL
+CREATE TABLE categoriasecondaria (
+  ID int(11) NOT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL,
+  NomeCategoria varchar(255) DEFAULT NULL,
+  DescrizioneCategoria varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `conto`;
-
-CREATE TABLE `conto` (
-  `ID` int(11) NOT NULL,
-  `NomeConto` varchar(255) DEFAULT NULL,
-  `Saldo` decimal(10, 2) DEFAULT NULL
+CREATE TABLE conto (
+  ID int(11) NOT NULL,
+  NomeConto varchar(255) DEFAULT NULL,
+  Saldo decimal(10, 2) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `credit`;
-
-CREATE TABLE `credit` (
-  `ID` int(11) NOT NULL,
-  `ImportoCredito` decimal(10, 2) DEFAULT NULL,
-  `NomeImporto` varchar(255) DEFAULT NULL,
-  `DataConcessione` date DEFAULT NULL,
-  `DataEstinsione` date DEFAULT NULL,
-  `Note` varchar(255) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL
+CREATE TABLE credit (
+  ID int(11) NOT NULL,
+  ImportoCredito decimal(10, 2) DEFAULT NULL,
+  NomeImporto varchar(255) DEFAULT NULL,
+  DataConcessione date DEFAULT NULL,
+  DataEstinsione date DEFAULT NULL,
+  Note varchar(255) DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-DROP TRIGGER IF EXISTS `check_credit_expiry`;
 
 DELIMITER $ $ CREATE TRIGGER `check_credit_expiry`
 AFTER
@@ -1134,20 +1110,39 @@ END IF;
 
 END $ $ DELIMITER;
 
-DROP TABLE IF EXISTS `debit`;
+DELIMITER $ $ CREATE TRIGGER `create_transaction_on_credit_insert`
+AFTER
+INSERT
+  ON `credit` FOR EACH ROW BEGIN
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    1,
+    NEW.ImportoCredito,
+    NEW.IDConto,
+    NEW.DataConcessione,
+    NEW.IDCategoriaPrimaria
+  );
 
-CREATE TABLE `debit` (
-  `ID` int(11) NOT NULL,
-  `ImportoDebito` decimal(10, 2) DEFAULT NULL,
-  `NomeImporto` varchar(255) DEFAULT NULL,
-  `DataConcessione` date DEFAULT NULL,
-  `DataEstinsione` date DEFAULT NULL,
-  `Note` varchar(255) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL
+END $ $ DELIMITER;
+
+CREATE TABLE debit (
+  ID int(11) NOT NULL,
+  ImportoDebito decimal(10, 2) DEFAULT NULL,
+  NomeImporto varchar(255) DEFAULT NULL,
+  DataConcessione date DEFAULT NULL,
+  DataEstinsione date DEFAULT NULL,
+  Note varchar(255) DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-DROP TRIGGER IF EXISTS `check_debit_expiry`;
 
 DELIMITER $ $ CREATE TRIGGER `check_debit_expiry`
 AFTER
@@ -1158,60 +1153,71 @@ END IF;
 
 END $ $ DELIMITER;
 
-DROP TABLE IF EXISTS `profili`;
+DELIMITER $ $ CREATE TRIGGER `create_transaction_on_debit_insert`
+AFTER
+INSERT
+  ON `debit` FOR EACH ROW BEGIN
+INSERT INTO
+  transazione (
+    Is_Expense,
+    Importo,
+    IDConto,
+    DataTransazione,
+    IDCategoriaPrimaria
+  )
+VALUES
+  (
+    0,
+    NEW.ImportoDebito,
+    NEW.IDConto,
+    NEW.DataConcessione,
+    NEW.IDCategoriaPrimaria
+  );
 
-CREATE TABLE `profili` (
-  `ID` int(11) NOT NULL,
-  `NomeProfilo` varchar(255) DEFAULT NULL,
-  `Email` varchar(255) DEFAULT NULL,
-  `Password` varchar(255) DEFAULT NULL
+END $ $ DELIMITER;
+
+CREATE TABLE profili (
+  ID int(11) NOT NULL,
+  NomeProfilo varchar(255) DEFAULT NULL,
+  Email varchar(255) DEFAULT NULL,
+  Password varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `profili_categoriaprimaria`;
-
-CREATE TABLE `profili_categoriaprimaria` (
-  `IDProfilo` int(11) NOT NULL,
-  `IDCategoriaPrimaria` int(11) NOT NULL
+CREATE TABLE profili_categoriaprimaria (
+  IDProfilo int(11) NOT NULL,
+  IDCategoriaPrimaria int(11) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `risparmi`;
-
-CREATE TABLE `risparmi` (
-  `ID` int(11) NOT NULL,
-  `ImportoRisparmiato` decimal(10, 2) DEFAULT NULL,
-  `DataInizio` date DEFAULT NULL,
-  `DataFine` date DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL
+CREATE TABLE risparmi (
+  ID int(11) NOT NULL,
+  ImportoRisparmiato decimal(10, 2) DEFAULT NULL,
+  DataInizio date DEFAULT NULL,
+  DataFine date DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `template_transazioni`;
-
-CREATE TABLE `template_transazioni` (
-  `ID` int(11) NOT NULL,
-  `NomeTemplate` varchar(255) DEFAULT NULL,
-  `Is_Expense` tinyint(1) DEFAULT NULL,
-  `Importo` decimal(10, 2) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL,
-  `IDCategoriaSecondaria` int(11) DEFAULT NULL,
-  `Descrizione` varchar(255) DEFAULT NULL
+CREATE TABLE template_transazioni (
+  ID int(11) NOT NULL,
+  NomeTemplate varchar(255) DEFAULT NULL,
+  Is_Expense tinyint(1) DEFAULT NULL,
+  Importo decimal(10, 2) DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL,
+  IDCategoriaSecondaria int(11) DEFAULT NULL,
+  Descrizione varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `transazione`;
-
-CREATE TABLE `transazione` (
-  `ID` int(11) NOT NULL,
-  `Is_Expense` tinyint(1) DEFAULT NULL,
-  `Importo` decimal(10, 2) DEFAULT NULL,
-  `IDTemplate` int(11) DEFAULT NULL,
-  `IDConto` int(11) DEFAULT NULL,
-  `DataTransazione` date DEFAULT NULL,
-  `IDCategoriaPrimaria` int(11) DEFAULT NULL,
-  `IDCategoriaSecondaria` int(11) DEFAULT NULL
+CREATE TABLE transazione (
+  ID int(11) NOT NULL,
+  Is_Expense tinyint(1) DEFAULT NULL,
+  Importo decimal(10, 2) DEFAULT NULL,
+  IDTemplate int(11) DEFAULT NULL,
+  IDConto int(11) DEFAULT NULL,
+  DataTransazione date DEFAULT NULL,
+  IDCategoriaPrimaria int(11) DEFAULT NULL,
+  IDCategoriaSecondaria int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-DROP TRIGGER IF EXISTS `CheckBudgetBeforeTransaction`;
 
 DELIMITER $ $ CREATE TRIGGER `CheckBudgetBeforeTransaction` BEFORE
 INSERT
@@ -1247,8 +1253,6 @@ END IF;
 
 END $ $ DELIMITER;
 
-DROP TRIGGER IF EXISTS `after_transazione_delete`;
-
 DELIMITER $ $ CREATE TRIGGER `after_transazione_delete`
 AFTER
   DELETE ON `transazione` FOR EACH ROW BEGIN IF OLD.Is_Expense = 1 THEN
@@ -1270,8 +1274,6 @@ WHERE
 END IF;
 
 END $ $ DELIMITER;
-
-DROP TRIGGER IF EXISTS `after_transazione_insert`;
 
 DELIMITER $ $ CREATE TRIGGER `after_transazione_insert`
 AFTER
@@ -1295,8 +1297,6 @@ WHERE
 END IF;
 
 END $ $ DELIMITER;
-
-DROP TRIGGER IF EXISTS `after_transazione_update`;
 
 DELIMITER $ $ CREATE TRIGGER `after_transazione_update`
 AFTER
@@ -1340,239 +1340,239 @@ END IF;
 END $ $ DELIMITER;
 
 ALTER TABLE
-  `assconti`
+  assconti
 ADD
-  KEY `fk_assconti_profilo` (`IDProfilo`),
+  KEY fk_assconti_profilo (IDProfilo),
 ADD
-  KEY `fk_assconti_conto` (`IDConto`);
+  KEY fk_assconti_conto (IDConto);
 
 ALTER TABLE
-  `budgetmax`
+  budgetmax
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `fk_budgetmax_primarycategory` (`IDPrimaryCategory`);
+  KEY fk_budgetmax_primarycategory (IDPrimaryCategory);
 
 ALTER TABLE
-  `categoriaprimaria`
+  categoriaprimaria
 ADD
-  PRIMARY KEY (`ID`);
+  PRIMARY KEY (ID);
 
 ALTER TABLE
-  `categoriasecondaria`
+  categoriasecondaria
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `categoriasecondaria_primaria_fk` (`IDCategoriaPrimaria`);
+  KEY categoriasecondaria_primaria_fk (IDCategoriaPrimaria);
 
 ALTER TABLE
-  `conto`
+  conto
 ADD
-  PRIMARY KEY (`ID`);
+  PRIMARY KEY (ID);
 
 ALTER TABLE
-  `credit`
+  credit
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `credit_conto_fk` (`IDConto`),
+  KEY credit_conto_fk (IDConto),
 ADD
-  KEY `fk_credit_categoriaprimaria` (`IDCategoriaPrimaria`);
+  KEY fk_credit_categoriaprimaria (IDCategoriaPrimaria);
 
 ALTER TABLE
-  `debit`
+  debit
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `debit_conto_fk` (`IDConto`),
+  KEY debit_conto_fk (IDConto),
 ADD
-  KEY `fk_debit_categoriaprimaria` (`IDCategoriaPrimaria`);
+  KEY fk_debit_categoriaprimaria (IDCategoriaPrimaria);
 
 ALTER TABLE
-  `profili`
+  profili
 ADD
-  PRIMARY KEY (`ID`);
+  PRIMARY KEY (ID);
 
 ALTER TABLE
-  `profili_categoriaprimaria`
+  profili_categoriaprimaria
 ADD
-  PRIMARY KEY (`IDProfilo`, `IDCategoriaPrimaria`),
+  PRIMARY KEY (IDProfilo, IDCategoriaPrimaria),
 ADD
-  KEY `fk_profili_categoriaprimaria_profilo` (`IDProfilo`),
+  KEY fk_profili_categoriaprimaria_profilo (IDProfilo),
 ADD
-  KEY `fk_profili_categoriaprimaria_categoria` (`IDCategoriaPrimaria`);
+  KEY fk_profili_categoriaprimaria_categoria (IDCategoriaPrimaria);
 
 ALTER TABLE
-  `risparmi`
+  risparmi
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `risparmi_conto_fk` (`IDConto`),
+  KEY risparmi_conto_fk (IDConto),
 ADD
-  KEY `fk_risparmi_categoriaprimaria` (`IDCategoriaPrimaria`);
+  KEY fk_risparmi_categoriaprimaria (IDCategoriaPrimaria);
 
 ALTER TABLE
-  `template_transazioni`
+  template_transazioni
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `template_transazioni_conto_fk` (`IDConto`),
+  KEY template_transazioni_conto_fk (IDConto),
 ADD
-  KEY `template_transazioni_primaria_fk` (`IDCategoriaPrimaria`),
+  KEY template_transazioni_primaria_fk (IDCategoriaPrimaria),
 ADD
-  KEY `template_transazioni_secondaria_fk` (`IDCategoriaSecondaria`);
+  KEY template_transazioni_secondaria_fk (IDCategoriaSecondaria);
 
 ALTER TABLE
-  `transazione`
+  transazione
 ADD
-  PRIMARY KEY (`ID`),
+  PRIMARY KEY (ID),
 ADD
-  KEY `transazione_template_fk` (`IDTemplate`),
+  KEY transazione_template_fk (IDTemplate),
 ADD
-  KEY `transazione_conto_fk` (`IDConto`),
+  KEY transazione_conto_fk (IDConto),
 ADD
-  KEY `transazione_primaria_fk` (`IDCategoriaPrimaria`),
+  KEY transazione_primaria_fk (IDCategoriaPrimaria),
 ADD
-  KEY `transazione_secondaria_fk` (`IDCategoriaSecondaria`);
+  KEY transazione_secondaria_fk (IDCategoriaSecondaria);
 
 ALTER TABLE
-  `budgetmax`
+  budgetmax
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `categoriaprimaria`
+  categoriaprimaria
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `categoriasecondaria`
+  categoriasecondaria
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `conto`
+  conto
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `credit`
+  credit
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `debit`
+  debit
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `profili`
+  profili
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `risparmi`
+  risparmi
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `template_transazioni`
+  template_transazioni
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `transazione`
+  transazione
 MODIFY
-  `ID` int(11) NOT NULL AUTO_INCREMENT;
+  ID int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE
-  `assconti`
+  assconti
 ADD
-  CONSTRAINT `fk_assconti_conto` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_assconti_conto FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_assconti_profilo` FOREIGN KEY (`IDProfilo`) REFERENCES `profili` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT fk_assconti_profilo FOREIGN KEY (IDProfilo) REFERENCES profili (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
-  `budgetmax`
+  budgetmax
 ADD
-  CONSTRAINT `fk_budgetmax_primarycategory` FOREIGN KEY (`IDPrimaryCategory`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_budgetmax_primarycategory FOREIGN KEY (IDPrimaryCategory) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE;
 
 ALTER TABLE
-  `categoriasecondaria`
+  categoriasecondaria
 ADD
-  CONSTRAINT `categoriasecondaria_primaria_fk` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT categoriasecondaria_primaria_fk FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
-  `credit`
+  credit
 ADD
-  CONSTRAINT `credit_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT credit_conto_fk FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_credit_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_credit_categoriaprimaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE;
 
 ALTER TABLE
-  `debit`
+  debit
 ADD
-  CONSTRAINT `debit_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT debit_conto_fk FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_debit_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_debit_categoriaprimaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE;
 
 ALTER TABLE
-  `profili_categoriaprimaria`
+  profili_categoriaprimaria
 ADD
-  CONSTRAINT `fk_profili_categoriaprimaria_categoria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_profili_categoriaprimaria_categoria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_profili_categoriaprimaria_profilo` FOREIGN KEY (`IDProfilo`) REFERENCES `profili` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT fk_profili_categoriaprimaria_profilo FOREIGN KEY (IDProfilo) REFERENCES profili (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
-  `risparmi`
+  risparmi
 ADD
-  CONSTRAINT `fk_risparmi_categoriaprimaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_risparmi_categoriaprimaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `risparmi_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT risparmi_conto_fk FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
-  `template_transazioni`
+  template_transazioni
 ADD
-  CONSTRAINT `fk_template_transazioni_primaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_template_transazioni_primaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_template_transazioni_primaria_new` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_template_transazioni_primaria_new FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_template_transazioni_secondaria` FOREIGN KEY (`IDCategoriaSecondaria`) REFERENCES `categoriasecondaria` (`ID`) ON DELETE
+  CONSTRAINT fk_template_transazioni_secondaria FOREIGN KEY (IDCategoriaSecondaria) REFERENCES categoriasecondaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_template_transazioni_secondaria_new` FOREIGN KEY (`IDCategoriaSecondaria`) REFERENCES `categoriasecondaria` (`ID`) ON DELETE
+  CONSTRAINT fk_template_transazioni_secondaria_new FOREIGN KEY (IDCategoriaSecondaria) REFERENCES categoriasecondaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `template_transazioni_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT template_transazioni_conto_fk FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
-  `transazione`
+  transazione
 ADD
-  CONSTRAINT `fk_transazione_primaria` FOREIGN KEY (`IDCategoriaPrimaria`) REFERENCES `categoriaprimaria` (`ID`) ON DELETE
+  CONSTRAINT fk_transazione_primaria FOREIGN KEY (IDCategoriaPrimaria) REFERENCES categoriaprimaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `fk_transazione_secondaria` FOREIGN KEY (`IDCategoriaSecondaria`) REFERENCES `categoriasecondaria` (`ID`) ON DELETE
+  CONSTRAINT fk_transazione_secondaria FOREIGN KEY (IDCategoriaSecondaria) REFERENCES categoriasecondaria (ID) ON DELETE
 SET
   NULL ON UPDATE CASCADE,
 ADD
-  CONSTRAINT `transazione_conto_fk` FOREIGN KEY (`IDConto`) REFERENCES `conto` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  CONSTRAINT transazione_conto_fk FOREIGN KEY (IDConto) REFERENCES conto (ID) ON DELETE CASCADE ON UPDATE CASCADE;
 
-DELIMITER $ $ DROP EVENT IF EXISTS `allocateSavingsEvent` $ $ CREATE DEFINER = `root` @`localhost` EVENT `allocateSavingsEvent` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-15 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ DROP EVENT IF EXISTS `check_debit_credit_expiry_event` $ $ CREATE DEFINER = `root` @`localhost` EVENT `check_debit_credit_expiry_event` ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 16:46:17' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
+DELIMITER $ $ CREATE DEFINER = root @localhost EVENT allocateSavingsEvent ON SCHEDULE EVERY 1 DAY STARTS '2024-05-15 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL AllocateSavingsDaily() $ $ CREATE DEFINER = root @localhost EVENT check_debit_credit_expiry_event ON SCHEDULE EVERY 1 DAY STARTS '2024-05-08 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO BEGIN DECLARE done INT DEFAULT FALSE;
 
 DECLARE debtCreditID INT;
 
@@ -1609,45 +1609,9 @@ IF done THEN LEAVE read_loop;
 
 END IF;
 
-IF debtCreditType = 'debit' THEN
-INSERT INTO
-  transazione (
-    Is_Expense,
-    Importo,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria
-  )
-SELECT
-  1,
-  ImportoDebito,
-  IDConto,
-  DataEstinsione,
-  IDCategoriaPrimaria
-FROM
-  debit
-WHERE
-  ID = debtCreditID;
+IF debtCreditType = 'debit' THEN CALL create_transaction_on_debit_termination(debtCreditID);
 
-ELSE
-INSERT INTO
-  transazione (
-    Is_Expense,
-    Importo,
-    IDConto,
-    DataTransazione,
-    IDCategoriaPrimaria
-  )
-SELECT
-  0,
-  ImportoCredito,
-  IDConto,
-  DataEstinsione,
-  IDCategoriaPrimaria
-FROM
-  credit
-WHERE
-  ID = debtCreditID;
+ELSE CALL create_transaction_on_credit_termination(debtCreditID);
 
 END IF;
 

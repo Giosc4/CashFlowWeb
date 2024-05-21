@@ -1,13 +1,12 @@
 <?php
 
-
 // Funzione per visualizzare i dati di una tabella
 function displayTableData($data, $tableName)
 {
     echo "<h3>$tableName</h3>";
 
     if (!empty($data)) {
-        echo "<table border='1'>";
+        echo "<table>";
         echo "<tr>";
 
         // Stampa gli header della tabella
@@ -16,16 +15,15 @@ function displayTableData($data, $tableName)
         }
         echo "<th>Modifica</th>";
 
-
         echo "</tr>";
-        // Print the data of the table
+        // Stampa i dati della tabella
         foreach ($data as $row) {
             echo "<tr>";
             foreach ($row as $value) {
                 echo "<td>$value</td>";
             }
 
-            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button style='background-color: red; color: white;'>Modifica</button></a></td>";
+            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button class='btn-edit'>Modifica</button></a></td>";
 
             echo "</tr>";
         }
@@ -41,7 +39,7 @@ function displayTableTemplate($data, $tableName)
     echo "<h3>$tableName</h3>";
 
     if (!empty($data)) {
-        echo "<table border='1'>"; 
+        echo "<table>";
         echo "<tr>";
 
         // Stampa gli header della tabella
@@ -51,19 +49,18 @@ function displayTableTemplate($data, $tableName)
         echo "<th>Modifica</th>";
         echo "<th>Nuovo</th>";
 
-
         echo "</tr>";
-        // Print the data of the table
+        // Stampa i dati della tabella
         foreach ($data as $row) {
             echo "<tr>";
             foreach ($row as $value) {
                 echo "<td>$value</td>";
             }
 
-            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button style='background-color: red; color: white;'>Modifica</button></a></td>";
+            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button class='btn-edit'>Modifica</button></a></td>";
 
-            // voglio aggiungere una colonna con un pulsante verde con scritto 'Create Transaction' questo apre una pagina chiamata 'from_template_transaction.php' che prende l'id del template e crea una transazione con la stored procedure
-            echo "<td><a href='../server/from_template_transaction.php?templateID=" . $row['ID'] . "'><button style='background-color: green; color: white;'>Crea Transazione</button></a></td>";
+            // Aggiungi una colonna con un pulsante verde con scritto 'Create Transaction' che apre una pagina chiamata 'from_template_transaction.php' che prende l'id del template e crea una transazione con la stored procedure
+            echo "<td><a href='../server/from_template_transaction.php?templateID=" . $row['ID'] . "'><button class='btn-create'>Crea Transazione</button></a></td>";
 
             echo "</tr>";
         }
@@ -79,7 +76,7 @@ function displayTableDebitCredit($data, $tableName, $type)
     echo "<h3>$tableName</h3>";
 
     if (!empty($data)) {
-        echo "<table border='1'>";
+        echo "<table>";
         echo "<tr>";
 
         // Stampa gli header della tabella
@@ -89,7 +86,6 @@ function displayTableDebitCredit($data, $tableName, $type)
         echo "<th>Modifica</th>";
         echo "<th>Nuovo</th>";
 
-
         echo "</tr>";
         // Stampa i dati della tabella
         foreach ($data as $row) {
@@ -98,10 +94,10 @@ function displayTableDebitCredit($data, $tableName, $type)
                 echo "<td>$value</td>";
             }
 
-            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button style='background-color: red; color: white;'>Modifica</button></a></td>";
+            echo "<td><a href='edit_manager.php?table=$tableName&id=" . $row['ID'] . "'><button class='btn-edit'>Modifica</button></a></td>";
 
-            // voglio aggiungere una colonna con un pulsante verde con scritto 'Fine' questo apre una pagina chiamata 'from_debit_credit.php' che prende l'id del debito o credito e crea una transazione per terminare il debito o il credito
-            echo "<td><a href='../server/from_debit_credit.php?debitCredit_ID=" . $row['ID'] . "&type=$type'><button style='background-color: green; color: white;'>Fine</button></a></td>";
+            // Aggiungi una colonna con un pulsante verde con scritto 'Fine' che apre una pagina chiamata 'from_debit_credit.php' che prende l'id del debito o credito e crea una transazione per terminare il debito o il credito
+            echo "<td><a href='../server/from_debit_credit.php?debitCredit_ID=" . $row['ID'] . "&type=$type'><button class='btn-create'>Fine</button></a></td>";
 
             echo "</tr>";
         }
