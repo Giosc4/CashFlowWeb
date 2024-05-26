@@ -31,6 +31,7 @@ if (!$risparmio) {
 
 // Assuming accounts are also related to user email, similar to the transaction case
 $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
+$primaryCategories = getTableBYEmail($_SESSION['email'], $selectCategoriaPrimariaFromEmail);
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +51,7 @@ $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
             flex-direction: column;
             align-items: center;
             justify-content: center;
-               
+
         }
 
         h1 {
@@ -143,6 +144,18 @@ $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
                 </select><br>
             </div>
 
+            <div>
+                <label for="primaryCategoryId">Categoria Primaria:</label>
+                <select id="primaryCategoryId" name="primaryCategoryId" required>
+                    <option value="" disabled>Seleziona la Categoria Primaria</option>
+                    <?php foreach ($primaryCategories as $primaryCategory) : ?>
+                        <option value="<?php echo htmlspecialchars($primaryCategory['ID']); ?>" <?php if ($primaryCategory['ID'] == $risparmio['IDCategoriaPrimaria']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($primaryCategory['NomeCategoria']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <button type="submit">Salva Modifiche</button>
         </form>
 
@@ -152,7 +165,7 @@ $conti = getTableBYEmail($_SESSION['email'], $selectContoFromEmail);
         </form>
     <?php else : ?>
         <p class="error">Saving not found.</p>
-    <?php endif; ?>    <br> <br> <?php require('../footer.php') ?>
+    <?php endif; ?> <br> <br> <?php require('../footer.php') ?>
 
 </body>
 
