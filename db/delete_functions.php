@@ -16,6 +16,7 @@ function deleteTransaction($transactionID)
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
+    logEvent('deleteTransaction', ['success' => true, 'transactionID' => $transactionID]);
 
     $stmt->close();
 
@@ -39,6 +40,7 @@ function deletePrimaryCategory($categoryID)
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
+    logEvent('deletePrimaryCategory', ['success' => true, 'categoryID' => $categoryID]);
 
     $stmt->close();
 
@@ -59,6 +61,7 @@ function deleteSecondaryCategory($categoryId)
         $stmt->close();
         throw new Exception('Error executing query: ' . $stmt->error);
     }
+    logEvent('deleteSecondaryCategory', ['success' => true, 'categoryId' => $categoryId]);
 
     $stmt->close();
     return true;
@@ -80,6 +83,7 @@ function deleteAccount($accountId)
         echo 'Errore nell\'esecuzione della query: ' . $stmt->error;
         return false;
     }
+    logEvent('deleteAccount', ['success' => true, 'accountId' => $accountId]);
 
     $stmt->close();
 
@@ -98,6 +102,7 @@ function deleteTemplateTransaction($templateId)
         $stmt->close();
         return false;
     }
+    logEvent('deleteTemplateTransaction', ['success' => true, 'templateId' => $templateId]);
 
     $stmt->close();
     return true;
@@ -115,6 +120,7 @@ function deleteRisparmio($risparmioId)
         $stmt->close();
         return false;
     }
+    logEvent('deleteRisparmio', ['success' => true, 'risparmioId' => $risparmioId]);
 
     $stmt->close();
     return true;
@@ -135,6 +141,7 @@ function deleteBudget($budgetID)
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
+    logEvent('deleteBudget', ['success' => true, 'budgetID' => $budgetID]);
 
     $stmt->close();
 
@@ -159,6 +166,7 @@ function deleteDebito($debtID)
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
+    logEvent('deleteDebito', ['success' => true, 'debtID' => $debtID]);
 
     $stmt->close();
     return true;
@@ -180,6 +188,7 @@ function deleteCredit($creditID)
         echo 'Error in execute statement: ' . $stmt->error;
         return false;
     }
+    logEvent('deleteCredit', ['success' => true, 'creditID' => $creditID]);
 
     $stmt->close();
     return true;
