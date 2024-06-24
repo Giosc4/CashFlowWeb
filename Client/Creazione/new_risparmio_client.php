@@ -76,6 +76,8 @@ if (!isset($_SESSION['email'])) {
 </head>
 
 <body>
+    <?php require('../navbar.php') ?>
+
     <form action="/CashFlowWeb/server/creazione/new_risparmio_server.php" method="post">
         <h1>Crea Risparmio</h1>
 

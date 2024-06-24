@@ -84,27 +84,37 @@ function createSecondaryCategory($idCategoriaPrimaria, $nomeCategoria, $descrizi
     return true;
 }
 
-
 function createRisparmio($amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId)
 {
     global $conn, $insertRisparmio;
 
-    $query = $insertRisparmio;
-    $stmt = $conn->prepare($query);
-
+    $stmt = $conn->prepare($insertRisparmio);
     if (!$stmt) {
         die('Error in prepare statement: ' . $conn->error);
     }
-
     $stmt->bind_param("dssii", $amount, $risparmioDateInizio, $risparmioDateFine, $contoId, $primaryCategoryId);
-
     if (!$stmt->execute()) {
         die('Error in execute statement: ' . $stmt->error);
     }
 
+    $risparmioId = $stmt->insert_id; // Ottieni l'ID del nuovo risparmio inserito
     $stmt->close();
+
+    // Chiamata alla procedura per allocare i risparmi
+    $allocateSavingsQuery = "CALL AllocateSavings(?)";
+    $allocateStmt = $conn->prepare($allocateSavingsQuery);
+    if (!$allocateStmt) {
+        die('Error in prepare statement: ' . $conn->error);
+    }
+    $allocateStmt->bind_param("i", $risparmioId);
+    if (!$allocateStmt->execute()) {
+        die('Error in execute statement: ' . $allocateStmt->error);
+    }
+    $allocateStmt->close();
     logEvent('createRisparmio', ['success' => true, 'details' => compact('amount', 'risparmioDateInizio', 'risparmioDateFine', 'contoId', 'primaryCategoryId')]);
     return true;
+
+    echo "Risparmio creato e transazioni giornaliere allocate con successo!";
 }
 
 function createTransactionTemplate($templateName, $entryType, $amount, $accountId, $primaryCategoryId, $secondaryCategoryId, $description)
